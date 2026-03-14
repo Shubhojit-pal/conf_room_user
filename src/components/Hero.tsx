@@ -1,0 +1,48 @@
+import React from 'react';
+
+interface HeroProps {
+    onReserveClick?: () => void;
+    onCalendarClick?: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onReserveClick, onCalendarClick }) => {
+    return (
+        <section className="relative w-full overflow-hidden text-center text-white flex items-center justify-center min-h-[350px] sm:min-h-[500px]">
+            {/* Background Image with Overlay */}
+            <div
+                className="absolute inset-0 z-0 bg-cover bg-center"
+                style={{
+                    backgroundImage: "url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')",
+                }}
+            >
+                <div className="absolute inset-0 bg-slate-900/50"></div>
+            </div>
+
+            {/* Content */}
+            <div className="relative z-10 max-w-3xl px-4 py-10 sm:py-0">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 leading-tight drop-shadow-sm">
+                    Book Conference Rooms with Confidence
+                </h1>
+                <p className="text-sm sm:text-lg md:text-xl mb-6 sm:mb-10 text-slate-100 max-w-2xl mx-auto drop-shadow-sm">
+                    Eliminate booking conflicts and manage meeting spaces across all your office locations with our intelligent reservation system
+                </p>
+                <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+                    <button
+                        onClick={onReserveClick}
+                        className="bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-all shadow-lg hover:shadow-xl"
+                    >
+                        Reserve a Space Now
+                    </button>
+                    <button
+                        onClick={onCalendarClick}
+                        className="bg-white hover:bg-slate-100 text-slate-800 font-semibold py-3 px-6 rounded-lg transition-all shadow-lg"
+                    >
+                        View Calendar
+                    </button>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+export default Hero;
