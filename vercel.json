@@ -7,6 +7,14 @@
   "devCommand": "npm run dev",
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "https://your-backend-url.vercel.app/api/:path*"
+    },
+    {
+      "source": "/uploads/:path*",
+      "destination": "https://your-backend-url.vercel.app/uploads/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

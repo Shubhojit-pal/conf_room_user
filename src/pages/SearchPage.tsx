@@ -255,7 +255,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                     location: r.location,
                     description: `Located on Floor ${r.floor_no}, Room ${r.room_number}. ${r.availability || 'Available for booking.'}`,
                     capacity: r.capacity,
-                    image: getDirectImageUrl(r.image_url) || `https://picsum.photos/seed/${r.room_id}/500/300`,
+                    image: getDirectImageUrl(r.image_url),
                     tags: [r.status || 'Available'],
                     utilization: Math.floor(Math.random() * 100),
                     amenities: r.amenities ? r.amenities.split(',').map(a => a.trim()) : [],
@@ -479,9 +479,6 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                     referrerPolicy="no-referrer"
                                     crossOrigin="anonymous"
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                    onError={(e) => {
-                                        (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/' + room.id + '/1200/800';
-                                    }}
                                 />
                                 {room.isInactive && (
                                     <div className="absolute inset-0 flex items-center justify-center bg-black/30">

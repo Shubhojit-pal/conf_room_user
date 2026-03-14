@@ -357,9 +357,6 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                             referrerPolicy="no-referrer"
                                             crossOrigin="anonymous"
                                             className="w-full h-full object-cover"
-                                            onError={(e) => {
-                                                (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/' + room.room_id + '-' + idx + '/1200/800';
-                                            }}
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
                                     </div>

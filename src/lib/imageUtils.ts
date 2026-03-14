@@ -2,7 +2,7 @@
  * Converts common cloud storage "view" links into direct image links
  * currently supports: Google Drive, Dropbox
  */
-export const getDirectImageUrl = (url: string | undefined): string => {
+export const getDirectImageUrl = (url: string | undefined | null): string => {
     if (!url) return '';
 
     // Handle local uploads (served from backend)
