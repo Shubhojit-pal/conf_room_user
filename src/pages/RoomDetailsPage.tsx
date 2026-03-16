@@ -437,26 +437,40 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                 </div>
                             ))}
                             {gallery.length === 2 && (
-                                <div className="h-1/2 rounded-xl overflow-hidden bg-theme-bg/50 border border-theme-border flex items-center justify-center">
-                                    <div className="text-center text-primary">
-                                        <MapPin size={32} className="mx-auto mb-1" />
-                                        <p className="text-sm font-medium">{room.location}</p>
+                                <div 
+                                    className={`h-1/2 rounded-xl overflow-hidden bg-theme-bg/50 border border-theme-border flex items-center justify-center p-4 transition-all ${room.mapLink ? 'cursor-pointer hover:bg-primary/5 hover:border-primary/30 group/loc' : ''}`}
+                                    onClick={() => room.mapLink && window.open(room.mapLink, '_blank')}
+                                >
+                                    <div className="text-center">
+                                        <MapPin size={32} className={`mx-auto mb-2 transition-colors ${room.mapLink ? 'text-primary group-hover/loc:scale-110' : 'text-theme-secondary opacity-40'}`} weight={room.mapLink ? "fill" : "regular"} />
+                                        <p className="text-sm font-bold text-theme-primary">{room.location}</p>
+                                        <p className="text-[10px] text-theme-secondary opacity-60 mt-1">Floor {room.floor_no}, Room {room.room_number}</p>
+                                        {room.mapLink && (
+                                            <span className="inline-block mt-2 text-[10px] font-black text-primary uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded">View on Map</span>
+                                        )}
                                     </div>
                                 </div>
                             )}
                         </>
                     ) : (
                         <>
-                            <div className="h-1/2 rounded-xl overflow-hidden bg-theme-bg border border-theme-border flex items-center justify-center">
-                                <div className="text-center text-theme-secondary opacity-40">
-                                    <Users size={32} className="mx-auto mb-1" />
-                                    <p className="text-sm font-medium">Capacity: {room.capacity}</p>
+                            <div 
+                                className={`h-1/2 rounded-xl overflow-hidden bg-theme-bg border border-theme-border flex items-center justify-center transition-all ${room.mapLink ? 'cursor-pointer hover:bg-primary/5 hover:border-primary/30 group/loc' : ''}`}
+                                onClick={() => room.mapLink && window.open(room.mapLink, '_blank')}
+                            >
+                                <div className="text-center">
+                                    <MapPin size={32} className={`mx-auto mb-2 transition-colors ${room.mapLink ? 'text-primary group-hover/loc:scale-110' : 'text-theme-secondary opacity-40'}`} weight={room.mapLink ? "fill" : "regular"} />
+                                    <p className="text-sm font-bold text-theme-primary">{room.location}</p>
+                                    <p className="text-[10px] text-theme-secondary opacity-60 mt-1">Floor {room.floor_no}, Room {room.room_number}</p>
+                                    {room.mapLink && (
+                                        <span className="inline-block mt-2 text-[10px] font-black text-primary uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded">View on Map</span>
+                                    )}
                                 </div>
                             </div>
                             <div className="h-1/2 rounded-xl overflow-hidden bg-theme-bg/50 border border-theme-border flex items-center justify-center">
-                                <div className="text-center text-primary opacity-60">
-                                    <MapPin size={32} className="mx-auto mb-1" />
-                                    <p className="text-sm font-medium">{room.location}</p>
+                                <div className="text-center text-theme-secondary opacity-40">
+                                    <Users size={32} className="mx-auto mb-1" />
+                                    <p className="text-sm font-medium">Capacity: {room.capacity}</p>
                                 </div>
                             </div>
                         </>
@@ -469,10 +483,10 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                 <div className="flex-1 space-y-8">
                     <div>
                         <h1 className="text-3xl font-bold text-theme-primary mb-2">{room.room_name}</h1>
-                        <div className="flex items-center gap-4 text-theme-secondary">
-                            <span className="flex items-center gap-1.5"><MapPin size={18} /> {room.location}</span>
-                            <span className="w-1 h-1 rounded-full bg-theme-border"></span>
-                            <span className="flex items-center gap-1.5"><SquaresFour size={18} /> Room {room.room_number}</span>
+                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-theme-secondary">
+                            <span className="flex items-center gap-1.5 font-bold"><MapPin size={18} className="text-primary" /> {room.location}</span>
+                            <span className="hidden md:block w-1 h-1 rounded-full bg-theme-border"></span>
+                            <span className="flex items-center gap-1.5 opacity-70 ml-6 md:ml-0"><SquaresFour size={18} /> Floor {room.floor_no}, Room {room.room_number}</span>
                         </div>
                         <p className="mt-4 text-theme-secondary leading-relaxed opacity-80">
                             Located on Floor {room.floor_no}, this room has a capacity of {room.capacity} people.
@@ -875,21 +889,6 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             </button>
                         </form>
 
-                        <div className="mt-8 pt-6 border-t border-theme-border">
-                            <h3 className="font-semibold text-theme-primary mb-3">Location Details</h3>
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                <p className="text-sm text-theme-secondary opacity-70">{room.location} — Floor {room.floor_no}, Room {room.room_number}</p>
-                                {room.mapLink && (
-                                    <button
-                                        onClick={() => window.open(room.mapLink, '_blank')}
-                                        className="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary text-sm font-bold rounded-xl transition-all"
-                                    >
-                                        <MapPin size={18} weight="fill" />
-                                        <span>View on Map</span>
-                                    </button>
-                                )}
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
