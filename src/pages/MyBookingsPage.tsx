@@ -36,22 +36,22 @@ const statusColors: Record<string, string> = {
 // --- Sub-components ---
 
 const SkeletonCard = () => (
-    <div className="border border-slate-100 rounded-3xl p-6 bg-white animate-pulse">
+    <div className="border border-theme-border rounded-3xl p-6 bg-theme-card animate-pulse">
         <div className="flex justify-between items-start mb-6">
             <div className="space-y-2">
-                <div className="h-6 w-48 bg-slate-100 rounded-lg" />
-                <div className="h-4 w-32 bg-slate-50 rounded-lg" />
+                <div className="h-6 w-48 bg-theme-bg rounded-lg" />
+                <div className="h-4 w-32 bg-theme-bg rounded-lg opacity-50" />
             </div>
-            <div className="h-6 w-20 bg-slate-100 rounded-full" />
+            <div className="h-6 w-20 bg-theme-bg rounded-full" />
         </div>
         <div className="grid grid-cols-4 gap-4 mb-6">
             {[1, 2, 3, 4].map(i => (
-                <div key={i} className="h-10 bg-slate-50 rounded-xl" />
+                <div key={i} className="h-10 bg-theme-bg rounded-xl" />
             ))}
         </div>
         <div className="flex gap-4">
-            <div className="h-12 flex-1 bg-slate-100 rounded-xl" />
-            <div className="h-12 w-24 bg-slate-50 rounded-xl" />
+            <div className="h-12 flex-1 bg-theme-bg rounded-xl" />
+            <div className="h-12 w-24 bg-theme-bg rounded-xl" />
         </div>
     </div>
 );
@@ -190,10 +190,10 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
         <button
             onClick={() => { setActiveTab(id); setSelectedDateFilter(null); }}
             className={`flex-1 py-3 px-6 rounded-full text-sm font-bold transition-all flex items-center justify-center gap-2
-                ${activeTab === id ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100'}`}
+                ${activeTab === id ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'text-theme-secondary hover:text-theme-primary hover:bg-theme-bg'}`}
         >
             {label}
-            <span className={`text-[10px] px-2 py-0.5 rounded-full shadow-inner ${activeTab === id ? 'bg-black/20 text-white' : 'bg-white text-slate-500'}`}>
+            <span className={`text-[10px] px-2 py-0.5 rounded-full shadow-inner ${activeTab === id ? 'bg-black/20 text-white' : 'bg-theme-card text-theme-secondary'}`}>
                 {count}
             </span>
         </button>
@@ -201,13 +201,13 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
 
     if (error) return (
         <div className="flex flex-col items-center justify-center min-h-[600px] text-center px-6">
-            <div className="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-500 mb-6">
-                <div className="animate-pulse bg-rose-100 p-4 rounded-full">
-                    <Info size={32} weight="bold" />
+            <div className="w-16 h-16 bg-rose-50 dark:bg-rose-900/20 rounded-2xl flex items-center justify-center text-rose-500 mb-6">
+                <div className="animate-pulse bg-rose-100 dark:bg-rose-900/30 p-4 rounded-full">
+                    <X size={32} weight="bold" />
                 </div>
             </div>
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">Connection Issue</h2>
-            <p className="text-slate-500 mb-8 max-w-sm">{error}</p>
+            <h2 className="text-2xl font-bold text-theme-primary mb-2">Connection Issue</h2>
+            <p className="text-theme-secondary mb-8 max-w-sm">{error}</p>
             <button
                 onClick={() => load(true)}
                 className="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-xl font-bold transition-all active:scale-95 shadow-lg shadow-primary/25 flex items-center gap-2"
@@ -240,8 +240,8 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
 
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 sm:mb-12 gap-4">
                 <div className="text-left">
-                    <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight mb-2 sm:mb-3">Booking Dashboard</h1>
-                    <p className="text-slate-500 text-sm sm:text-lg flex items-center gap-2">
+                    <h1 className="text-3xl sm:text-5xl font-black text-theme-primary tracking-tight mb-2 sm:mb-3">Booking Dashboard</h1>
+                    <p className="text-theme-secondary text-sm sm:text-lg flex items-center gap-2">
                         <Calendar size={20} className="text-primary" weight="bold" />
                         Manage your conference schedule and requests
                     </p>
@@ -249,13 +249,13 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
 
                 {/* Search Bar — desktop only */}
                 <div className="relative w-full md:w-96 hidden md:block">
-                    <MagnifyingGlass size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <MagnifyingGlass size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-theme-secondary opacity-50" />
                     <input
                         type="text"
                         placeholder="Search Room, ID, or Purpose..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-2xl py-4 pl-12 pr-6 text-sm font-medium focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-slate-400 shadow-sm"
+                        className="w-full bg-theme-card border border-theme-border rounded-2xl py-4 pl-12 pr-6 text-sm font-medium focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-theme-secondary/50 shadow-sm text-theme-primary"
                     />
                 </div>
             </div>
@@ -274,12 +274,12 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                         {loading ? (
                             Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)
                         ) : filteredBookings.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center p-20 text-center bg-slate-50/50 rounded-[3rem] border border-dashed border-slate-200">
-                                <div className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center text-slate-200 mb-8 shadow-sm">
+                            <div className="flex flex-col items-center justify-center p-20 text-center bg-theme-bg/50 rounded-[3rem] border border-dashed border-theme-border">
+                                <div className="w-24 h-24 bg-theme-card rounded-3xl flex items-center justify-center text-theme-secondary opacity-30 mb-8 shadow-sm">
                                     <MagnifyingGlass size={48} weight="light" />
                                 </div>
-                                <h3 className="text-2xl font-black text-slate-900 mb-3">No matching results</h3>
-                                <p className="text-slate-500 mb-8 max-w-xs font-medium italic">Try adjusting your filters or search terms to find what you're looking for.</p>
+                                <h3 className="text-2xl font-black text-theme-primary mb-3">No matching results</h3>
+                                <p className="text-theme-secondary mb-8 max-w-xs font-medium italic">Try adjusting your filters or search terms to find what you're looking for.</p>
                                 {(searchTerm || selectedDateFilter) && (
                                     <button
                                         onClick={() => { setSearchTerm(''); setSelectedDateFilter(null); }}
@@ -295,12 +295,12 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                 const isConfirmed = booking.status === 'confirmed';
 
                                 let cardClasses = "group border rounded-[2.5rem] p-8 transition-all duration-500 relative hover:-translate-y-1 overflow-hidden ";
-                                if (isConfirmed) cardClasses += "bg-white border-emerald-100 hover:border-emerald-200 shadow-xl shadow-emerald-900/5";
-                                else cardClasses += "bg-white border-rose-100 hover:border-rose-200 shadow-xl shadow-rose-900/5";
+                                if (isConfirmed) cardClasses += "bg-theme-card border-emerald-100 dark:border-emerald-900/30 hover:border-emerald-200 dark:hover:border-emerald-900/50 shadow-xl shadow-emerald-900/5";
+                                else cardClasses += "bg-theme-card border-rose-100 dark:border-rose-900/30 hover:border-rose-200 dark:hover:border-rose-900/50 shadow-xl shadow-rose-900/5";
 
-                                const statBoxClasses = isConfirmed ? "bg-emerald-50 border-emerald-100/50" : "bg-rose-50 border-rose-100/50";
-                                const statValueClasses = isConfirmed ? "text-emerald-950" : "text-rose-950";
-                                const titleClasses = "text-slate-900";
+                                const statBoxClasses = isConfirmed ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-100/50" : "bg-rose-50 dark:bg-rose-950/20 border-rose-100/50";
+                                const statValueClasses = isConfirmed ? "text-emerald-950 dark:text-emerald-500" : "text-rose-950 dark:text-rose-500";
+                                const titleClasses = "text-theme-primary";
 
                                 return (
                                     <div
@@ -308,20 +308,20 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                         className={cardClasses}
                                     >
                                     {/* Background Watermark Icon */}
-                                    <div className={`absolute -right-4 -bottom-4 opacity-[0.03] transform  transition-transform duration-700 pointer-events-none text-slate-900 group-hover:scale-110 group-hover:-rotate-12`}>
+                                    <div className={`absolute -right-4 -bottom-4 opacity-[0.03] transform  transition-transform duration-700 pointer-events-none text-theme-primary group-hover:scale-110 group-hover:-rotate-12`}>
                                         {isConfirmed ? <Calendar size={200} weight="fill" /> : <VideoCamera size={200} weight="fill" />}
                                     </div>
 
                                     <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                                         <div className="flex items-center gap-5">
-                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 bg-slate-50 text-primary group-hover:bg-primary group-hover:text-white`}>
+                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 bg-theme-bg text-primary group-hover:bg-primary group-hover:text-white`}>
                                                 <VideoCamera size={28} weight="bold" />
                                             </div>
                                             <div>
                                                 <h3 className={`text-2xl font-black leading-tight tracking-tight ${titleClasses}`}>
                                                     {booking.room_name || `Room ${booking.room_id}`}
                                                 </h3>
-                                                <p className={`text-slate-400 font-bold uppercase text-[10px] tracking-widest mt-1`}>
+                                                <p className={`text-theme-secondary font-bold uppercase text-[10px] tracking-widest mt-1`}>
                                                     Reserved for {booking.user_name || 'Individual'}
                                                 </p>
                                             </div>
@@ -334,23 +334,23 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
 
                                     <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                                         <div className={`${statBoxClasses} rounded-2xl p-4 border transition-colors`}>
-                                            <label className="block text-slate-400 text-[9px] uppercase font-black tracking-widest mb-1.5">Reference</label>
+                                            <label className="block text-theme-secondary opacity-50 text-[9px] uppercase font-black tracking-widest mb-1.5">Reference</label>
                                             <span className={`font-black font-mono text-sm ${statValueClasses}`}>#{booking.booking_id.split('-')[1] || booking.booking_id.slice(-6)}</span>
                                         </div>
                                         <div className={`${statBoxClasses} rounded-2xl p-4 border transition-colors`}>
-                                            <label className="block text-slate-400 text-[9px] uppercase font-black tracking-widest mb-1.5">Schedule</label>
+                                            <label className="block text-theme-secondary opacity-50 text-[9px] uppercase font-black tracking-widest mb-1.5">Schedule</label>
                                             <span className={`font-black text-sm italic ${statValueClasses}`}>
                                                 {parseLocalDate(booking.start_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                                             </span>
                                         </div>
                                         <div className={`${statBoxClasses} rounded-2xl p-4 border transition-colors`}>
-                                            <label className="block text-slate-400 text-[9px] uppercase font-black tracking-widest mb-1.5">Time Interval</label>
+                                            <label className="block text-theme-secondary opacity-50 text-[9px] uppercase font-black tracking-widest mb-1.5">Time Interval</label>
                                             <span className={`font-black text-sm ${statValueClasses}`}>
                                                 {booking.start_time?.slice(0, 5)}–{booking.end_time?.slice(0, 5)}
                                             </span>
                                         </div>
                                         <div className={`${statBoxClasses} rounded-2xl p-4 border transition-colors`}>
-                                            <label className="block text-slate-400 text-[9px] uppercase font-black tracking-widest mb-1.5">Location</label>
+                                            <label className="block text-theme-secondary opacity-50 text-[9px] uppercase font-black tracking-widest mb-1.5">Location</label>
                                             <div className="flex items-center gap-1">
                                                 <MapPin size={12} className="text-primary" weight="bold" />
                                                 <span className={`font-black text-sm truncate ${statValueClasses}`}>{booking.location || 'HQ'}</span>
@@ -379,22 +379,22 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                             </button>
                                         )}
                                         {booking.status === 'cancelled' && (
-                                            <div className="w-full bg-slate-50 flex items-center gap-3 p-5 rounded-[1.25rem] border border-slate-100">
-                                                <Info size={20} className="text-slate-400" />
-                                                <p className="text-xs font-bold text-slate-500 italic">This reservation was voided and cannot be reused.</p>
+                                            <div className="w-full bg-theme-bg flex items-center gap-3 p-5 rounded-[1.25rem] border border-theme-border">
+                                                <Info size={20} className="text-theme-secondary opacity-50" />
+                                                <p className="text-xs font-bold text-theme-secondary italic">This reservation was voided and cannot be reused.</p>
                                             </div>
                                         )}
                                     </div>
 
                                     {/* Granular Segments Display */}
                                     {(booking.selected_dates || booking.selected_slots) && booking.status !== 'cancelled' && (
-                                        <div className={`mt-8 pt-8 border-t border-slate-50 space-y-4`}>
+                                        <div className={`mt-8 pt-8 border-t border-theme-border space-y-4`}>
                                             {booking.selected_dates && booking.selected_dates.split(',').length > 1 && (
                                                 <div>
-                                                    <label className={`text-[10px] font-black uppercase tracking-widest mb-2 block text-slate-400`}>Reserved Dates</label>
+                                                    <label className={`text-[10px] font-black uppercase tracking-widest mb-2 block text-theme-secondary opacity-50`}>Reserved Dates</label>
                                                     <div className="flex flex-wrap gap-2">
                                                         {booking.selected_dates.split(',').sort().map(d => (
-                                                            <span key={d} className={`px-3 py-1 rounded-lg text-xs font-bold border bg-slate-50 text-slate-600 border-slate-100`}>
+                                                            <span key={d} className={`px-3 py-1 rounded-lg text-xs font-bold border bg-theme-bg text-theme-secondary border-theme-border`}>
                                                                 {new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                                                             </span>
                                                         ))}
@@ -403,7 +403,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                             )}
                                             {booking.selected_slots && (
                                                 <div>
-                                                    <label className={`text-[10px] font-black uppercase tracking-widest mb-2 block text-slate-400`}>Daily Time Blocks</label>
+                                                    <label className={`text-[10px] font-black uppercase tracking-widest mb-2 block text-theme-secondary opacity-50`}>Daily Time Blocks</label>
                                                     <div className="flex flex-wrap gap-2">
                                                         {booking.selected_slots.split(',').sort().map(s => (
                                                             <span key={s} className={`px-3 py-1 rounded-lg text-xs font-bold border flex items-center gap-1 bg-primary/5 text-primary border-primary/10`}>
@@ -426,12 +426,12 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
             <div className="lg:col-span-5 space-y-8">
                     {/* Quick Stats Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[2.5rem] p-6 text-white relative overflow-hidden group hover:scale-[1.02] transition-transform shadow-xl shadow-slate-900/20">
+                        <div className="bg-theme-card border border-theme-border rounded-[2.5rem] p-6 text-theme-primary relative overflow-hidden group hover:scale-[1.02] transition-transform shadow-xl shadow-slate-900/5">
                             <div className="relative z-10 flex flex-col h-full justify-between">
-                                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Upcoming Booking</p>
+                                <p className="text-theme-secondary opacity-50 text-[10px] font-black uppercase tracking-widest mb-1">Upcoming Booking</p>
                                 <h4 className="text-3xl font-black">{stats.upcoming}</h4>
                             </div>
-                            <div className="absolute -bottom-4 -right-4 text-white/5 transform group-hover:-rotate-12 transition-transform">
+                            <div className="absolute -bottom-4 -right-4 text-theme-primary opacity-[0.03] transform group-hover:-rotate-12 transition-transform">
                                 <Calendar size={80} weight="fill" />
                             </div>
                         </div>
@@ -456,20 +456,20 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                     </div>
 
                     {/* Calendar Card */}
-                    <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-2xl shadow-slate-200/50 p-8 overflow-hidden relative">
+                    <div className="bg-theme-card rounded-[2.5rem] border border-theme-border shadow-xl p-8 overflow-hidden relative">
                         <div className="flex items-center justify-between mb-8">
-                            <h2 className="text-2xl font-black text-slate-900 italic tracking-tighter">MY SCHEDULE</h2>
-                            <div className="flex gap-4 items-center bg-slate-50 p-1.5 rounded-2xl border border-slate-100">
+                            <h2 className="text-2xl font-black text-theme-primary italic tracking-tighter uppercase">My Schedule</h2>
+                            <div className="flex gap-4 items-center bg-theme-bg p-1.5 rounded-2xl border border-theme-border">
                                 <button
                                     onClick={() => setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() - 1)))}
-                                    className="p-2 hover:bg-white hover:shadow-sm rounded-xl transition-all text-slate-400 hover:text-primary"
+                                    className="p-2 hover:bg-theme-card hover:shadow-sm rounded-xl transition-all text-theme-secondary hover:text-primary"
                                 >
                                     <CaretLeft size={20} weight="bold" />
                                 </button>
-                                <span className="text-sm font-black text-slate-700 w-28 text-center uppercase tracking-widest">{monthNames[currentDate.getMonth()]}</span>
+                                <span className="text-sm font-black text-theme-primary w-28 text-center uppercase tracking-widest">{monthNames[currentDate.getMonth()]}</span>
                                 <button
                                     onClick={() => setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() + 1)))}
-                                    className="p-2 hover:bg-white hover:shadow-sm rounded-xl transition-all text-slate-400 hover:text-primary"
+                                    className="p-2 hover:bg-theme-card hover:shadow-sm rounded-xl transition-all text-theme-secondary hover:text-primary"
                                 >
                                     <CaretRight size={20} weight="bold" />
                                 </button>
@@ -478,7 +478,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
 
                         <div className="grid grid-cols-7 gap-2 mb-6">
                             {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, ix) => (
-                                <div key={ix} className="text-[10px] font-black text-slate-300 uppercase text-center py-2">{day}</div>
+                                <div key={ix} className="text-[10px] font-black text-theme-secondary opacity-30 uppercase text-center py-2">{day}</div>
                             ))}
                         </div>
 
@@ -495,16 +495,16 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                 const isSelected = selectedDateFilter === dateStr;
                                 const isPast = isPastDate(dateStr);
 
-                                let dateColorClass = 'hover:bg-slate-50 cursor-default text-slate-400';
+                                let dateColorClass = 'hover:bg-theme-bg cursor-default text-theme-secondary opacity-30';
                                 if (isPast) {
-                                    dateColorClass = 'bg-slate-100/50 text-slate-400 opacity-60 cursor-not-allowed';
+                                    dateColorClass = 'bg-theme-bg/50 text-theme-secondary opacity-20 cursor-not-allowed';
                                 } else if (dateBookings.length > 0) {
                                     if (hasConfirmed) {
                                         dateColorClass = 'bg-emerald-500 shadow-xl shadow-emerald-500/40 cursor-pointer active:scale-90 text-white hover:bg-emerald-600';
                                     } else if (!hasConfirmed && hasCancelled) {
                                         dateColorClass = 'bg-rose-500 shadow-xl shadow-rose-500/40 cursor-pointer active:scale-90 text-white hover:bg-rose-600';
                                     } else {
-                                        dateColorClass = 'bg-slate-900 shadow-xl shadow-slate-900/40 cursor-pointer active:scale-90 text-white hover:bg-black';
+                                        dateColorClass = 'bg-theme-primary shadow-xl shadow-theme-primary/40 cursor-pointer active:scale-90 text-theme-bg hover:opacity-90';
                                     }
                                 }
 
@@ -527,14 +527,14 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                             })}
                         </div>
 
-                        <div className="mt-8 pt-8 border-t border-slate-100 flex gap-8 justify-center">
+                        <div className="mt-8 pt-8 border-t border-theme-border flex gap-8 justify-center">
                             <div className="flex items-center gap-2 group cursor-help" title="Click a date to filter list">
                                 <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Confirmed</span>
+                                <span className="text-[10px] font-black text-theme-secondary opacity-50 uppercase tracking-[0.2em]">Confirmed</span>
                             </div>
                             <div className="flex items-center gap-2 group cursor-help">
                                 <div className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Cancelled</span>
+                                <span className="text-[10px] font-black text-theme-secondary opacity-50 uppercase tracking-[0.2em]">Cancelled</span>
                             </div>
                         </div>
 
@@ -570,42 +570,42 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
                         {/* Backdrop */}
                         <div
-                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm cursor-pointer transition-opacity"
+                            className="absolute inset-0 bg-theme-bg/60 backdrop-blur-sm cursor-pointer transition-opacity"
                             onClick={() => setShowDatePopup(null)}
                         />
 
                         {/* Modal Dialog */}
-                        <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg relative z-10 overflow-hidden flex flex-col max-h-[90vh]">
+                        <div className="bg-theme-card border border-theme-border rounded-[2rem] shadow-2xl w-full max-w-lg relative z-10 overflow-hidden flex flex-col max-h-[90vh]">
                             {/* Header */}
-                            <div className="px-8 py-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 sticky top-0">
+                            <div className="px-8 py-6 border-b border-theme-border flex justify-between items-center bg-theme-bg sticky top-0">
                                 <div>
-                                    <h3 className="text-xl font-black text-slate-800 tracking-tight">
+                                    <h3 className="text-xl font-black text-theme-primary tracking-tight">
                                         {new Date(showDatePopup!).toLocaleDateString('en-US', {
                                             weekday: 'long',
                                             month: 'long',
                                             day: 'numeric'
                                         })}
                                     </h3>
-                                    <p className="text-sm font-semibold text-slate-500 mt-1">
+                                    <p className="text-sm font-semibold text-theme-secondary mt-1">
                                         {bookings.filter(b => b.start_date.slice(0, 10) === showDatePopup).length} Bookings found
                                     </p>
                                 </div>
                                 <button
                                     onClick={() => setShowDatePopup(null)}
-                                    className="p-2.5 hover:bg-white rounded-xl transition-all shadow-sm text-slate-400 hover:text-slate-700 border border-slate-200"
+                                    className="p-2.5 hover:bg-theme-bg rounded-xl transition-all shadow-sm text-theme-secondary hover:text-theme-primary border border-theme-border"
                                 >
                                     <X size={20} weight="bold" />
                                 </button>
                             </div>
 
                             {/* Content Details */}
-                            <div className="p-8 overflow-y-auto space-y-4 bg-slate-50/50">
+                            <div className="p-8 overflow-y-auto space-y-4 bg-theme-bg/50">
                                 {bookings
                                     .filter(b => b.start_date.slice(0, 10) === showDatePopup)
                                     .map(booking => (
-                                        <div key={booking.booking_id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                        <div key={booking.booking_id} className="bg-theme-card p-5 rounded-2xl border border-theme-border shadow-sm hover:shadow-md transition-shadow">
                                             <div className="flex justify-between items-start mb-4">
-                                                <h4 className="font-bold text-slate-800 text-lg">{booking.room_name || `Room ${booking.room_id}`}</h4>
+                                                <h4 className="font-bold text-theme-primary text-lg">{booking.room_name || `Room ${booking.room_id}`}</h4>
                                                 <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider
                                                     ${booking.status === 'confirmed' ? 'bg-emerald-100 text-emerald-600' :
                                                             'bg-rose-100 text-rose-600'}
@@ -615,14 +615,14 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                             </div>
 
                                             <div className="space-y-3">
-                                                <div className="flex items-center gap-3 text-slate-600 text-sm font-medium">
-                                                    <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400">
+                                                <div className="flex items-center gap-3 text-theme-primary text-sm font-medium">
+                                                    <div className="w-8 h-8 rounded-lg bg-theme-bg flex items-center justify-center text-theme-secondary">
                                                         <Clock size={16} weight="bold" />
                                                     </div>
                                                     <span>{booking.start_time} - {booking.end_time}</span>
                                                 </div>
-                                                <div className="flex items-center gap-3 text-slate-600 text-sm font-medium">
-                                                    <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400">
+                                                <div className="flex items-center gap-3 text-theme-primary text-sm font-medium">
+                                                    <div className="w-8 h-8 rounded-lg bg-theme-bg flex items-center justify-center text-theme-secondary">
                                                         <Users size={16} weight="bold" />
                                                     </div>
                                                     <span className="capitalize">{booking.purpose || 'Team Meeting'}</span>
@@ -635,7 +635,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                                         setShowDatePopup(null);
                                                         openCancelModal(booking);
                                                     }}
-                                                    className="w-full mt-5 py-3 rounded-xl border-2 border-rose-100 text-rose-500 font-bold text-sm hover:bg-rose-50 transition-colors"
+                                                    className="w-full mt-5 py-3 rounded-xl border-2 border-rose-100 dark:border-rose-900/30 text-rose-500 font-bold text-sm hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors"
                                                 >
                                                     Cancel Reservation
                                                 </button>
@@ -761,8 +761,8 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                 };
 
                 return (
-                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={closeCancelModal}>
-                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[90vh]" onClick={e => e.stopPropagation()}>
+                    <div className="fixed inset-0 bg-theme-bg/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={closeCancelModal}>
+                        <div className="bg-theme-card border border-theme-border rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[90vh]" onClick={e => e.stopPropagation()}>
                             {/* Header */}
                             <div className="bg-gradient-to-r from-rose-500 to-red-500 px-6 py-5 text-white rounded-t-2xl flex-shrink-0">
                                 <h3 className="text-lg font-bold">Cancel Booking</h3>
@@ -774,14 +774,14 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                             <div className="p-6 space-y-5 overflow-y-auto flex-1">
                                 {/* Reason */}
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                    <label className="block text-xs font-bold text-theme-secondary opacity-50 uppercase tracking-wider mb-2">
                                         Reason <span className="text-rose-500">*</span>
                                     </label>
                                     <textarea
                                         value={cancelReason}
                                         onChange={e => setCancelReason(e.target.value)}
                                         placeholder="Why are you cancelling?"
-                                        className="w-full border border-slate-200 rounded-xl p-3 text-sm resize-none h-20 focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all font-medium"
+                                        className="w-full bg-theme-bg border border-theme-border rounded-xl p-3 text-sm resize-none h-20 focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all font-medium text-theme-primary placeholder:text-theme-secondary/30"
                                         autoFocus
                                     />
                                 </div>
@@ -789,7 +789,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                 {/* Date + Slot selector (for multi-day or show slots directly for single-day) */}
                                 <div>
                                     <div className="flex items-center justify-between mb-3">
-                                        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                        <label className="text-xs font-bold text-theme-secondary opacity-50 uppercase tracking-wider">
                                             {isMultiDay ? 'Select date(s) & slots to cancel' : 'Select slot(s) to cancel'}
                                         </label>
                                         {isMultiDay && (
@@ -814,20 +814,20 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                                 const isDateSelected = !!cancelDateSlots[date];
                                                 const selectedSlotSet = cancelDateSlots[date] || new Set<string>();
                                                 return (
-                                                    <div key={date} className={`border-2 rounded-xl overflow-hidden transition-all ${isDateSelected ? 'border-rose-300' : 'border-slate-100'
+                                                    <div key={date} className={`border-2 rounded-xl overflow-hidden transition-all ${isDateSelected ? 'border-rose-300' : 'border-theme-border'
                                                         }`}>
                                                         {/* Date toggle header */}
                                                         <button
                                                             onClick={() => toggleDate(date)}
-                                                            className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors ${isDateSelected ? 'bg-rose-50' : 'bg-slate-50 hover:bg-slate-100'
+                                                            className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors ${isDateSelected ? 'bg-rose-50 dark:bg-rose-900/10' : 'bg-theme-bg hover:bg-theme-bg/80'
                                                                 }`}
                                                         >
                                                             <div className="flex items-center gap-3">
-                                                                <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all ${isDateSelected ? 'bg-rose-500 border-rose-500' : 'border-slate-300'
+                                                                <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all ${isDateSelected ? 'bg-rose-500 border-rose-500' : 'border-theme-border'
                                                                     }`}>
                                                                     {isDateSelected && <Check size={12} weight="bold" className="text-white" />}
                                                                 </div>
-                                                                <span className="font-bold text-sm text-slate-700">
+                                                                <span className="font-bold text-sm text-theme-primary">
                                                                     {new Date(date + 'T00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                                                                 </span>
                                                             </div>
@@ -840,12 +840,12 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
 
                                                         {/* Slots for this date (only shown when date is selected) */}
                                                         {isDateSelected && (
-                                                            <div className="px-4 py-3 grid grid-cols-2 gap-2 bg-white">
+                                                            <div className="px-4 py-3 grid grid-cols-2 gap-2 bg-theme-card">
                                                                 {allSlots.map(slot => {
                                                                     const checked = selectedSlotSet.has(slot);
                                                                     const [from, to] = slot.split('-');
                                                                     return (
-                                                                        <label key={slot} className={`flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer transition-all text-xs font-bold ${checked ? 'border-rose-300 bg-rose-50 text-rose-700' : 'border-slate-100 bg-slate-50 text-slate-400'
+                                                                        <label key={slot} className={`flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer transition-all text-xs font-bold ${checked ? 'border-rose-300 bg-rose-50 dark:bg-rose-900/20 text-rose-700' : 'border-theme-border bg-theme-bg text-theme-secondary opacity-50'
                                                                             }`}>
                                                                             <input
                                                                                 type="checkbox"
@@ -872,7 +872,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                                 const checked = (cancelDateSlots[date] || new Set()).has(slot);
                                                 const [from, to] = slot.split('-');
                                                 return (
-                                                    <label key={slot} className={`flex items-center gap-2 p-3 rounded-xl border-2 cursor-pointer transition-all text-xs font-bold ${checked ? 'border-rose-300 bg-rose-50 text-rose-700' : 'border-slate-100 bg-slate-50 text-slate-400'
+                                                    <label key={slot} className={`flex items-center gap-2 p-3 rounded-xl border-2 cursor-pointer transition-all text-xs font-bold ${checked ? 'border-rose-300 bg-rose-50 dark:bg-rose-900/20 text-rose-700' : 'border-theme-border bg-theme-bg text-theme-secondary opacity-50'
                                                         }`}>
                                                         <input
                                                             type="checkbox"

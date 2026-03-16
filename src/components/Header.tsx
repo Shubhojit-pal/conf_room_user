@@ -115,11 +115,11 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
     return (
         <>
             {/* ─── Top Header ─── */}
-            <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-4 transition-colors">
+            <header className="sticky top-0 z-50 bg-theme-bg border-b border-theme-border py-4 transition-colors">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center">
                     {/* Logo */}
                     <div
-                        className="flex items-center gap-3 font-bold text-xl text-slate-800 dark:text-slate-100 cursor-pointer"
+                        className="flex items-center gap-3 font-bold text-xl text-theme-primary cursor-pointer"
                         onClick={() => navigate('home')}
                     >
                         <div className="bg-primary text-white p-1.5 rounded-md flex">
@@ -129,14 +129,14 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                     </div>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex gap-1 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-xl border border-slate-100 dark:border-slate-700">
+                    <nav className="hidden md:flex gap-1 bg-theme-bg p-1.5 rounded-xl border border-theme-border">
                         {navItems.map((item) => (
                             <button
                                 key={item.id}
                                 onClick={() => navigate(item.id)}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${currentView === item.id
-                                    ? 'bg-white dark:bg-slate-700 text-primary shadow-sm'
-                                    : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700'
+                                    ? 'bg-theme-card text-primary shadow-sm'
+                                    : 'text-theme-secondary hover:text-theme-primary hover:bg-theme-card'
                                     }`}
                             >
                                 {item.label}
@@ -145,8 +145,8 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                         <button
                             onClick={() => navigate('help')}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${currentView === 'help'
-                                ? 'bg-white dark:bg-slate-700 text-primary shadow-sm'
-                                : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700'
+                                ? 'bg-theme-card text-primary shadow-sm'
+                                : 'text-theme-secondary hover:text-theme-primary hover:bg-theme-card'
                                 }`}
                         >
                             Help
@@ -176,7 +176,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                 {/* Notification Bell */}
                                 <div className="relative" ref={notifRef}>
                                     <button
-                                        className="relative text-slate-500 hover:text-slate-700 transition-colors p-2"
+                                        className="relative text-theme-secondary hover:text-theme-primary transition-colors p-2"
                                         onClick={() => setShowNotifications(v => !v)}
                                     >
                                         <Bell size={24} />
@@ -190,11 +190,11 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                     {/* Notification Dropdown — constrained for mobile */}
                                     {showNotifications && (
                                         <div
-                                            className="absolute top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-sm bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden z-[100]"
+                                            className="absolute top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-sm bg-theme-card rounded-xl shadow-xl border border-theme-border overflow-hidden z-[100]"
                                             style={{ right: 0, maxHeight: '70vh' }}
                                         >
-                                            <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
-                                                <h3 className="font-bold text-slate-800 dark:text-slate-100">Notifications</h3>
+                                            <div className="p-4 border-b border-theme-border flex justify-between items-center bg-theme-bg">
+                                                <h3 className="font-bold text-theme-primary">Notifications</h3>
                                                 <button
                                                     onClick={handleMarkAllRead}
                                                     className="text-xs text-primary font-medium hover:underline"
@@ -212,23 +212,23 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                                         <div
                                                             key={notif._id}
                                                             onClick={() => !notif.isRead && handleMarkRead(notif._id)}
-                                                            className={`p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors cursor-pointer ${!notif.isRead ? 'bg-blue-50/30' : ''}`}
+                                                            className={`p-4 border-b border-theme-border hover:bg-theme-bg transition-colors cursor-pointer ${!notif.isRead ? 'bg-primary/5' : ''}`}
                                                         >
                                                             <div className="flex justify-between items-start mb-1 gap-2">
-                                                                <h4 className={`text-sm flex-1 ${notif.title === 'Booking Approved' ? 'text-primary font-bold' : !notif.isRead ? 'font-bold text-slate-800' : 'font-medium text-slate-600'}`}>
+                                                                <h4 className={`text-sm flex-1 ${notif.title === 'Booking Approved' ? 'text-primary font-bold' : !notif.isRead ? 'font-bold text-theme-primary' : 'font-medium text-theme-secondary'}`}>
                                                                     {notif.title}
                                                                 </h4>
-                                                                <span className="text-[10px] text-slate-400 whitespace-nowrap shrink-0">{formatTime(notif.createdAt)}</span>
+                                                                <span className="text-[10px] text-theme-secondary opacity-70 whitespace-nowrap shrink-0">{formatTime(notif.createdAt)}</span>
                                                             </div>
-                                                            <p className="text-xs text-slate-500 leading-relaxed">{notif.message}</p>
+                                                            <p className="text-xs text-theme-secondary leading-relaxed">{notif.message}</p>
                                                         </div>
                                                     ))
                                                 )}
                                             </div>
-                                            <div className="p-3 text-center border-t border-slate-100 bg-slate-50/30">
+                                            <div className="p-3 text-center border-t border-theme-border bg-theme-bg">
                                                 <button
                                                     onClick={() => navigate('my-bookings')}
-                                                    className="text-xs font-bold text-slate-600 hover:text-primary transition-colors"
+                                                    className="text-xs font-bold text-theme-secondary hover:text-primary transition-colors"
                                                 >
                                                     View All Activity
                                                 </button>
@@ -238,19 +238,19 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                 </div>
 
                                 {/* Theme & Sound Toggles (Desktop) */}
-                                <div className="hidden sm:flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700">
+                                <div className="hidden sm:flex items-center gap-1 bg-theme-bg p-1 rounded-lg border border-theme-border">
                                     <button
                                         onClick={toggleTheme}
                                         title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-                                        className="p-1.5 rounded-md text-slate-500 hover:text-primary hover:bg-white dark:hover:bg-slate-700 transition-all"
+                                        className="p-1.5 rounded-md text-theme-secondary hover:text-primary hover:bg-theme-card transition-all"
                                     >
                                         {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
                                     </button>
-                                    <div className="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-0.5" />
+                                    <div className="w-px h-4 bg-theme-border mx-0.5" />
                                     <button
                                         onClick={toggleSounds}
                                         title={soundsEnabled ? 'Disable UI Sounds' : 'Enable UI Sounds'}
-                                        className={`p-1.5 rounded-md transition-all ${soundsEnabled ? 'text-primary' : 'text-slate-400 hover:text-slate-600'}`}
+                                        className={`p-1.5 rounded-md transition-all ${soundsEnabled ? 'text-primary' : 'text-theme-secondary opacity-70 hover:opacity-100 hover:text-theme-primary'}`}
                                     >
                                         {soundsEnabled ? <SpeakerHigh size={20} /> : <SpeakerNone size={20} />}
                                     </button>
@@ -269,7 +269,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                 <button
                                     onClick={logout}
                                     title="Sign Out"
-                                    className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors text-sm font-medium"
+                                    className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg text-theme-secondary hover:text-red-600 hover:bg-red-50 transition-colors text-sm font-medium"
                                 >
                                     <SignOut size={18} />
                                 </button>
@@ -288,15 +288,15 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
 
                 {/* Mobile Dropdown Menu */}
                 {showMobileMenu && (
-                    <div className="md:hidden border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pb-4 pt-2">
+                    <div className="md:hidden border-t border-theme-border bg-theme-bg px-4 pb-4 pt-2 shadow-inner">
                         <div className="flex flex-col gap-1">
                             {navItems.map((item) => (
                                 <button
                                     key={item.id}
                                     onClick={() => navigate(item.id)}
-                                    className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left ${currentView === item.id
-                                        ? 'bg-white text-primary shadow-sm border border-slate-100'
-                                        : 'text-slate-600 hover:bg-slate-50'
+                                    className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left transition-colors ${currentView === item.id
+                                        ? 'bg-theme-card text-primary shadow-sm border border-theme-border'
+                                        : 'text-theme-secondary hover:bg-theme-card hover:text-theme-primary'
                                         }`}
                                 >
                                     {item.icon}
@@ -305,19 +305,19 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                             ))}
                             <button
                                 onClick={() => navigate('help')}
-                                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left ${currentView === 'help'
-                                    ? 'bg-white text-primary shadow-sm border border-slate-100'
-                                    : 'text-slate-600 hover:bg-slate-50'
+                                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left transition-colors ${currentView === 'help'
+                                    ? 'bg-theme-card text-primary shadow-sm border border-theme-border'
+                                    : 'text-theme-secondary hover:bg-theme-card hover:text-theme-primary'
                                     }`}
                             >
                                 Help
                             </button>
                             {user && (
                                 <>
-                                    <hr className="my-1 border-slate-100" />
+                                    <hr className="my-1 border-theme-border" />
                                     <button
                                         onClick={() => navigate('profile')}
-                                        className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50"
+                                        className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-theme-secondary hover:bg-theme-card hover:text-theme-primary"
                                     >
                                         <User size={20} />
                                         Profile ({user.name.split(' ')[0]})
@@ -329,22 +329,22 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                         <SignOut size={20} />
                                         Sign Out
                                     </button>
-                                    <hr className="my-1 border-slate-100 dark:border-slate-800" />
+                                    <hr className="my-1 border-theme-border" />
                                     <div className="flex items-center justify-between px-4 py-3">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Appearance</span>
+                                        <span className="text-sm font-medium text-theme-secondary">Appearance</span>
                                         <button
                                             onClick={toggleTheme}
-                                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
+                                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-theme-bg text-theme-primary border border-theme-border"
                                         >
                                             {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
                                             <span className="text-xs uppercase font-bold">{theme === 'light' ? 'Dark' : 'Light'}</span>
                                         </button>
                                     </div>
                                     <div className="flex items-center justify-between px-4 py-3">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Interface Sounds</span>
+                                        <span className="text-sm font-medium text-theme-secondary">Interface Sounds</span>
                                         <button
                                             onClick={toggleSounds}
-                                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all ${soundsEnabled ? 'bg-primary/10 text-primary border-primary/20' : 'bg-slate-50 dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'}`}
+                                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all ${soundsEnabled ? 'bg-primary/10 text-primary border-primary/20' : 'bg-theme-bg text-theme-secondary opacity-70 border-theme-border'}`}
                                         >
                                             {soundsEnabled ? <SpeakerHigh size={18} /> : <SpeakerNone size={18} />}
                                             <span className="text-xs uppercase font-bold">{soundsEnabled ? 'On' : 'Off'}</span>
@@ -359,7 +359,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
 
             {/* ─── Mobile Bottom Navigation Bar (authenticated only) ─── */}
             {user && (
-                <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-lg">
+                <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-theme-bg border-t border-theme-border shadow-lg">
                     <div className="flex justify-around items-center px-1 py-2">
                         {navItems.map((item) => {
                             const isActive = currentView === item.id;
@@ -370,7 +370,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                     onClick={() => navigate(item.id)}
                                     className={`flex flex-col items-center gap-0.5 px-1 py-1.5 rounded-xl flex-1 transition-all ${isActive
                                         ? 'text-primary'
-                                        : 'text-slate-400 hover:text-slate-600'
+                                        : 'text-theme-secondary opacity-70'
                                         }`}
                                 >
                                     <div className={`relative p-1 rounded-lg transition-all ${isActive ? 'bg-primary/10' : ''}`}>
@@ -381,7 +381,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                             </span>
                                         )}
                                     </div>
-                                    <span className={`text-[10px] font-semibold ${isActive ? 'text-primary' : 'text-slate-400'}`}>
+                                    <span className={`text-[10px] font-semibold ${isActive ? 'text-primary' : 'text-theme-secondary opacity-70'}`}>
                                         {item.label}
                                     </span>
                                 </button>

@@ -24,6 +24,13 @@ export default {
                     orangeLight: '#fef3c7', // amber-100
                     red: '#ef4444', // red-500
                     redLight: '#fee2e2', // red-100
+                },
+                theme: {
+                    bg: 'var(--bg-app)',
+                    card: 'var(--bg-card)',
+                    primary: 'var(--text-primary)',
+                    secondary: 'var(--text-secondary)',
+                    border: 'var(--border-theme)',
                 }
             },
             fontFamily: {

@@ -424,7 +424,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
         return (
             <div className="flex flex-col items-center justify-center min-h-[400px]">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
-                <p className="text-slate-500 font-medium">Loading spaces...</p>
+                <p className="text-theme-secondary font-medium">Loading spaces...</p>
             </div>
         );
     }
@@ -458,18 +458,18 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                     >
                         ← Back to Offices
                     </button>
-                    <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">{selectedOffice}</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-2">Select a room type to view details and book</p>
+                    <h1 className="text-3xl font-bold text-theme-primary">{selectedOffice}</h1>
+                    <p className="text-theme-secondary mt-2">Select a room type to view details and book</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {roomTypes.map((room) => (
                         <div
                             key={room.id}
-                            className={`bg-white dark:bg-slate-900 rounded-xl border overflow-hidden transition-shadow ${
+                            className={`bg-theme-card rounded-xl border overflow-hidden transition-shadow ${
                                 room.isInactive
-                                    ? 'border-slate-200 dark:border-slate-800 opacity-60 grayscale-[40%]'
-                                    : 'border-slate-200 dark:border-slate-800 hover:shadow-lg'
+                                    ? 'border-theme-border opacity-60 grayscale-[40%]'
+                                    : 'border-theme-border hover:shadow-lg'
                             }`}
                         >
                             <div className="h-48 overflow-hidden bg-slate-100 relative">
@@ -489,9 +489,9 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                 )}
                             </div>
                             <div className="p-6">
-                                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2">{room.type}</h3>
-                                <p className="text-slate-600 dark:text-slate-400 text-sm mb-4">{room.description}</p>
-                                <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-400 mb-4">
+                                <h3 className="text-lg font-bold text-theme-primary mb-2">{room.type}</h3>
+                                <p className="text-theme-secondary text-sm mb-4">{room.description}</p>
+                                <div className="flex items-center gap-4 text-sm text-theme-secondary mb-4">
                                     <div className="flex items-center gap-1.5">
                                         <Users size={16} className="text-primary" />
                                         <span>{room.capacity} people</span>
@@ -510,7 +510,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                     disabled={room.isInactive}
                                     className={`w-full font-semibold py-2 rounded-lg transition-colors ${
                                         room.isInactive
-                                            ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                                            ? 'bg-theme-bg text-theme-secondary opacity-40 cursor-not-allowed border border-theme-border'
                                             : 'bg-primary hover:bg-primary-dark text-white cursor-pointer'
                                     }`}
                                 >
@@ -538,8 +538,8 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
                     {/* Room Details */}
                     <div className="lg:col-span-2">
-                        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden mb-6">
-                            <div className="h-64 overflow-hidden bg-slate-100">
+                        <div className="bg-theme-card rounded-xl border border-theme-border overflow-hidden mb-6">
+                            <div className="h-64 overflow-hidden bg-theme-bg/50">
                                 <img
                                     src={selectedRoomType.image}
                                     alt={selectedRoomType.name}
@@ -548,25 +548,25 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                 />
                             </div>
                             <div className="p-8">
-                                <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-2">{selectedRoomType.name}</h1>
-                                <p className="text-slate-600 dark:text-slate-400 mb-6">{selectedRoomType.description}</p>
+                                <h1 className="text-3xl font-bold text-theme-primary mb-2">{selectedRoomType.name}</h1>
+                                <p className="text-theme-secondary mb-6">{selectedRoomType.description}</p>
 
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                                    <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                                        <p className="text-slate-500 dark:text-slate-400 text-sm">Capacity</p>
+                                    <div className="p-4 bg-theme-bg/50 rounded-lg border border-theme-border">
+                                        <p className="text-theme-secondary text-sm">Capacity</p>
                                         <p className="text-2xl font-bold text-primary">{selectedRoomType.capacity}</p>
                                     </div>
-                                    <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg invisible h-0">
-                                        <p className="text-slate-500 dark:text-slate-400 text-sm">Cost</p>
-                                        <p className="text-2xl font-bold text-slate-800 dark:text-slate-100">Free</p>
+                                    <div className="p-4 bg-theme-bg/50 rounded-lg invisible h-0">
+                                        <p className="text-theme-secondary text-sm">Cost</p>
+                                        <p className="text-2xl font-bold text-theme-primary">Free</p>
                                     </div>
                                 </div>
 
                                 <div className="mb-8">
-                                    <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4">Amenities</h3>
+                                    <h3 className="text-lg font-bold text-theme-primary mb-4">Amenities</h3>
                                     <div className="flex flex-wrap gap-3">
                                         {selectedRoomType.amenities.map((amenity) => (
-                                            <span key={amenity} className="px-3 py-2 bg-primary-light dark:bg-primary/20 text-primary rounded-lg text-sm font-medium capitalize">
+                                            <span key={amenity} className="px-3 py-2 bg-primary/10 text-primary rounded-lg text-sm font-medium capitalize border border-primary/20">
                                                 {amenity.replace('-', ' ')}
                                             </span>
                                         ))}
@@ -574,14 +574,14 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                 </div>
 
                                 <div className="mb-8">
-                                    <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4">Room Layout</h3>
-                                    <div className="bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-lg p-12 border-2 border-dashed border-slate-300 dark:border-slate-700">
+                                    <h3 className="text-lg font-bold text-theme-primary mb-4">Room Layout</h3>
+                                    <div className="bg-gradient-to-b from-theme-bg to-theme-card rounded-lg p-12 border-2 border-dashed border-theme-border">
                                         {/* Screen/Display Area */}
                                         <div className="mb-8">
-                                            <div className="h-16 bg-slate-400 rounded-lg flex items-center justify-center text-white font-bold mb-2">
+                                            <div className="h-16 bg-theme-border flex items-center justify-center text-theme-primary font-bold mb-2 rounded-lg border border-theme-border shadow-inner">
                                                 Screen / Display Area
                                             </div>
-                                            <p className="text-center text-sm text-slate-500">Front of Room</p>
+                                            <p className="text-center text-sm text-theme-secondary">Front of Room</p>
                                         </div>
 
                                         {/* Seats Layout */}
@@ -600,7 +600,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                             ))}
                                         </div>
 
-                                        <p className="text-center text-sm text-slate-500">← Click to select your seat(s) →</p>
+                                        <p className="text-center text-sm text-theme-secondary">← Click to select your seat(s) →</p>
                                     </div>
                                 </div>
                             </div>
@@ -609,8 +609,8 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
 
                     {/* Booking Form */}
                     <div>
-                        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 sticky top-8">
-                            <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-6">Book This Room</h3>
+                        <div className="bg-theme-card rounded-xl border border-theme-border p-6 sticky top-8">
+                            <h3 className="text-xl font-bold text-theme-primary mb-6">Book This Room</h3>
 
                             {bookingResult && (
                                 <div className={`mb-4 p-3 rounded-lg text-sm font-medium ${bookingResult.ok ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-600 border border-red-200'
@@ -677,30 +677,30 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                             }}>
                                 {/* Date Selection */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Reservation Date</label>
+                                    <label className="block text-sm font-semibold text-theme-primary mb-1.5">Reservation Date</label>
                                     <input
                                         type="date"
                                         value={bookDate}
                                         min={todayStr}
                                         onChange={e => setBookDate(e.target.value)}
                                         required
-                                        className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 dark:bg-slate-800 font-medium text-sm text-slate-800 dark:text-slate-100"
+                                        className="w-full p-3 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg font-medium text-sm text-theme-primary"
                                     />
                                 </div>
 
                                 {/* Time Slot Grid */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                                    <label className="block text-sm font-semibold text-theme-primary mb-1.5">
                                         Select Time Slots
                                     </label>
-                                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-wider">
+                                    <p className="text-[10px] text-theme-secondary opacity-60 mb-3 uppercase tracking-wider">
                                         Click start slot, then end slot to define range
                                     </p>
 
                                     {loadingSlots ? (
                                         <div className="grid grid-cols-2 gap-2">
                                             {Array.from({ length: 4 }).map((_, i) => (
-                                                <div key={i} className="h-10 bg-slate-100 rounded-xl animate-pulse" />
+                                                <div key={i} className="h-10 bg-theme-bg/50 border border-theme-border rounded-xl animate-pulse" />
                                             ))}
                                         </div>
                                     ) : (
@@ -714,13 +714,13 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                                 let classes = 'relative flex items-center justify-center px-2 py-3 rounded-xl text-[11px] font-bold transition-all border-2 ';
 
                                                 if (status === 'past') {
-                                                    classes += 'bg-slate-50 dark:bg-slate-800/50 text-slate-300 dark:text-slate-600 border-slate-100 dark:border-slate-700 cursor-not-allowed line-through';
+                                                    classes += 'bg-theme-bg opacity-30 text-theme-secondary border-theme-border cursor-not-allowed line-through';
                                                 } else if (status === 'booked') {
-                                                    classes += 'bg-rose-50 dark:bg-rose-500/10 text-rose-300 dark:text-rose-500 border-rose-100 dark:border-rose-900/30 cursor-not-allowed';
+                                                    classes += 'bg-rose-500/10 text-rose-500 border-rose-500/30 cursor-not-allowed';
                                                 } else if (selected) {
                                                     classes += 'bg-primary border-primary text-white shadow-md shadow-primary/20 scale-[0.98]';
                                                 } else {
-                                                    classes += 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-primary hover:text-primary cursor-pointer';
+                                                    classes += 'bg-theme-bg text-theme-secondary border-theme-border hover:border-primary hover:text-primary cursor-pointer';
                                                 }
 
                                                 return (
@@ -745,13 +745,13 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Purpose</label>
-                                    <textarea rows={3} value={bookPurpose} onChange={e => setBookPurpose(e.target.value)} className="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100" placeholder="Meeting purpose..."></textarea>
+                                    <label className="block text-sm font-medium text-theme-primary mb-2">Purpose</label>
+                                    <textarea rows={3} value={bookPurpose} onChange={e => setBookPurpose(e.target.value)} className="w-full p-3 rounded-lg border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg text-theme-primary" placeholder="Meeting purpose..."></textarea>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Attendees</label>
-                                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mb-1 uppercase tracking-wider">Max capacity: {selectedRoomType.capacity} people</p>
+                                    <label className="block text-sm font-medium text-theme-primary mb-2">Attendees</label>
+                                    <p className="text-[10px] text-theme-secondary opacity-60 mb-1 uppercase tracking-wider">Max capacity: {selectedRoomType.capacity} people</p>
                                     <input
                                         type="number"
                                         min="1"
@@ -766,11 +766,11 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                             }
                                         }}
                                         required
-                                        className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100"
+                                        className="w-full p-3 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg text-theme-primary"
                                     />
                                 </div>
 
-                                <div className="pt-4 border-t border-slate-200">
+                                <div className="pt-4 border-t border-theme-border">
                                     <button
                                         type="submit"
                                         disabled={bookingSubmitting || (selectedRoomType && Number(bookAttendees) > selectedRoomType.capacity)}
@@ -810,28 +810,28 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
 
                 {/* ── MOBILE: Filter Modal ── */}
                 {isMobileFilterOpen && (
-                    <div className="lg:hidden fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm flex items-end justify-center p-4">
-                        <div className="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl relative animate-in slide-in-from-bottom-8 duration-300">
+                    <div className="lg:hidden fixed inset-0 z-[100] bg-theme-bg/60 backdrop-blur-sm flex items-end justify-center p-4">
+                        <div className="bg-theme-card w-full max-w-md rounded-3xl p-6 shadow-2xl relative animate-in slide-in-from-bottom-8 duration-300 border border-theme-border">
                             <button
                                 onClick={() => setIsMobileFilterOpen(false)}
-                                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 bg-slate-100 rounded-full"
+                                className="absolute top-4 right-4 p-2 text-theme-secondary hover:text-theme-primary bg-theme-bg rounded-full border border-theme-border"
                             >
                                 <X size={20} weight="bold" />
                             </button>
                             
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="p-2 rounded-xl bg-primary-light text-primary">
+                                <div className="p-2 rounded-xl bg-primary/10 text-primary">
                                     <Funnel size={24} weight="fill" />
                                 </div>
-                                <h3 className="text-xl font-bold text-slate-800">Quick Filters</h3>
+                                <h3 className="text-xl font-bold text-theme-primary">Quick Filters</h3>
                             </div>
 
                             <div className="flex flex-col gap-5">
                                 {/* Search Bar */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-2">Search</label>
+                                    <label className="block text-sm font-semibold text-theme-primary mb-2">Search</label>
                                     <div className="relative">
-                                        <MagnifyingGlass size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
+                                        <MagnifyingGlass size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-theme-secondary opacity-60" />
                                         <input
                                             type="text"
                                             placeholder="Location or name..."
@@ -840,16 +840,16 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                                 setSearchQuery(e.target.value);
                                                 applyFilters(undefined, undefined, undefined, undefined, e.target.value);
                                             }}
-                                            className="w-full pl-10 pr-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-slate-50 font-medium"
+                                            className="w-full pl-10 pr-4 py-3.5 rounded-xl border border-theme-border text-theme-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-theme-bg font-medium"
                                         />
                                     </div>
                                 </div>
 
                                 {/* Room Type */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-2">Room Type</label>
+                                    <label className="block text-sm font-semibold text-theme-primary mb-2">Room Type</label>
                                     <select
-                                        className="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 font-medium"
+                                        className="w-full p-3.5 rounded-xl border border-theme-border text-theme-primary focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg font-medium"
                                         value={selectedRoomTypes[0] || ""}
                                         onChange={(e) => {
                                             const val = e.target.value ? [e.target.value] : [];
@@ -864,9 +864,9 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
 
                                 {/* Location */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-2">Location</label>
+                                    <label className="block text-sm font-semibold text-theme-primary mb-2">Location</label>
                                     <select
-                                        className="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 font-medium"
+                                        className="w-full p-3.5 rounded-xl border border-theme-border text-theme-primary focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg font-medium"
                                         value={selectedLocations[0] || ""}
                                         onChange={(e) => {
                                             const val = e.target.value ? [e.target.value] : [];
@@ -881,9 +881,9 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
 
                                 {/* Capacity */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-2">Capacity</label>
+                                    <label className="block text-sm font-semibold text-theme-primary mb-2">Capacity</label>
                                     <select
-                                        className="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 font-medium"
+                                        className="w-full p-3.5 rounded-xl border border-theme-border text-theme-primary focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg font-medium"
                                         value={selectedCapacity[0] || ""}
                                         onChange={(e) => {
                                             const val = e.target.value ? [e.target.value] : [];
@@ -898,9 +898,9 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
 
                                 {/* Amenities */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-2">Amenities</label>
+                                    <label className="block text-sm font-semibold text-theme-primary mb-2">Amenities</label>
                                     <select
-                                        className="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 font-medium capitalize"
+                                        className="w-full p-3.5 rounded-xl border border-theme-border text-theme-primary focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg font-medium capitalize"
                                         value={selectedAmenities[0] || ""}
                                         onChange={(e) => {
                                             const val = e.target.value ? [e.target.value] : [];
@@ -927,15 +927,15 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                 {/* ── DESKTOP: Filters Sidebar ── */}
                 <div className="hidden lg:block w-64 shrink-0 space-y-8">
                     <div className="flex items-center gap-2 mb-4">
-                        <Funnel size={20} className="text-slate-800" />
-                        <h2 className="font-bold text-lg text-slate-800">Filters</h2>
+                        <Funnel size={20} className="text-theme-primary" />
+                        <h2 className="font-bold text-lg text-theme-primary">Filters</h2>
                     </div>
 
                     {/* Room Type Filter */}
                     <div>
                         <div className="flex justify-between items-center mb-4 cursor-pointer">
-                            <h3 className="font-semibold text-slate-700">Room Type</h3>
-                            <CaretDown size={14} />
+                            <h3 className="font-semibold text-theme-primary opacity-80">Room Type</h3>
+                            <CaretDown size={14} className="text-theme-secondary opacity-50" />
                         </div>
                         <div className="space-y-3">
                             {filters.roomType.map((type) => (
@@ -944,9 +944,9 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                         type="checkbox"
                                         checked={selectedRoomTypes.includes(type)}
                                         onChange={() => handleRoomTypeChange(type)}
-                                        className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary"
+                                        className="w-4 h-4 rounded border-theme-border text-primary focus:ring-primary bg-theme-bg"
                                     />
-                                    <span className="text-slate-600 group-hover:text-primary transition-colors">{type}</span>
+                                    <span className="text-theme-secondary group-hover:text-primary transition-colors">{type}</span>
                                 </label>
                             ))}
                         </div>
@@ -955,8 +955,8 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                     {/* Location Filter */}
                     <div>
                         <div className="flex justify-between items-center mb-4 cursor-pointer">
-                            <h3 className="font-semibold text-slate-700">Location</h3>
-                            <CaretDown size={14} />
+                            <h3 className="font-semibold text-theme-primary opacity-80">Location</h3>
+                            <CaretDown size={14} className="text-theme-secondary opacity-50" />
                         </div>
                         <div className="space-y-3">
                             {filters.location.map((loc) => (
@@ -976,8 +976,8 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                     {/* Amenities Filter */}
                     <div>
                         <div className="flex justify-between items-center mb-4 cursor-pointer">
-                            <h3 className="font-semibold text-slate-700">Amenities</h3>
-                            <CaretDown size={14} />
+                            <h3 className="font-semibold text-theme-primary opacity-80">Amenities</h3>
+                            <CaretDown size={14} className="text-theme-secondary opacity-50" />
                         </div>
                         <div className="space-y-3">
                             {filters.amenities.map((amenity) => (
@@ -997,8 +997,8 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                     {/* Capacity Filter */}
                     <div>
                         <div className="flex justify-between items-center mb-4 cursor-pointer">
-                            <h3 className="font-semibold text-slate-700">Capacity</h3>
-                            <CaretDown size={14} />
+                            <h3 className="font-semibold text-theme-primary opacity-80">Capacity</h3>
+                            <CaretDown size={14} className="text-theme-secondary opacity-50" />
                         </div>
                         <div className="space-y-3">
                             {filters.capacity.map((cap) => (
@@ -1016,7 +1016,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                     </div>
 
                     {/* Apply Filters Button */}
-                    <div className="pt-4 border-t border-slate-200">
+                    <div className="pt-4 border-t border-theme-border">
                         <button
                             onClick={() => applyFilters()}
                             className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-lg transition-colors"
@@ -1031,7 +1031,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                     {/* Desktop Search Bar */}
                     <div className="hidden lg:block mb-6">
                         <div className="relative">
-                            <MagnifyingGlass size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
+                            <MagnifyingGlass size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-theme-secondary opacity-60" />
                             <input
                                 type="text"
                                 placeholder="Search by location or office name..."
@@ -1040,13 +1040,13 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                     setSearchQuery(e.target.value);
                                     applyFilters(undefined, undefined, undefined, undefined, e.target.value);
                                 }}
-                                className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                                className="w-full pl-10 pr-4 py-3 rounded-lg border border-theme-border text-theme-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-theme-bg"
                             />
                         </div>
                     </div>
 
                     <div className="flex justify-between items-center mb-6">
-                        <span className="text-slate-500 font-medium">{getUniqueOffices().length} offices available</span>
+                        <span className="text-theme-secondary font-medium">{getUniqueOffices().length} offices available</span>
                     </div>
 
                     {/* Office Cards */}
@@ -1054,10 +1054,10 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                         {getUniqueOffices().map((office) => (
                             <div
                                 key={office.location}
-                                className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow group"
+                                className="bg-theme-card rounded-xl border border-theme-border overflow-hidden hover:shadow-lg transition-shadow group"
                             >
                                 {/* Office Image */}
-                                <div className="h-48 overflow-hidden bg-slate-100 cursor-pointer" onClick={() => setSelectedOffice(office.location)}>
+                                <div className="h-48 overflow-hidden bg-theme-bg cursor-pointer" onClick={() => setSelectedOffice(office.location)}>
                                     <img
                                         src={office.image}
                                         alt={office.name}
@@ -1069,15 +1069,15 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
 
                                 {/* Office Info */}
                                 <div className="p-6">
-                                    <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-primary transition-colors">{office.name}</h3>
-                                    <p className="text-slate-600 text-sm mb-4">
+                                    <h3 className="text-xl font-bold text-theme-primary mb-2 group-hover:text-primary transition-colors">{office.name}</h3>
+                                    <p className="text-theme-secondary text-sm mb-4">
                                         {getRoomTypesForOffice(office.location).length} room types available
                                     </p>
 
                                     {/* Room Types Preview */}
                                     <div className="space-y-2 mb-6">
                                         {[...new Set(getRoomTypesForOffice(office.location).map(r => r.type))].map((type) => (
-                                            <span key={type} className="inline-block px-3 py-1 bg-slate-100 text-slate-700 text-xs rounded-full mr-2 mb-2">
+                                            <span key={type} className="inline-block px-3 py-1 bg-theme-bg text-theme-secondary text-xs rounded-full mr-2 mb-2 border border-theme-border">
                                                 {type}
                                             </span>
                                         ))}

@@ -57,28 +57,28 @@ const Analytics: React.FC<AnalyticsProps> = ({ onNavigate }) => {
         <section className="py-16 px-6">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-slate-900 mb-2">Booking Analytics</h2>
-                    <p className="text-slate-500">Insights into booking patterns and popular locations</p>
+                    <h2 className="text-3xl font-bold text-theme-primary mb-2">Booking Analytics</h2>
+                    <p className="text-theme-secondary opacity-60">Insights into booking patterns and popular locations</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Peak Booking Hours */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div className="bg-theme-card rounded-2xl p-6 shadow-sm border border-theme-border">
                         <div className="flex items-center gap-4 mb-8">
-                            <div className="p-2 rounded-lg bg-secondary-light text-secondary">
+                            <div className="p-2 rounded-lg bg-secondary/10 text-secondary">
                                 <ChartBar size={24} weight="fill" />
                             </div>
-                            <h3 className="text-xl font-bold text-slate-800">Peak Booking Hours</h3>
+                            <h3 className="text-xl font-bold text-theme-primary">Peak Booking Hours</h3>
                         </div>
 
                         <div className="flex flex-col gap-5">
                             {hours.map((item, idx) => (
                                 <div key={idx}>
                                     <div className="flex justify-between text-sm font-medium mb-1.5">
-                                        <span className="text-slate-500">{item.time}</span>
+                                        <span className="text-theme-secondary opacity-60">{item.time}</span>
                                         <span className="text-secondary font-semibold">{item.count} bookings</span>
                                     </div>
-                                    <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                    <div className="h-2 w-full bg-theme-bg rounded-full overflow-hidden">
                                         <div
                                             className="h-full bg-secondary rounded-full"
                                             style={{ width: item.width }}
@@ -88,38 +88,38 @@ const Analytics: React.FC<AnalyticsProps> = ({ onNavigate }) => {
                             ))}
                         </div>
 
-                        <div className="mt-8 bg-secondary-light rounded-lg p-4 flex gap-4 items-start">
+                        <div className="mt-8 bg-secondary/5 border border-secondary/10 rounded-lg p-4 flex gap-4 items-start">
                             <Lightbulb size={24} className="text-secondary shrink-0 mt-0.5" />
                             <div>
-                                <strong className="block text-sm font-bold text-slate-900 mb-1">Pro Tip</strong>
-                                <p className="text-xs text-slate-600">Book early morning or late afternoon slots for better availability</p>
+                                <strong className="block text-sm font-bold text-theme-primary mb-1">Pro Tip</strong>
+                                <p className="text-xs text-theme-secondary opacity-80">Book early morning or late afternoon slots for better availability</p>
                             </div>
                         </div>
                     </div>
 
                     {/* Most Booked Locations */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col">
+                    <div className="bg-theme-card rounded-2xl p-6 shadow-sm border border-theme-border flex flex-col">
                         <div className="flex items-center gap-4 mb-8">
-                            <div className="p-2 rounded-lg bg-primary-light text-primary">
+                            <div className="p-2 rounded-lg bg-primary/10 text-primary">
                                 <MapPin size={24} weight="fill" />
                             </div>
-                            <h3 className="text-xl font-bold text-slate-800">Most Booked Locations</h3>
+                            <h3 className="text-xl font-bold text-theme-primary">Most Booked Locations</h3>
                         </div>
 
                         <div className="flex flex-col gap-6 flex-1">
                             {locations.map((loc, idx) => (
                                 <div key={idx} className="flex flex-col gap-2">
                                     <div className="flex items-center gap-3">
-                                        <div className={`p-1.5 rounded-md ${loc.iconBg} text-lg`}>
+                                        <div className={`p-1.5 rounded-md ${loc.iconBg.replace('-light', '/10')} text-lg`}>
                                             {loc.icon}
                                         </div>
-                                        <span className="flex-1 font-medium text-slate-800 text-sm">{loc.name}</span>
+                                        <span className="flex-1 font-medium text-theme-primary text-sm">{loc.name}</span>
                                         <div className="flex gap-2 text-sm">
-                                            <strong className="text-slate-900">{loc.count}</strong>
+                                            <strong className="text-theme-primary">{loc.count}</strong>
                                             <span className="text-primary text-xs font-bold pt-0.5">{loc.trend}</span>
                                         </div>
                                     </div>
-                                    <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                                    <div className="h-1.5 w-full bg-theme-bg rounded-full overflow-hidden">
                                         <div
                                             className={`h-full rounded-full ${loc.color}`}
                                             style={{ width: loc.width }}

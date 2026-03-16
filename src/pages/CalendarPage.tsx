@@ -390,18 +390,18 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
             {/* Header Section */}
             <div className="flex justify-between items-end mb-4 sm:mb-8">
                 <div>
-                    <h1 className="text-xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 bg-gradient-to-r from-violet-700 to-indigo-600 bg-clip-text text-transparent">Booking Calendar</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm sm:text-base">View and manage bookings</p>
+                    <h1 className="text-xl sm:text-3xl font-bold text-theme-primary bg-gradient-to-r from-violet-700 to-indigo-600 bg-clip-text text-transparent">Booking Calendar</h1>
+                    <p className="text-theme-secondary mt-1 text-sm sm:text-base">View and manage bookings</p>
                 </div>
             </div>
 
             {/* ── DESKTOP: Filters ── */}
-            <div className="hidden md:block bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 sm:p-5 mb-4 sm:mb-6 shadow-sm">
+            <div className="hidden md:block bg-theme-card border border-theme-border rounded-xl p-3 sm:p-5 mb-4 sm:mb-6 shadow-sm">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 mb-4">
                     <div>
-                        <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Filter by Location</label>
+                        <label className="block text-sm font-medium text-theme-primary opacity-70 mb-2">Filter by Location</label>
                         <select
-                            className="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary text-slate-700 dark:text-slate-200"
+                            className="w-full p-3 rounded-lg border border-theme-border bg-theme-bg focus:outline-none focus:ring-2 focus:ring-primary text-theme-primary"
                             value={tempLocation}
                             onChange={e => setTempLocation(e.target.value)}
                         >
@@ -412,9 +412,9 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Filter by Time Slot</label>
+                        <label className="block text-sm font-medium text-theme-primary opacity-70 mb-2">Filter by Time Slot</label>
                         <select
-                            className="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary text-slate-700 dark:text-slate-200"
+                            className="w-full p-3 rounded-lg border border-theme-border bg-theme-bg focus:outline-none focus:ring-2 focus:ring-primary text-theme-primary"
                             value={tempTimeSlot}
                             onChange={e => setTempTimeSlot(e.target.value)}
                         >
@@ -425,8 +425,8 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                         </select>
                     </div>
                 </div>
-                <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-                    <div className="flex items-center gap-2 text-xs text-slate-500">
+                <div className="flex items-center justify-between pt-3 border-t border-theme-border">
+                    <div className="flex items-center gap-2 text-xs text-theme-secondary">
                         {(filterLocation !== 'all' || filterTimeSlot !== 'all') && (
                             <span className="inline-flex items-center gap-1 bg-primary/10 text-primary font-semibold px-2 py-1 rounded-full">
                                 ✓ Filters active
@@ -441,7 +441,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                 setFilterLocation('all');
                                 setFilterTimeSlot('all');
                             }}
-                            className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-medium transition-colors px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
+                            className="text-sm text-theme-secondary hover:text-theme-primary font-medium transition-colors px-4 py-2 rounded-lg border border-theme-border hover:bg-theme-bg"
                         >
                             Reset
                         </button>
@@ -476,27 +476,27 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
 
             {/* ── MOBILE: Filter Modal ── */}
             {isMobileFilterOpen && (
-                <div className="md:hidden fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm flex items-end justify-center p-4">
-                    <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-6 shadow-2xl relative animate-in slide-in-from-bottom-8 duration-300">
+                <div className="md:hidden fixed inset-0 z-[100] bg-theme-bg/60 backdrop-blur-sm flex items-end justify-center p-4">
+                    <div className="bg-theme-card w-full max-w-md rounded-3xl p-6 shadow-2xl relative animate-in slide-in-from-bottom-8 duration-300 border border-theme-border">
                         <button
                             onClick={() => setIsMobileFilterOpen(false)}
-                            className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-800 rounded-full"
+                            className="absolute top-4 right-4 p-2 text-theme-secondary hover:text-theme-primary bg-theme-bg rounded-full border border-theme-border"
                         >
                             <X size={20} weight="bold" />
                         </button>
                         
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="p-2 rounded-xl bg-primary-light dark:bg-primary/20 text-primary">
+                            <div className="p-2 rounded-xl bg-primary/10 text-primary">
                                 <Funnel size={24} weight="fill" />
                             </div>
-                            <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">Filter Calendar</h3>
+                            <h3 className="text-xl font-bold text-theme-primary">Filter Calendar</h3>
                         </div>
 
                         <div className="flex flex-col gap-5">
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Location</label>
+                                <label className="block text-sm font-semibold text-theme-primary mb-2">Location</label>
                                 <select
-                                    className="w-full p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 dark:bg-slate-800 font-medium"
+                                    className="w-full p-3.5 rounded-xl border border-theme-border text-theme-primary focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg font-medium"
                                     value={tempLocation}
                                     onChange={e => setTempLocation(e.target.value)}
                                 >
@@ -507,9 +507,9 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Time Slot</label>
+                                <label className="block text-sm font-semibold text-theme-primary mb-2">Time Slot</label>
                                 <select
-                                    className="w-full p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 dark:bg-slate-800 font-medium"
+                                    className="w-full p-3.5 rounded-xl border border-theme-border text-theme-primary focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg font-medium"
                                     value={tempTimeSlot}
                                     onChange={e => setTempTimeSlot(e.target.value)}
                                 >
@@ -529,7 +529,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                         setFilterTimeSlot('all');
                                         setIsMobileFilterOpen(false);
                                     }}
-                                    className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold rounded-xl active:scale-[0.98] transition-transform"
+                                    className="flex-1 py-4 bg-theme-bg text-theme-secondary font-bold rounded-xl active:scale-[0.98] transition-transform border border-theme-border"
                                 >
                                     Reset
                                 </button>
@@ -551,7 +551,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
 
             {/* Book Now Banner */}
             {selectedDates.length > 0 && (
-                <div className="bg-primary-light border border-primary rounded-xl px-6 py-4 mb-6 flex items-center justify-between shadow-sm">
+                <div className="bg-primary/10 border border-primary/30 rounded-xl px-6 py-4 mb-6 flex items-center justify-between shadow-sm">
                     <div>
                         <p className="text-primary font-bold text-sm">{selectedDates.length} date{selectedDates.length > 1 ? 's' : ''} selected</p>
                         <p className="text-primary/70 text-xs mt-0.5">{selectedDates.sort().join(', ')}</p>
@@ -576,11 +576,11 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
             {/* Detail modal for single-date timeline */}
             {isDetailOpen && detailDate && (
                 <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-slate-900/40" onClick={() => setIsDetailOpen(false)}></div>
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative z-10 shadow-2xl p-6 border border-slate-200 dark:border-slate-800">
+                    <div className="absolute inset-0 bg-theme-bg/60 backdrop-blur-sm" onClick={() => setIsDetailOpen(false)}></div>
+                    <div className="bg-theme-card rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative z-10 shadow-2xl p-6 border border-theme-border">
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Details for {detailDate}</h3>
-                            <button onClick={() => setIsDetailOpen(false)} className="text-slate-500 dark:text-slate-400">Close</button>
+                            <h3 className="text-lg font-bold text-theme-primary">Details for {detailDate}</h3>
+                            <button onClick={() => setIsDetailOpen(false)} className="text-theme-secondary hover:text-theme-primary transition-colors">Close</button>
                         </div>
 
                         <div className="space-y-2">
@@ -640,11 +640,11 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
             )}
 
             {/* Calendar Grid */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-3 sm:p-6 lg:p-8">
+            <div className="bg-theme-card rounded-2xl border border-theme-border shadow-sm p-3 sm:p-6 lg:p-8">
                 {/* Calendar Header with View Options */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-8 gap-3">
                     <div>
-                        <h2 className="text-lg sm:text-2xl font-bold text-slate-800 dark:text-slate-100">
+                        <h2 className="text-lg sm:text-2xl font-bold text-theme-primary">
                             {viewType === 'month'
                                 ? `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`
                                 : viewType === 'week'
@@ -658,20 +658,20 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                         <div className="relative" ref={viewRef}>
                             <button
                                 onClick={() => setIsViewOpen(prev => !prev)}
-                                className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 px-4 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 font-medium hover:border-primary hover:text-primary transition-colors"
+                                className="flex items-center gap-2 bg-theme-bg border border-theme-border px-4 py-2.5 rounded-lg text-theme-primary font-medium hover:border-primary hover:text-primary transition-colors"
                             >
                                 <span className="capitalize">{viewType} View</span>
                                 <CaretDown size={16} />
                             </button>
                             {isViewOpen && (
-                                <div className="absolute top-full mt-1 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg overflow-hidden z-10">
+                                <div className="absolute top-full mt-1 right-0 bg-theme-card border border-theme-border rounded-lg shadow-lg overflow-hidden z-10">
                                     {(['day', 'week', 'month'] as ViewType[]).map((view) => (
                                         <button
                                             key={view}
                                             onClick={() => { setViewType(view); setIsViewOpen(false); }}
                                             className={`w-full text-left px-4 py-2.5 capitalize transition-colors ${viewType === view
-                                                ? 'bg-primary-light dark:bg-primary/20 text-primary font-semibold'
-                                                : 'hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200'
+                                                ? 'bg-primary/10 text-primary font-semibold'
+                                                : 'hover:bg-theme-bg text-theme-secondary hover:text-theme-primary'
                                                 }`}
                                         >
                                             {view} View
@@ -682,10 +682,10 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                         </div>
                         {/* Navigation Buttons */}
                         <div className="flex gap-2">
-                            <button onClick={handlePrevious} className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">
+                            <button onClick={handlePrevious} className="p-2 border border-theme-border rounded-lg hover:bg-theme-bg text-theme-secondary transition-colors">
                                 <CaretLeft size={20} />
                             </button>
-                            <button onClick={handleNext} className="p-2 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">
+                            <button onClick={handleNext} className="p-2 border border-theme-border rounded-lg hover:bg-theme-bg text-theme-secondary transition-colors">
                                 <CaretRight size={20} />
                             </button>
                         </div>
@@ -693,14 +693,14 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                 </div>
 
                 {/* Legend */}
-                <div className="flex gap-3 sm:gap-6 mb-4 sm:mb-8 pb-4 sm:pb-6 border-b border-slate-200 dark:border-slate-800 overflow-x-auto">
+                <div className="flex gap-3 sm:gap-6 mb-4 sm:mb-8 pb-4 sm:pb-6 border-b border-theme-border overflow-x-auto">
                     <div className="flex items-center gap-1.5 shrink-0">
                         <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-100 dark:bg-green-900/30 border-2 border-green-500 rounded"></div>
-                        <span className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 whitespace-nowrap">Booked</span>
+                        <span className="text-xs sm:text-sm text-theme-secondary whitespace-nowrap">Booked</span>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
                         <div className="w-3 h-3 sm:w-4 sm:h-4 bg-indigo-100 dark:bg-indigo-900/30 border-2 border-indigo-400 rounded"></div>
-                        <span className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 whitespace-nowrap">Available</span>
+                        <span className="text-xs sm:text-sm text-theme-secondary whitespace-nowrap">Available</span>
                     </div>
                 </div>
 
@@ -726,7 +726,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
 
                                 const statusColors = {
                                     booked: 'bg-green-100 dark:bg-green-900/20 border-green-400 dark:border-green-800',
-                                    available: 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-800'
+                                    available: 'bg-primary/5 dark:bg-primary/10 border-primary/20 dark:border-primary/40'
                                 };
 
                                 return (
@@ -754,15 +754,15 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                             className={`
                                                 aspect-[4/3] rounded-lg sm:rounded-xl border-2 flex flex-col p-1 sm:p-2 lg:p-3 transition-all hover:shadow-md
                                                 ${isPast
-                                                    ? 'bg-slate-100/50 dark:bg-slate-800/20 border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-600 opacity-60 cursor-not-allowed'
+                                                    ? 'bg-theme-bg/50 border-theme-border text-theme-secondary opacity-40 cursor-not-allowed'
                                                     : isSelected
-                                                        ? 'bg-indigo-50 dark:bg-indigo-900/30 border-indigo-500 ring-1 sm:ring-2 ring-indigo-300/60 cursor-pointer shadow-md'
+                                                        ? 'bg-primary/10 border-primary ring-1 sm:ring-2 ring-primary/40 cursor-pointer shadow-md'
                                                         : `${statusColors[status]} cursor-pointer`
                                                 }
                                             `}
                                         >
                                             <div className="flex items-center justify-between">
-                                                <span className={`font-bold text-xs sm:text-sm lg:text-base ${isPast ? 'text-slate-400 dark:text-slate-600' : isSelected ? 'text-indigo-700 dark:text-indigo-400' : 'text-slate-800 dark:text-slate-200'}`}>{day}</span>
+                                                <span className={`font-bold text-xs sm:text-sm lg:text-base ${isPast ? 'text-theme-secondary opacity-40' : isSelected ? 'text-primary' : 'text-theme-primary'}`}>{day}</span>
                                                 {isSelected && (
                                                     <span className="w-4 h-4 rounded-full bg-primary flex items-center justify-center">
                                                         <span className="text-white text-[8px] font-black">✓</span>
@@ -771,11 +771,11 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                             </div>
                                             {dayBookings.length > 0 && (
                                                 <div className="mt-0.5 hidden sm:block">
-                                                    <span className={`text-[10px] block truncate ${isPast ? 'text-slate-400 dark:text-slate-600' : 'text-slate-600 dark:text-slate-400'}`}>
+                                                    <span className={`text-[10px] block truncate ${isPast ? 'text-theme-secondary opacity-40' : 'text-theme-secondary opacity-70'}`}>
                                                         {dayBookings[0].room.split(' ')[0]}
                                                     </span>
                                                     {dayBookings[0].timeSlot && (
-                                                        <span className="text-[9px] text-slate-500 dark:text-slate-500 block mt-0.5 hidden lg:block">{dayBookings[0].timeSlot}</span>
+                                                        <span className="text-[9px] text-theme-secondary opacity-50 block mt-0.5 hidden lg:block">{dayBookings[0].timeSlot}</span>
                                                     )}
                                                 </div>
                                             )}
@@ -783,15 +783,15 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
 
                                         {/* Hover Tooltip for Booked */}
                                         {hoveredBooking && hoveredDate === dateStr && (dayBookings.length > 0) && !isPast && (
-                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-slate-900 dark:bg-slate-800 text-white px-4 py-3 rounded-lg shadow-lg z-20 whitespace-nowrap pointer-events-none border border-slate-700">
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-theme-bg text-theme-primary px-4 py-3 rounded-lg shadow-lg z-20 whitespace-nowrap pointer-events-none border border-theme-border">
                                                 <p className="font-semibold text-sm">{hoveredBooking.room}</p>
-                                                <p className="text-xs text-slate-300 dark:text-slate-400">Booked by: {hoveredBooking.bookedBy}</p>
+                                                <p className="text-xs text-theme-secondary">Booked by: {hoveredBooking.bookedBy}</p>
                                                 {hoveredBooking.timeSlot && (
-                                                    <p className="text-xs text-slate-300 dark:text-slate-400">Time: {hoveredBooking.timeSlot}</p>
+                                                    <p className="text-xs text-theme-secondary">Time: {hoveredBooking.timeSlot}</p>
                                                 )}
-                                                <p className="text-xs text-slate-300 dark:text-slate-400">Purpose: {hoveredBooking.purpose}</p>
-                                                <p className={`text-xs font-semibold mt-1 text-green-400`}>Confirmed</p>
-                                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-slate-900 dark:bg-slate-800 rotate-45 -mt-1 border-r border-b border-slate-700"></div>
+                                                <p className="text-xs text-theme-secondary">Purpose: {hoveredBooking.purpose}</p>
+                                                <p className={`text-xs font-semibold mt-1 text-green-500`}>Confirmed</p>
+                                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-theme-bg rotate-45 -mt-1 border-r border-b border-theme-border"></div>
                                             </div>
                                         )}
 
@@ -804,7 +804,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                                     setIsDetailOpen(true);
                                                     setActiveDateOptions(null);
                                                 }}
-                                                className="absolute top-2 right-2 z-30 bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary text-[10px] font-bold px-2 py-0.5 rounded-lg shadow-sm transition-colors"
+                                                className="absolute top-2 right-2 z-30 bg-theme-bg/90 border border-theme-border text-theme-secondary hover:text-primary hover:border-primary text-[10px] font-bold px-2 py-0.5 rounded-lg shadow-sm transition-colors"
                                             >
                                                 Details
                                             </button>
@@ -821,10 +821,10 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                     <div className="week-view">
 
                         {/* ── MOBILE: Compact Weekly Grid ─────────────────── */}
-                        <div className="md:hidden bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col h-[65vh] min-h-[400px]">
+                        <div className="md:hidden bg-theme-card rounded-2xl border border-theme-border shadow-sm overflow-hidden flex flex-col h-[65vh] min-h-[400px]">
                             {/* Header: Days */}
-                            <div className="flex border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 shrink-0 shadow-sm z-10">
-                                <div className="w-10 shrink-0 border-r border-slate-100 dark:border-slate-800 flex items-center justify-center bg-white dark:bg-slate-900">
+                            <div className="flex border-b border-theme-border bg-theme-bg shrink-0 shadow-sm z-10">
+                                <div className="w-10 shrink-0 border-r border-theme-border flex items-center justify-center bg-theme-card">
                                     <CalendarBlank size={16} className="text-slate-300 dark:text-slate-600" weight="fill" />
                                 </div>
                                 {getWeekDays(currentDate).map((date) => {
@@ -832,9 +832,9 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                     const isToday = dateStr === dateToString(new Date());
                                     const dayName = ['S','M','T','W','T','F','S'][date.getDay()];
                                     return (
-                                        <div key={dateStr} className={`flex-1 flex flex-col items-center justify-center py-2 border-r border-slate-100 dark:border-slate-800 last:border-0 ${isToday ? 'bg-primary/5 dark:bg-primary/10' : ''}`}>
-                                            <span className={`text-[9px] font-bold uppercase ${isToday ? 'text-primary' : 'text-slate-400 dark:text-slate-500'}`}>{dayName}</span>
-                                            <span className={`text-xs font-black mt-0.5 flex items-center justify-center w-5 h-5 rounded-full ${isToday ? 'bg-primary text-white shadow-sm shadow-primary/30' : 'text-slate-700 dark:text-slate-300'}`}>
+                                        <div key={dateStr} className={`flex-1 flex flex-col items-center justify-center py-2 border-r border-theme-border last:border-0 ${isToday ? 'bg-primary/10' : ''}`}>
+                                            <span className={`text-[9px] font-bold uppercase ${isToday ? 'text-primary' : 'text-theme-secondary opacity-50'}`}>{dayName}</span>
+                                            <span className={`text-xs font-black mt-0.5 flex items-center justify-center w-5 h-5 rounded-full ${isToday ? 'bg-primary text-white shadow-sm shadow-primary/30' : 'text-theme-primary'}`}>
                                                 {date.getDate()}
                                             </span>
                                         </div>
@@ -845,10 +845,10 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                             {/* Body: Time slots grid */}
                             <div className="flex-1 overflow-y-auto overscroll-contain pb-4">
                                 {ALL_SLOTS.map((slot, slotIdx) => (
-                                    <div key={slotIdx} className="flex border-b border-slate-100 dark:border-slate-800 min-h-[48px]">
+                                    <div key={slotIdx} className="flex border-b border-theme-border min-h-[48px]">
                                         {/* Time Label */}
-                                        <div className="w-10 shrink-0 border-r border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 flex flex-col items-center pt-1.5">
-                                            <span className="text-[9px] font-bold text-slate-400 dark:text-slate-600 tracking-tighter">{slot.start.slice(0,5)}</span>
+                                        <div className="w-10 shrink-0 border-r border-theme-border bg-theme-bg/50 flex flex-col items-center pt-1.5">
+                                            <span className="text-[9px] font-bold text-theme-secondary opacity-50 tracking-tighter">{slot.start.slice(0,5)}</span>
                                         </div>
                                         {/* 7 Days Columns */}
                                         {getWeekDays(currentDate).map((date) => {
@@ -869,9 +869,9 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                             return (
                                                 <div 
                                                     key={`${dateStr}-${slotIdx}`}
-                                                    className={`flex-1 border-r border-slate-100 dark:border-slate-800 last:border-0 relative p-[1.5px] transition-colors
-                                                        ${isToday ? 'bg-primary/[0.02] dark:bg-primary/[0.05]' : ''}
-                                                        ${isPastHour ? 'bg-slate-50/80 dark:bg-slate-800/50' : !hasBooking ? 'active:bg-primary/10 cursor-pointer' : ''}
+                                                    className={`flex-1 border-r border-theme-border last:border-0 relative p-[1.5px] transition-colors
+                                                        ${isToday ? 'bg-primary/5' : ''}
+                                                        ${isPastHour ? 'bg-theme-bg/40 opacity-60' : !hasBooking ? 'active:bg-primary/10 cursor-pointer' : ''}
                                                     `}
                                                     onClick={() => {
                                                         if (isPastHour || hasBooking) return;
@@ -919,16 +919,16 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                             <div
                                                 key={dateToString(date)}
                                                 className={`flex-1 text-center py-3 px-1 border-b-2 ${isToday
-                                                    ? 'border-primary bg-primary/5 dark:bg-primary/10'
+                                                    ? 'border-primary bg-primary/10'
                                                     : isPast
-                                                        ? 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20'
-                                                        : 'border-slate-200 dark:border-slate-800'
+                                                        ? 'border-theme-border bg-theme-bg/30'
+                                                        : 'border-theme-border'
                                                     }`}
                                             >
-                                                <p className={`text-[10px] font-bold uppercase tracking-widest ${isToday ? 'text-primary' : 'text-slate-400 dark:text-slate-500'}`}>{dayName}</p>
+                                                <p className={`text-[10px] font-bold uppercase tracking-widest ${isToday ? 'text-primary' : 'text-theme-secondary opacity-50'}`}>{dayName}</p>
                                                 <p className={`text-xl font-black mt-0.5 ${isToday
                                                     ? 'bg-primary text-white w-9 h-9 rounded-full flex items-center justify-center mx-auto shadow-sm shadow-primary/30'
-                                                    : isPast ? 'text-slate-300 dark:text-slate-700' : 'text-slate-800 dark:text-slate-200'
+                                                    : isPast ? 'text-theme-secondary opacity-30' : 'text-theme-primary'
                                                     }`}>{date.getDate()}</p>
                                             </div>
                                         );
@@ -938,9 +938,9 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                 {/* Time rows */}
                                 {ALL_SLOTS.map((slot, slotIdx) => {
                                     return (
-                                        <div key={slotIdx} className="flex border-t border-slate-100 dark:border-slate-800 group/row hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                        <div key={slotIdx} className="flex border-t border-theme-border group/row hover:bg-theme-bg/30 transition-colors">
                                             <div className="w-24 shrink-0 pt-2 pr-3 text-right">
-                                                <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-600">{slot.label}</span>
+                                                <span className="text-[11px] font-semibold text-theme-secondary opacity-50">{slot.label}</span>
                                             </div>
                                             {getWeekDays(currentDate).map((date) => {
                                                 const dateStr = dateToString(date);
@@ -959,9 +959,9 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                                 return (
                                                     <div
                                                         key={`${dateStr}-${slotIdx}`}
-                                                        className={`flex-1 min-h-[52px] relative border-l border-slate-100 dark:border-slate-800 p-1 transition-colors
-                                                            ${isToday ? 'bg-primary/[0.03] dark:bg-primary/[0.06]' : ''}
-                                                            ${isPastHour ? 'bg-slate-50 dark:bg-slate-800/40 opacity-60' : !hasBooking ? 'cursor-pointer hover:bg-primary/5 dark:hover:bg-primary/10' : ''}
+                                                        className={`flex-1 min-h-[52px] relative border-l border-theme-border p-1 transition-colors
+                                                            ${isToday ? 'bg-primary/5' : ''}
+                                                            ${isPastHour ? 'bg-theme-bg/40 opacity-60' : !hasBooking ? 'cursor-pointer hover:bg-primary/5' : ''}
                                                         `}
                                                         onClick={() => {
                                                             if (isPastHour || hasBooking) return;
@@ -1019,26 +1019,26 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                             {/* Day Header */}
                             <div className={`p-5 rounded-xl mb-6 border-2 flex items-center justify-between shadow-sm
                                 ${isPastDay
-                                    ? 'bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800'
+                                    ? 'bg-theme-bg/50 border-theme-border opacity-60'
                                     : isToday
-                                        ? 'bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/5 border-primary shadow-primary/5'
-                                        : 'bg-gradient-to-r from-primary-light to-primary/5 dark:from-primary/10 dark:to-primary/5 border-primary/40 dark:border-primary/20'
+                                        ? 'bg-primary/10 border-primary shadow-primary/5'
+                                        : 'bg-theme-card border-primary/20'
                                 }`}
                             >
                                 <div>
-                                    <p className={`text-xs font-bold uppercase tracking-widest mb-1 ${isPastDay ? 'text-slate-400 dark:text-slate-600' : 'text-primary'}`}>{dayOfWeek}</p>
-                                    <h3 className={`text-2xl font-black ${isPastDay ? 'text-slate-400 dark:text-slate-600' : 'text-slate-800 dark:text-slate-100'}`}>
+                                    <p className={`text-xs font-bold uppercase tracking-widest mb-1 ${isPastDay ? 'text-theme-secondary opacity-50' : 'text-primary'}`}>{dayOfWeek}</p>
+                                    <h3 className={`text-2xl font-black ${isPastDay ? 'text-theme-secondary opacity-50' : 'text-theme-primary'}`}>
                                         {monthNames[currentDate.getMonth()]} {currentDate.getDate()}, {currentDate.getFullYear()}
                                     </h3>
                                     {isToday && <p className="text-xs text-primary font-bold mt-1 uppercase tracking-tighter">Today</p>}
                                 </div>
                                 {isPastDay && (
-                                    <div className="bg-slate-200 text-slate-500 text-xs font-bold px-3 py-1.5 rounded-full">Past Day — Read Only</div>
+                                    <div className="bg-theme-bg text-theme-secondary opacity-70 text-xs font-bold px-3 py-1.5 rounded-full border border-theme-border">Past Day — Read Only</div>
                                 )}
                             </div>
 
                             {/* Timeline */}
-                            <div className="border border-slate-200 rounded-xl overflow-hidden">
+                            <div className="border border-theme-border rounded-xl overflow-hidden bg-theme-card">
                                 {ALL_SLOTS.map((slot, slotIdx) => {
                                     const isPastHour = isPastDay || isPastDateTime(dateStr, slot.startH);
                                     const isCurrentHour = isToday && currentHour === slot.startH;
@@ -1057,10 +1057,10 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                     return (
                                         <div
                                             key={slotIdx}
-                                            className={`flex gap-0 border-t border-slate-100 dark:border-slate-800 first:border-t-0 transition-colors
-                                                ${isCurrentHour ? 'bg-primary/5 dark:bg-primary/10 border-l-4 border-l-primary' : ''}
-                                                ${isPastHour && !isCurrentHour ? 'bg-slate-50/70 dark:bg-slate-800/40' : ''}
-                                                ${!isPastHour && !hasBooking ? 'hover:bg-primary/3 dark:hover:bg-primary/5 cursor-pointer' : ''}
+                                            className={`flex gap-0 border-t border-theme-border first:border-t-0 transition-colors
+                                                ${isCurrentHour ? 'bg-primary/10 border-l-4 border-l-primary' : ''}
+                                                ${isPastHour && !isCurrentHour ? 'bg-theme-bg/40 opacity-60' : ''}
+                                                ${!isPastHour && !hasBooking ? 'hover:bg-primary/5 cursor-pointer' : ''}
                                             `}
                                             onClick={() => {
                                                 if (isPastHour || hasBooking) return;
@@ -1071,10 +1071,10 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                             }}
                                         >
                                             {/* Time label */}
-                                            <div className={`w-28 shrink-0 py-4 px-4 flex flex-col justify-center border-r border-slate-100 dark:border-slate-800
-                                                ${isCurrentHour ? 'bg-primary/10 dark:bg-primary/20' : isPastHour ? 'bg-slate-50 dark:bg-slate-800/50' : 'bg-white dark:bg-slate-900'}
+                                            <div className={`w-28 shrink-0 py-4 px-4 flex flex-col justify-center border-r border-theme-border
+                                                ${isCurrentHour ? 'bg-primary/15' : isPastHour ? 'bg-theme-bg/60' : 'bg-theme-bg'}
                                             `}>
-                                                <span className={`text-sm font-black ${isCurrentHour ? 'text-primary' : isPastHour ? 'text-slate-300 dark:text-slate-700' : 'text-slate-600 dark:text-slate-400'}`}>
+                                                <span className={`text-sm font-black ${isCurrentHour ? 'text-primary' : isPastHour ? 'text-theme-secondary opacity-30 whitespace-nowrap' : 'text-theme-secondary opacity-70 whitespace-nowrap'}`}>
                                                     {slot.label}
                                                 </span>
                                                 {isCurrentHour && (
@@ -1142,9 +1142,9 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                     <div className="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative z-10 shadow-2xl flex flex-col border border-white dark:border-slate-800">
 
                         {/* Modal Header */}
-                        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center sticky top-0 bg-white dark:bg-slate-900 z-20">
-                            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Book Conference Room</h2>
-                            <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-1">
+                        <div className="p-6 border-b border-theme-border flex justify-between items-center sticky top-0 bg-theme-card z-20">
+                            <h2 className="text-xl font-bold text-theme-primary">Book Conference Room</h2>
+                            <button onClick={() => setIsModalOpen(false)} className="text-theme-secondary hover:text-theme-primary p-1">
                                 <X size={24} />
                             </button>
                         </div>
@@ -1153,7 +1153,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                         <div className="p-8 space-y-6">
                             {/* Selected Dates Display */}
                             <div>
-                                <label className="block text-sm font-medium text-slate-900 dark:text-slate-300 mb-2">Selected Dates</label>
+                                <label className="block text-sm font-medium text-theme-primary opacity-80 mb-2">Selected Dates</label>
                                 <div className="flex flex-wrap gap-2">
                                     {selectedDates.map(date => (
                                         <div
@@ -1162,7 +1162,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer transition-all border
                                                 ${activeDate === date
                                                     ? 'bg-primary text-white border-primary shadow-md shadow-primary/20'
-                                                    : 'bg-primary-light/50 dark:bg-primary/10 text-primary-dark dark:text-primary border-primary-light dark:border-primary/20 hover:bg-primary-light/80 dark:hover:bg-primary/20'}`}
+                                                    : 'bg-primary/5 text-primary border-primary/20 hover:bg-primary/10'}`}
                                         >
                                             <CalendarBlank size={16} />
                                             {date}
@@ -1182,9 +1182,9 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
 
                             {/* Select Room */}
                             <div>
-                                <label className="block text-sm font-medium text-slate-900 dark:text-slate-300 mb-2">Select Room</label>
+                                <label className="block text-sm font-medium text-theme-primary opacity-80 mb-2">Select Room</label>
                                 <select
-                                    className="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100"
+                                    className="w-full p-3 rounded-lg border border-theme-border focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-theme-bg text-theme-primary"
                                     value={formData.room}
                                     onChange={(e) => {
                                         setDateSlots({});
@@ -1203,7 +1203,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                             {/* Time Slots */}
                             <div className={!activeDate ? 'opacity-50 pointer-events-none' : ''}>
                                 <div className="flex justify-between items-center mb-1.5">
-                                    <label className="block text-sm font-semibold text-slate-900 dark:text-slate-300">
+                                    <label className="block text-sm font-semibold text-theme-primary">
                                         Select Time Slots {activeDate && <span className="text-primary font-black ml-1">for {activeDate}</span>}
                                     </label>
                                     {selectedDates.length > 1 && (
@@ -1227,7 +1227,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                         </button>
                                     )}
                                 </div>
-                                <p className="text-[10px] text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-wider">
+                                <p className="text-[10px] text-theme-secondary opacity-50 mb-3 uppercase tracking-wider">
                                     {activeDate ? 'Click time slots to select or deselect them' : 'Select a date above to define slots'}
                                 </p>
                                 <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto pr-1 custom-scrollbar">
@@ -1246,13 +1246,13 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                         });
 
                                         if (status === 'past') {
-                                            classes += 'bg-slate-50 dark:bg-slate-800/50 text-slate-300 dark:text-slate-600 border-slate-100 dark:border-slate-800 cursor-not-allowed line-through';
+                                            classes += 'bg-theme-bg/40 text-theme-secondary opacity-30 border-theme-border cursor-not-allowed line-through';
                                         } else if (status === 'booked') {
-                                            classes += 'bg-rose-50 dark:bg-rose-900/20 text-rose-300 dark:text-rose-500 border-rose-100 dark:border-rose-900/30 cursor-not-allowed';
+                                            classes += 'bg-rose-50 dark:bg-rose-900/10 text-rose-500 border-rose-200 dark:border-rose-900/30 cursor-not-allowed';
                                         } else if (selected) {
                                             classes += 'bg-primary border-primary text-white shadow-md shadow-primary/20 scale-[0.98]';
                                         } else {
-                                            classes += 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-primary hover:text-primary cursor-pointer';
+                                            classes += 'bg-theme-bg text-theme-primary border-theme-border hover:border-primary hover:text-primary cursor-pointer';
                                         }
 
                                         return (
@@ -1293,23 +1293,23 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                     })}
                                 </div>
                                 {/* Legend */}
-                                <div className="flex items-center gap-4 mt-3 text-[10px] text-slate-400 dark:text-slate-500">
+                                <div className="flex items-center gap-4 mt-3 text-[10px] text-theme-secondary opacity-50">
                                     <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-primary inline-block"></span>Available</span>
-                                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-rose-300 dark:bg-rose-900/50 inline-block"></span>Booked</span>
-                                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-700 inline-block"></span>Past</span>
+                                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-rose-500/50 inline-block"></span>Booked</span>
+                                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-theme-bg/60 border border-theme-border inline-block"></span>Past</span>
                                 </div>
                             </div>
 
                             {/* Attendees */}
                             <div>
-                                <label className="block text-sm font-medium text-slate-900 dark:text-slate-300 mb-2">Number of Attendees</label>
+                                <label className="block text-sm font-medium text-theme-primary opacity-80 mb-2">Number of Attendees</label>
                                 {formData.room && (
-                                    <p className="text-xs text-slate-400 dark:text-slate-500 mb-2">Max capacity for selected room: {availableRooms.find(r => `${r.catalog_id}:${r.room_id}` === formData.room)?.capacity} people</p>
+                                    <p className="text-xs text-theme-secondary opacity-50 mb-2">Max capacity for selected room: {availableRooms.find(r => `${r.catalog_id}:${r.room_id}` === formData.room)?.capacity} people</p>
                                 )}
                                 <input
                                     type="number"
                                     min="1"
-                                    className="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100"
+                                    className="w-full p-3 rounded-lg border border-theme-border focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-theme-bg text-theme-primary"
                                     value={formData.attendees}
                                     onChange={(e) => {
                                         const val = e.target.value;
@@ -1324,9 +1324,9 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
 
                             {/* Purpose */}
                             <div>
-                                <label className="block text-sm font-medium text-slate-900 dark:text-slate-300 mb-2">Purpose of Booking</label>
+                                <label className="block text-sm font-medium text-theme-primary opacity-80 mb-2">Purpose of Booking</label>
                                 <textarea
-                                    className="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary min-h-[100px] bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100"
+                                    className="w-full p-3 rounded-lg border border-theme-border focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary min-h-[100px] bg-theme-bg text-theme-primary"
                                     value={formData.purpose}
                                     onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
                                     placeholder="Brief description of your meeting"
@@ -1336,10 +1336,10 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                         </div>
 
                         {/* Modal Footer */}
-                        <div className="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 rounded-b-2xl flex justify-end gap-3 sticky bottom-0">
+                        <div className="p-6 border-t border-theme-border bg-theme-bg/50 rounded-b-2xl flex justify-end gap-3 sticky bottom-0">
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="px-6 py-2.5 rounded-lg font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
+                                className="px-6 py-2.5 rounded-lg font-bold text-theme-secondary hover:bg-theme-bg transition-colors"
                             >
                                 Cancel
                             </button>

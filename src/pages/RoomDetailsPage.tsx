@@ -311,10 +311,10 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
     if (error || !room) return (
         <div className="max-w-7xl mx-auto px-6 py-8">
-            <button onClick={onBack} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors mb-6 text-sm font-medium">
+            <button onClick={onBack} className="flex items-center gap-2 text-theme-secondary hover:text-theme-primary transition-colors mb-6 text-sm font-medium">
                 <ArrowLeft size={16} /> Back to all spaces
             </button>
-            <div className="text-center py-20 text-slate-500">
+            <div className="text-center py-20 text-theme-secondary">
                 <p className="text-lg font-semibold">{error || 'Room not found'}</p>
             </div>
         </div>
@@ -334,7 +334,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-8">
-            <button onClick={onBack} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors mb-6 text-sm font-medium">
+            <button onClick={onBack} className="flex items-center gap-2 text-theme-secondary hover:text-theme-primary transition-colors mb-6 text-sm font-medium">
                 <ArrowLeft size={16} />
                 Back to all spaces
             </button>
@@ -420,7 +420,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             {gallery.slice(1, 3).map((url, idx) => (
                                 <div 
                                     key={idx} 
-                                    className="h-1/2 rounded-xl overflow-hidden bg-slate-100 cursor-pointer group relative"
+                                    className="h-1/2 rounded-xl overflow-hidden bg-theme-bg cursor-pointer group relative"
                                     onClick={() => setCurrentImageIndex(idx + 1)}
                                 >
                                     <img
@@ -437,8 +437,8 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                 </div>
                             ))}
                             {gallery.length === 2 && (
-                                <div className="h-1/2 rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100/30 flex items-center justify-center">
-                                    <div className="text-center text-green-600">
+                                <div className="h-1/2 rounded-xl overflow-hidden bg-theme-bg/50 border border-theme-border flex items-center justify-center">
+                                    <div className="text-center text-primary">
                                         <MapPin size={32} className="mx-auto mb-1" />
                                         <p className="text-sm font-medium">{room.location}</p>
                                     </div>
@@ -447,14 +447,14 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                         </>
                     ) : (
                         <>
-                            <div className="h-1/2 rounded-xl overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center">
-                                <div className="text-center text-slate-400">
+                            <div className="h-1/2 rounded-xl overflow-hidden bg-theme-bg border border-theme-border flex items-center justify-center">
+                                <div className="text-center text-theme-secondary opacity-40">
                                     <Users size={32} className="mx-auto mb-1" />
                                     <p className="text-sm font-medium">Capacity: {room.capacity}</p>
                                 </div>
                             </div>
-                            <div className="h-1/2 rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100/30 flex items-center justify-center">
-                                <div className="text-center text-green-600">
+                            <div className="h-1/2 rounded-xl overflow-hidden bg-theme-bg/50 border border-theme-border flex items-center justify-center">
+                                <div className="text-center text-primary opacity-60">
                                     <MapPin size={32} className="mx-auto mb-1" />
                                     <p className="text-sm font-medium">{room.location}</p>
                                 </div>
@@ -468,45 +468,45 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                 {/* Main Info */}
                 <div className="flex-1 space-y-8">
                     <div>
-                        <h1 className="text-3xl font-bold text-slate-900 mb-2">{room.room_name}</h1>
-                        <div className="flex items-center gap-4 text-slate-500">
+                        <h1 className="text-3xl font-bold text-theme-primary mb-2">{room.room_name}</h1>
+                        <div className="flex items-center gap-4 text-theme-secondary">
                             <span className="flex items-center gap-1.5"><MapPin size={18} /> {room.location}</span>
-                            <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+                            <span className="w-1 h-1 rounded-full bg-theme-border"></span>
                             <span className="flex items-center gap-1.5"><SquaresFour size={18} /> Room {room.room_number}</span>
                         </div>
-                        <p className="mt-4 text-slate-600 leading-relaxed">
+                        <p className="mt-4 text-theme-secondary leading-relaxed opacity-80">
                             Located on Floor {room.floor_no}, this room has a capacity of {room.capacity} people.
                             {room.availability ? ` ${room.availability}` : ' Available for booking.'}
                         </p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-primary-light/30 p-5 rounded-xl flex items-center gap-4 border border-primary-light">
-                            <div className="p-3 bg-primary-light text-primary rounded-lg"><Users size={24} /></div>
+                        <div className="bg-primary/5 p-5 rounded-xl flex items-center gap-4 border border-primary/10">
+                            <div className="p-3 bg-primary/10 text-primary rounded-lg"><Users size={24} /></div>
                             <div>
-                                <span className="block text-sm text-slate-500">Capacity</span>
-                                <strong className="text-lg text-slate-900">{room.capacity} people</strong>
+                                <span className="block text-sm text-theme-secondary opacity-60">Capacity</span>
+                                <strong className="text-lg text-theme-primary">{room.capacity} people</strong>
                             </div>
                         </div>
-                        <div className="bg-green-50 p-5 rounded-xl flex items-center gap-4 border border-green-100">
-                            <div className="p-3 bg-green-100 text-green-600 rounded-lg"><SquaresFour size={24} /></div>
+                        <div className="bg-emerald-50 dark:bg-emerald-950/20 p-5 rounded-xl flex items-center gap-4 border border-emerald-100 dark:border-emerald-900/30">
+                            <div className="p-3 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 rounded-lg"><SquaresFour size={24} /></div>
                             <div>
-                                <span className="block text-sm text-slate-500">Status</span>
-                                <strong className="text-lg text-slate-900 capitalize">{room.status}</strong>
+                                <span className="block text-sm text-theme-secondary opacity-60">Status</span>
+                                <strong className="text-lg text-theme-primary capitalize">{room.status}</strong>
                             </div>
                         </div>
                     </div>
 
                     {amenityList.length > 0 && (
                         <div>
-                            <h2 className="text-xl font-bold text-slate-900 mb-4">Amenities</h2>
+                            <h2 className="text-xl font-bold text-theme-primary mb-4">Amenities</h2>
                             <div className="grid grid-cols-2 gap-4">
                                 {amenityList.map((item, idx) => (
-                                    <div key={idx} className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
-                                        <div className="text-primary bg-white p-2 rounded shadow-sm border border-slate-100">
+                                    <div key={idx} className="flex items-center gap-3 p-3 rounded-lg hover:bg-theme-bg transition-colors">
+                                        <div className="text-primary bg-theme-card p-2 rounded shadow-sm border border-theme-border">
                                             {amenityIcons[item] || <SquaresFour size={20} />}
                                         </div>
-                                        <span className="text-slate-700 font-medium">{item}</span>
+                                        <span className="text-theme-secondary font-medium">{item}</span>
                                     </div>
                                 ))}
                             </div>
@@ -516,10 +516,10 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
                 {/* Right Sidebar - Booking Card */}
                 <div className="w-full lg:w-[420px] shrink-0 space-y-6">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 sticky top-24">
+                    <div className="bg-theme-card p-6 rounded-2xl shadow-sm border border-theme-border sticky top-24">
                         <div className="mb-6 invisible h-0">
                             <span className="text-3xl font-bold text-secondary">Free</span>
-                            <span className="text-slate-500"> per hour</span>
+                            <span className="text-theme-secondary opacity-50"> per hour</span>
                         </div>
 
                         {bookResult && (
@@ -530,7 +530,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
                         <form onSubmit={handleBook} className="space-y-5">
                             {/* Date Selection Mode Toggle */}
-                            <div className="flex bg-slate-100 p-1 rounded-xl mb-4">
+                            <div className="flex bg-theme-bg p-1 rounded-xl mb-4 border border-theme-border">
                                 <button 
                                     type="button" 
                                     onClick={() => {
@@ -539,7 +539,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                         setActiveDate(todayStr);
                                         setDateSlots({});
                                     }} 
-                                    className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'single' ? 'bg-white shadow text-primary' : 'text-slate-500 hover:text-slate-700'}`}
+                                    className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'single' ? 'bg-theme-card shadow text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}
                                 >
                                     Single Day
                                 </button>
@@ -553,7 +553,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                         setActiveDate(null);
                                         setDateSlots({});
                                     }} 
-                                    className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'range' ? 'bg-white shadow text-primary' : 'text-slate-500 hover:text-slate-700'}`}
+                                    className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'range' ? 'bg-theme-card shadow text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}
                                 >
                                     Consecutive Days
                                 </button>
@@ -565,7 +565,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                         setActiveDate(null);
                                         setDateSlots({});
                                     }} 
-                                    className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'custom' ? 'bg-white shadow text-primary' : 'text-slate-500 hover:text-slate-700'}`}
+                                    className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'custom' ? 'bg-theme-card shadow text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}
                                 >
                                     Custom Days
                                 </button>
@@ -574,7 +574,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             {/* Date Picker Interfaces */}
                             {dateMode === 'single' && (
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Reservation Date</label>
+                                    <label className="block text-sm font-semibold text-theme-primary mb-1.5 font-sans">Reservation Date</label>
                                     <input
                                         type="date"
                                         min={todayStr}
@@ -586,7 +586,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                                 setActiveDate(val);
                                             }
                                         }}
-                                        className="w-full p-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 font-medium text-sm transition-all text-slate-500"
+                                        className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm transition-all text-theme-primary"
                                     />
                                 </div>
                             )}
@@ -594,7 +594,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             {dateMode === 'range' && (
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Start Date</label>
+                                        <label className="block text-sm font-semibold text-theme-primary mb-1.5 font-sans">Start Date</label>
                                         <input
                                             type="date"
                                             min={todayStr}
@@ -615,11 +615,11 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                                     setActiveDate(dates[0] || null);
                                                 }
                                             }}
-                                            className="w-full p-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 font-medium text-sm transition-all text-slate-500"
+                                            className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm transition-all text-theme-primary"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">End Date</label>
+                                        <label className="block text-sm font-semibold text-theme-primary mb-1.5 font-sans">End Date</label>
                                         <input
                                             type="date"
                                             min={rangeStart || todayStr}
@@ -634,7 +634,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                                     else if (!activeDate) setActiveDate(dates[0]);
                                                 }
                                             }}
-                                            className="w-full p-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 font-medium text-sm transition-all text-slate-500"
+                                            className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm transition-all text-theme-primary"
                                         />
                                     </div>
                                 </div>
@@ -642,7 +642,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
                             {dateMode === 'custom' && (
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Add Dates</label>
+                                    <label className="block text-sm font-semibold text-theme-primary mb-1.5 font-sans">Add Dates</label>
                                     <input
                                         type="date"
                                         min={todayStr}
@@ -653,7 +653,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                                 setActiveDate(val);
                                             }
                                         }}
-                                        className="w-full p-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 font-medium text-sm transition-all text-slate-500"
+                                        className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm transition-all text-theme-primary"
                                     />
                                 </div>
                             )}
@@ -661,7 +661,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             {/* Selected Dates Display (Only in Range or Custom mode) */}
                             {(dateMode === 'custom' || dateMode === 'range') && selectedDates.length > 0 && (
                                 <div className="mt-2">
-                                    <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Selected Dates ({selectedDates.length})</label>
+                                    <label className="block text-xs font-bold text-theme-secondary opacity-50 uppercase mb-2">Selected Dates ({selectedDates.length})</label>
                                     <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
                                         {selectedDates.map(date => (
                                             <div
@@ -670,7 +670,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer transition-all border
                                                     ${activeDate === date
                                                         ? 'bg-primary text-white border-primary shadow-md'
-                                                        : 'bg-primary-light/50 text-primary-dark border-primary-light hover:bg-primary-light/80'}`}
+                                                        : 'bg-primary/5 text-primary border-primary/20 hover:bg-primary/10'}`}
                                             >
                                                 {formatLocalDate(date)}
                                                 {dateMode === 'custom' && (
@@ -703,7 +703,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             {/* Time Slot Grid */}
                             <div className={!activeDate ? 'opacity-50 pointer-events-none' : ''}>
                                 <div className="flex justify-between items-center mb-1.5">
-                                    <label className="block text-sm font-semibold text-slate-700">
+                                    <label className="block text-sm font-semibold text-theme-primary">
                                         Select Time Slots {activeDate && <span className="text-primary font-black ml-1">for {formatLocalDate(activeDate)}</span>}
                                     </label>
                                     {selectedDates.length > 1 && (
@@ -726,14 +726,14 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                         </button>
                                     )}
                                 </div>
-                                <p className="text-[10px] text-slate-400 mb-3 uppercase tracking-wider">
+                                <p className="text-[10px] text-theme-secondary opacity-50 mb-3 uppercase tracking-wider">
                                     {activeDate ? 'Click time slots to select or deselect them' : 'Select a date above to define slots'}
                                 </p>
 
                                 {loadingSlots ? (
                                     <div className="grid grid-cols-2 gap-2">
                                         {Array.from({ length: 6 }).map((_, i) => (
-                                            <div key={i} className="h-12 bg-slate-100 rounded-xl animate-pulse" />
+                                            <div key={i} className="h-12 bg-theme-bg rounded-xl animate-pulse" />
                                         ))}
                                     </div>
                                 ) : (
@@ -745,13 +745,13 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                             let classes = 'relative flex items-center gap-2 px-3 py-3 rounded-xl text-xs font-bold transition-all border-2 ';
 
                                             if (status === 'past') {
-                                                classes += 'bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed line-through';
+                                                classes += 'bg-theme-bg text-theme-secondary opacity-30 border-theme-border cursor-not-allowed line-through';
                                             } else if (status === 'booked') {
-                                                classes += 'bg-rose-50 text-rose-400 border-rose-100 cursor-pointer hover:bg-rose-100';
+                                                classes += 'bg-rose-50 dark:bg-rose-950/20 text-rose-500 border-rose-100 dark:border-rose-900/30 cursor-pointer hover:bg-rose-100 dark:hover:bg-rose-900/40';
                                             } else if (selected) {
                                                 classes += 'bg-primary text-white border-primary shadow-lg shadow-primary/25 scale-[1.02]';
                                             } else {
-                                                classes += 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 hover:border-emerald-300 cursor-pointer hover:scale-[1.02] active:scale-95';
+                                                classes += 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 border-emerald-100 dark:border-emerald-900/30 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 hover:border-emerald-300 cursor-pointer hover:scale-[1.02] active:scale-95';
                                             }
 
                                             return (
@@ -786,21 +786,21 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                                         const mb = getMatchingBooking(slot);
                                                         if (!mb) return null;
                                                         return (
-                                                            <div className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border-2 border-rose-200 rounded-xl shadow-xl p-4 animate-fade-in">
+                                                            <div className="absolute z-50 left-0 right-0 top-full mt-1 bg-theme-card border-2 border-rose-200 dark:border-rose-900/50 rounded-xl shadow-xl p-4 animate-fade-in">
                                                                 <div className="flex justify-between items-start mb-2">
                                                                     <span className="text-xs font-black text-rose-500 uppercase tracking-wide">Booked</span>
                                                                     <button
                                                                         onClick={(e) => { e.stopPropagation(); setViewingBookedSlot(null); }}
-                                                                        className="text-slate-400 hover:text-slate-600"
+                                                                        className="text-theme-secondary opacity-50 hover:opacity-100 transition-opacity"
                                                                     >
                                                                         <X size={14} />
                                                                     </button>
                                                                 </div>
-                                                                <p className="text-sm font-bold text-slate-800">{mb.user_name || 'Unknown'}</p>
-                                                                {mb.email && <p className="text-xs text-slate-500">{mb.email}</p>}
-                                                                {mb.phone_no && <p className="text-xs text-slate-500">📞 {mb.phone_no}</p>}
-                                                                {mb.purpose && <p className="text-xs text-slate-600 mt-1">📋 {mb.purpose}</p>}
-                                                                <p className="text-xs text-slate-400 mt-1">
+                                                                <p className="text-sm font-bold text-theme-primary">{mb.user_name || 'Unknown'}</p>
+                                                                {mb.email && <p className="text-xs text-theme-secondary opacity-60">{mb.email}</p>}
+                                                                {mb.phone_no && <p className="text-xs text-theme-secondary opacity-60">📞 {mb.phone_no}</p>}
+                                                                {mb.purpose && <p className="text-xs text-theme-secondary opacity-80 mt-1">📋 {mb.purpose}</p>}
+                                                                <p className="text-xs text-theme-secondary opacity-40 mt-1">
                                                                     {mb.start_time.slice(0, 5)} – {mb.end_time.slice(0, 5)}
                                                                 </p>
                                                             </div>
@@ -815,16 +815,16 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                 {/* Legend */}
                                 <div className="flex gap-4 mt-3 justify-center">
                                     <div className="flex items-center gap-1.5">
-                                        <div className="w-3 h-3 rounded bg-emerald-200 border border-emerald-300" />
-                                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wide">Available</span>
+                                        <div className="w-3 h-3 rounded bg-emerald-100 dark:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-900/60" />
+                                        <span className="text-[10px] text-theme-secondary opacity-50 font-bold uppercase tracking-wide">Available</span>
                                     </div>
                                     <div className="flex items-center gap-1.5">
-                                        <div className="w-3 h-3 rounded bg-rose-200 border border-rose-300" />
-                                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wide">Booked</span>
+                                        <div className="w-3 h-3 rounded bg-rose-100 dark:bg-rose-900/40 border border-rose-200 dark:border-rose-900/60" />
+                                        <span className="text-[10px] text-theme-secondary opacity-50 font-bold uppercase tracking-wide">Booked</span>
                                     </div>
                                     <div className="flex items-center gap-1.5">
-                                        <div className="w-3 h-3 rounded bg-slate-200 border border-slate-300" />
-                                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wide">Past</span>
+                                        <div className="w-3 h-3 rounded bg-theme-bg border border-theme-border" />
+                                        <span className="text-[10px] text-theme-secondary opacity-50 font-bold uppercase tracking-wide">Past</span>
                                     </div>
                                 </div>
                             </div>
@@ -833,18 +833,18 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             {totalSelectedHoures > 0 && (
                                 <div className="bg-primary/5 border border-primary/20 p-4 rounded-xl">
                                     <p className="text-xs font-bold text-primary uppercase tracking-wide mb-1">Reservation Summary</p>
-                                    <p className="text-xl font-black text-slate-900">
+                                    <p className="text-xl font-black text-theme-primary">
                                         {selectedDates.length} date(s)
                                     </p>
-                                    <p className="text-xs text-slate-500 mt-1">
+                                    <p className="text-xs text-theme-secondary opacity-60 mt-1">
                                         {totalSelectedHoures} total hour(s) selected
                                     </p>
                                 </div>
                             )}
 
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Attendees</label>
-                                <p className="text-[10px] text-slate-400 mb-1 uppercase tracking-wider">Max capacity: {room.capacity} people</p>
+                                <label className="block text-sm font-semibold text-theme-primary mb-1.5">Attendees</label>
+                                <p className="text-[10px] text-theme-secondary opacity-50 mb-1 uppercase tracking-wider">Max capacity: {room.capacity} people</p>
                                 <input
                                     type="number"
                                     min="1"
@@ -859,12 +859,12 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                         }
                                     }}
                                     required
-                                    className="w-full text-sm p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50"
+                                    className="w-full text-sm p-3 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg text-theme-primary"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Purpose</label>
-                                <textarea rows={2} value={purpose} onChange={e => setPurpose(e.target.value)} className="w-full text-sm p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50" placeholder="Meeting purpose..." />
+                                <label className="block text-sm font-semibold text-theme-primary mb-1.5">Purpose</label>
+                                <textarea rows={2} value={purpose} onChange={e => setPurpose(e.target.value)} className="w-full text-sm p-3 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg text-theme-primary" placeholder="Meeting purpose..." />
                             </div>
                             <button
                                 type="submit"
@@ -875,9 +875,9 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             </button>
                         </form>
 
-                        <div className="mt-8 pt-6 border-t border-slate-100">
-                            <h3 className="font-semibold text-slate-900 mb-3">Location Details</h3>
-                            <p className="text-sm text-slate-600">{room.location} — Floor {room.floor_no}, Room {room.room_number}</p>
+                        <div className="mt-8 pt-6 border-t border-theme-border">
+                            <h3 className="font-semibold text-theme-primary mb-3">Location Details</h3>
+                            <p className="text-sm text-theme-secondary opacity-70">{room.location} — Floor {room.floor_no}, Room {room.room_number}</p>
                         </div>
                     </div>
                 </div>

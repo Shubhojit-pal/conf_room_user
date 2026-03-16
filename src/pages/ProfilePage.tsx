@@ -205,7 +205,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
 
     return (
         <div className="max-w-5xl mx-auto px-6 py-12">
-            <h1 className="text-3xl font-bold text-slate-900 mb-8">My Profile</h1>
+            <h1 className="text-3xl font-bold text-theme-primary mb-8">My Profile</h1>
 
             {saveMsg && (
                 <div className={`mb-6 p-3 rounded-lg text-sm font-medium ${saveMsg.ok ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-600 border border-red-200'}`}>
@@ -216,28 +216,28 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Profile Card */}
                 <div className="lg:col-span-1">
-                    <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center shadow-sm sticky top-24">
-                        <div className="w-28 h-28 bg-gradient-to-br from-primary to-indigo-600 text-white rounded-full mx-auto flex items-center justify-center text-4xl font-bold mb-4 ring-8 ring-indigo-50 shadow-xl shadow-primary/20">
+                    <div className="bg-theme-card rounded-2xl border border-theme-border p-8 text-center shadow-sm sticky top-24">
+                        <div className="w-28 h-28 bg-gradient-to-br from-primary to-indigo-600 text-white rounded-full mx-auto flex items-center justify-center text-4xl font-bold mb-4 ring-8 ring-primary/5 shadow-xl shadow-primary/20">
                             {initials}
                         </div>
-                        <h2 className="text-xl font-bold text-slate-900">{profile?.name}</h2>
-                        <p className="text-slate-500 text-sm">{profile?.userrole_id}</p>
+                        <h2 className="text-xl font-bold text-theme-primary">{profile?.name}</h2>
+                        <p className="text-theme-secondary text-sm">{profile?.userrole_id}</p>
 
                         <div className="mt-6 flex justify-center gap-2">
                             <span className="bg-blue-50 text-blue-600 text-xs px-3 py-1 rounded-full font-medium">{profile?.dept}</span>
                             <span className="bg-purple-50 text-purple-600 text-xs px-3 py-1 rounded-full font-medium">{profile?.uid}</span>
                         </div>
 
-                        <div className="mt-8 pt-6 border-t border-slate-100 w-full text-left space-y-4">
-                            <div className="flex items-center gap-3 text-slate-600 text-sm">
+                        <div className="mt-8 pt-6 border-t border-theme-border w-full text-left space-y-4">
+                            <div className="flex items-center gap-3 text-theme-secondary text-sm">
                                 <Envelope size={18} className="text-primary" />
                                 <span>{profile?.email}</span>
                             </div>
-                            <div className="flex items-center gap-3 text-slate-600 text-sm">
+                            <div className="flex items-center gap-3 text-theme-secondary text-sm">
                                 <Phone size={18} className="text-primary" />
                                 <span>{profile?.phone_no}</span>
                             </div>
-                            <div className="flex items-center gap-3 text-slate-600 text-sm">
+                            <div className="flex items-center gap-3 text-theme-secondary text-sm">
                                 <Briefcase size={18} className="text-primary" />
                                 <span>Dept: {profile?.dept}</span>
                             </div>
@@ -250,23 +250,23 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
                     {/* Stats */}
                     <button 
                         onClick={onViewBookings}
-                        className="w-full bg-gradient-to-br from-indigo-50 to-white p-6 rounded-2xl border border-indigo-100 flex items-center justify-between shadow-sm hover:shadow-md hover:border-indigo-300 transition-all group"
+                        className="w-full bg-theme-card p-6 rounded-2xl border border-theme-border flex items-center justify-between shadow-sm hover:shadow-md hover:border-primary transition-all group"
                     >
                         <div className="text-left">
-                            <div className="text-[11px] font-bold text-indigo-400 uppercase tracking-widest mb-1 flex items-center gap-2">
+                            <div className="text-[11px] font-bold text-primary uppercase tracking-widest mb-1 flex items-center gap-2 opacity-70">
                                 Total Bookings <ArrowRight size={12} weight="bold" className="group-hover:translate-x-1 transition-transform" />
                             </div>
-                            <div className="text-4xl font-black text-indigo-900 group-hover:text-primary transition-colors">{stats.total}</div>
+                            <div className="text-4xl font-black text-theme-primary group-hover:text-primary transition-colors">{stats.total}</div>
                         </div>
-                        <div className="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500 shadow-inner group-hover:scale-110 transition-transform">
+                        <div className="w-14 h-14 bg-theme-bg rounded-full flex items-center justify-center text-primary shadow-inner group-hover:scale-110 transition-transform">
                             <CalendarBlank size={28} weight="duotone" />
                         </div>
                     </button>
 
                     {/* Edit Profile */}
-                    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                        <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                            <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                    <div className="bg-theme-card rounded-2xl border border-theme-border overflow-hidden">
+                        <div className="p-4 border-b border-theme-border bg-theme-bg/50 flex items-center justify-between">
+                            <h3 className="font-bold text-theme-primary flex items-center gap-2">
                                 <Gear size={20} /> Edit Profile
                             </h3>
                             {!editing && (
@@ -277,46 +277,46 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
                         </div>
                         <div className="p-6 space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Name</label>
+                                <label className="block text-sm font-medium text-theme-secondary mb-1">Name</label>
                                 <input
                                     type="text"
                                     value={editing ? editForm.name : (profile?.name || '')}
                                     onChange={e => setEditForm({ ...editForm, name: e.target.value })}
                                     disabled={!editing}
-                                    className="w-full p-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-slate-50 disabled:text-slate-500"
+                                    className="w-full bg-theme-bg p-3 rounded-lg border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:text-theme-secondary text-theme-primary transition-all"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Department</label>
+                                <label className="block text-sm font-medium text-theme-secondary mb-1">Department</label>
                                 <input
                                     type="text"
                                     value={editing ? editForm.dept : (profile?.dept || '')}
                                     onChange={e => setEditForm({ ...editForm, dept: e.target.value })}
                                     disabled={!editing}
-                                    className="w-full p-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-slate-50 disabled:text-slate-500"
+                                    className="w-full bg-theme-bg p-3 rounded-lg border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:text-theme-secondary text-theme-primary transition-all"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Phone</label>
+                                <label className="block text-sm font-medium text-theme-secondary mb-1">Phone</label>
                                 <input
                                     type="text"
                                     value={editing ? editForm.phone_no : (profile?.phone_no || '')}
                                     onChange={e => setEditForm({ ...editForm, phone_no: e.target.value })}
                                     disabled={!editing}
-                                    className="w-full p-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-slate-50 disabled:text-slate-500"
+                                    className="w-full bg-theme-bg p-3 rounded-lg border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:text-theme-secondary text-theme-primary transition-all"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
-                                <input type="text" value={profile?.email || ''} disabled className="w-full p-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-500" />
-                                <p className="text-xs text-slate-400 mt-1">Email cannot be changed</p>
+                                <label className="block text-sm font-medium text-theme-secondary mb-1">Email</label>
+                                <input type="text" value={profile?.email || ''} disabled className="w-full bg-theme-bg p-3 rounded-lg border border-theme-border text-theme-secondary opacity-50" />
+                                <p className="text-xs text-theme-secondary opacity-50 mt-1">Email cannot be changed</p>
                             </div>
                             {editing && (
                                 <div className="flex gap-3 pt-2">
                                     <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-lg font-bold transition-colors disabled:opacity-60">
                                         <Check size={16} /> {saving ? 'Saving...' : 'Save Changes'}
                                     </button>
-                                    <button onClick={() => { setEditing(false); setEditForm({ name: profile?.name || '', dept: profile?.dept || '', phone_no: profile?.phone_no || '' }); }} className="flex items-center gap-2 text-slate-600 hover:text-slate-800 px-4 py-2.5 rounded-lg font-medium border border-slate-200">
+                                    <button onClick={() => { setEditing(false); setEditForm({ name: profile?.name || '', dept: profile?.dept || '', phone_no: profile?.phone_no || '' }); }} className="flex items-center gap-2 text-theme-secondary hover:text-theme-primary px-4 py-2.5 rounded-lg font-medium border border-theme-border hover:bg-theme-bg transition-colors">
                                         <X size={16} /> Cancel
                                     </button>
                                 </div>
@@ -324,21 +324,21 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
                         </div>
                     </div>
                     {/* App Preferences */}
-                    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                        <div className="p-4 border-b border-slate-100 bg-slate-50/50">
-                            <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                    <div className="bg-theme-card rounded-2xl border border-theme-border overflow-hidden">
+                        <div className="p-4 border-b border-theme-border bg-theme-bg/50">
+                            <h3 className="font-bold text-theme-primary flex items-center gap-2">
                                 <SpeakerHigh size={20} /> App Preferences
                             </h3>
                         </div>
                         <div className="p-6">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                    <div className={`p-2 rounded-lg ${soundsEnabled ? 'bg-primary/10 text-primary' : 'bg-slate-100 text-slate-400'}`}>
+                                    <div className={`p-2 rounded-lg ${soundsEnabled ? 'bg-primary/10 text-primary' : 'bg-theme-bg text-theme-secondary opacity-30'}`}>
                                         {soundsEnabled ? <SpeakerHigh size={20} /> : <SpeakerNone size={20} />}
                                     </div>
                                     <div>
-                                        <p className="text-sm font-semibold text-slate-800">Interface Sounds</p>
-                                        <p className="text-xs text-slate-500">Enable audio feedback for clicks and actions</p>
+                                        <p className="text-sm font-semibold text-theme-primary">Interface Sounds</p>
+                                        <p className="text-xs text-theme-secondary opacity-50">Enable audio feedback for clicks and actions</p>
                                     </div>
                                 </div>
                                 <button
@@ -358,9 +358,9 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
                     </div>
 
                     {/* Security */}
-                    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                        <div className="p-4 border-b border-slate-100 bg-slate-50/50">
-                            <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                    <div className="bg-theme-card rounded-2xl border border-theme-border overflow-hidden">
+                        <div className="p-4 border-b border-theme-border bg-theme-bg/50">
+                            <h3 className="font-bold text-theme-primary flex items-center gap-2">
                                 <Shield size={20} /> Security
                             </h3>
                         </div>
@@ -368,10 +368,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
                             {!showPwForm ? (
                                 <button 
                                     onClick={() => setShowPwForm(true)}
-                                    className="w-full text-left flex justify-between items-center p-3 hover:bg-slate-50 rounded-lg transition-colors group"
+                                    className="w-full text-left flex justify-between items-center p-3 hover:bg-theme-bg rounded-lg transition-colors group"
                                 >
-                                    <span className="text-slate-700 font-medium">Change Password</span>
-                                    <span className="text-slate-400 group-hover:text-primary text-sm">Update</span>
+                                    <span className="text-theme-primary font-medium">Change Password</span>
+                                    <span className="text-theme-secondary opacity-50 group-hover:text-primary text-sm group-hover:opacity-100">Update</span>
                                 </button>
                             ) : (
                                 <form onSubmit={handlePwChange} className="space-y-4">
@@ -421,7 +421,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
                                         <button 
                                             type="button"
                                             onClick={() => setShowPwForm(false)}
-                                            className="px-4 py-2.5 rounded-lg font-medium border border-slate-200 text-slate-600"
+                                            className="px-4 py-2.5 rounded-lg font-medium border border-theme-border text-theme-secondary hover:bg-theme-bg transition-colors"
                                         >
                                             Cancel
                                         </button>
@@ -431,7 +431,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
                         </div>
                     </div>
 
-                    <button onClick={logout} className="w-full py-4 text-red-500 font-bold bg-white border border-red-100 hover:bg-red-50 rounded-xl transition-colors flex items-center justify-center gap-2">
+                    <button onClick={logout} className="w-full py-4 text-rose-500 font-bold bg-theme-card border border-rose-100 dark:border-rose-900/30 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm">
                         <SignOut size={20} />
                         Sign Out
                     </button>
