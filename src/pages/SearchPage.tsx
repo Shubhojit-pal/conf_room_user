@@ -458,18 +458,18 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                     >
                         ← Back to Offices
                     </button>
-                    <h1 className="text-3xl font-bold text-slate-800">{selectedOffice}</h1>
-                    <p className="text-slate-500 mt-2">Select a room type to view details and book</p>
+                    <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">{selectedOffice}</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-2">Select a room type to view details and book</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {roomTypes.map((room) => (
                         <div
                             key={room.id}
-                            className={`bg-white rounded-xl border overflow-hidden transition-shadow ${
+                            className={`bg-white dark:bg-slate-900 rounded-xl border overflow-hidden transition-shadow ${
                                 room.isInactive
-                                    ? 'border-slate-200 opacity-60 grayscale-[40%]'
-                                    : 'border-slate-200 hover:shadow-lg'
+                                    ? 'border-slate-200 dark:border-slate-800 opacity-60 grayscale-[40%]'
+                                    : 'border-slate-200 dark:border-slate-800 hover:shadow-lg'
                             }`}
                         >
                             <div className="h-48 overflow-hidden bg-slate-100 relative">
@@ -489,9 +489,9 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                 )}
                             </div>
                             <div className="p-6">
-                                <h3 className="text-lg font-bold text-slate-800 mb-2">{room.type}</h3>
-                                <p className="text-slate-600 text-sm mb-4">{room.description}</p>
-                                <div className="flex items-center gap-4 text-sm text-slate-600 mb-4">
+                                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2">{room.type}</h3>
+                                <p className="text-slate-600 dark:text-slate-400 text-sm mb-4">{room.description}</p>
+                                <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-400 mb-4">
                                     <div className="flex items-center gap-1.5">
                                         <Users size={16} className="text-primary" />
                                         <span>{room.capacity} people</span>
@@ -538,7 +538,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
                     {/* Room Details */}
                     <div className="lg:col-span-2">
-                        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden mb-6">
+                        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden mb-6">
                             <div className="h-64 overflow-hidden bg-slate-100">
                                 <img
                                     src={selectedRoomType.image}
@@ -548,25 +548,25 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                 />
                             </div>
                             <div className="p-8">
-                                <h1 className="text-3xl font-bold text-slate-800 mb-2">{selectedRoomType.name}</h1>
-                                <p className="text-slate-600 mb-6">{selectedRoomType.description}</p>
+                                <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-2">{selectedRoomType.name}</h1>
+                                <p className="text-slate-600 dark:text-slate-400 mb-6">{selectedRoomType.description}</p>
 
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                                    <div className="p-4 bg-slate-50 rounded-lg">
-                                        <p className="text-slate-500 text-sm">Capacity</p>
+                                    <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                                        <p className="text-slate-500 dark:text-slate-400 text-sm">Capacity</p>
                                         <p className="text-2xl font-bold text-primary">{selectedRoomType.capacity}</p>
                                     </div>
-                                    <div className="p-4 bg-slate-50 rounded-lg invisible h-0">
-                                        <p className="text-slate-500 text-sm">Cost</p>
-                                        <p className="text-2xl font-bold text-slate-800">Free</p>
+                                    <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg invisible h-0">
+                                        <p className="text-slate-500 dark:text-slate-400 text-sm">Cost</p>
+                                        <p className="text-2xl font-bold text-slate-800 dark:text-slate-100">Free</p>
                                     </div>
                                 </div>
 
                                 <div className="mb-8">
-                                    <h3 className="text-lg font-bold text-slate-800 mb-4">Amenities</h3>
+                                    <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4">Amenities</h3>
                                     <div className="flex flex-wrap gap-3">
                                         {selectedRoomType.amenities.map((amenity) => (
-                                            <span key={amenity} className="px-3 py-2 bg-primary-light text-primary rounded-lg text-sm font-medium capitalize">
+                                            <span key={amenity} className="px-3 py-2 bg-primary-light dark:bg-primary/20 text-primary rounded-lg text-sm font-medium capitalize">
                                                 {amenity.replace('-', ' ')}
                                             </span>
                                         ))}
@@ -574,8 +574,8 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                 </div>
 
                                 <div className="mb-8">
-                                    <h3 className="text-lg font-bold text-slate-800 mb-4">Room Layout</h3>
-                                    <div className="bg-gradient-to-b from-slate-50 to-slate-100 rounded-lg p-12 border-2 border-dashed border-slate-300">
+                                    <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4">Room Layout</h3>
+                                    <div className="bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-lg p-12 border-2 border-dashed border-slate-300 dark:border-slate-700">
                                         {/* Screen/Display Area */}
                                         <div className="mb-8">
                                             <div className="h-16 bg-slate-400 rounded-lg flex items-center justify-center text-white font-bold mb-2">
@@ -609,8 +609,8 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
 
                     {/* Booking Form */}
                     <div>
-                        <div className="bg-white rounded-xl border border-slate-200 p-6 sticky top-8">
-                            <h3 className="text-xl font-bold text-slate-800 mb-6">Book This Room</h3>
+                        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 sticky top-8">
+                            <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-6">Book This Room</h3>
 
                             {bookingResult && (
                                 <div className={`mb-4 p-3 rounded-lg text-sm font-medium ${bookingResult.ok ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-600 border border-red-200'
@@ -677,23 +677,23 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                             }}>
                                 {/* Date Selection */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">Reservation Date</label>
+                                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Reservation Date</label>
                                     <input
                                         type="date"
                                         value={bookDate}
                                         min={todayStr}
                                         onChange={e => setBookDate(e.target.value)}
                                         required
-                                        className="w-full p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 font-medium text-sm"
+                                        className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 dark:bg-slate-800 font-medium text-sm text-slate-800 dark:text-slate-100"
                                     />
                                 </div>
 
                                 {/* Time Slot Grid */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                                         Select Time Slots
                                     </label>
-                                    <p className="text-[10px] text-slate-400 mb-3 uppercase tracking-wider">
+                                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-wider">
                                         Click start slot, then end slot to define range
                                     </p>
 
@@ -714,13 +714,13 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                                 let classes = 'relative flex items-center justify-center px-2 py-3 rounded-xl text-[11px] font-bold transition-all border-2 ';
 
                                                 if (status === 'past') {
-                                                    classes += 'bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed line-through';
+                                                    classes += 'bg-slate-50 dark:bg-slate-800/50 text-slate-300 dark:text-slate-600 border-slate-100 dark:border-slate-700 cursor-not-allowed line-through';
                                                 } else if (status === 'booked') {
-                                                    classes += 'bg-rose-50 text-rose-300 border-rose-100 cursor-not-allowed';
+                                                    classes += 'bg-rose-50 dark:bg-rose-500/10 text-rose-300 dark:text-rose-500 border-rose-100 dark:border-rose-900/30 cursor-not-allowed';
                                                 } else if (selected) {
                                                     classes += 'bg-primary border-primary text-white shadow-md shadow-primary/20 scale-[0.98]';
                                                 } else {
-                                                    classes += 'bg-white text-slate-600 border-slate-200 hover:border-primary hover:text-primary cursor-pointer';
+                                                    classes += 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-primary hover:text-primary cursor-pointer';
                                                 }
 
                                                 return (
@@ -745,13 +745,13 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-2">Purpose</label>
-                                    <textarea rows={3} value={bookPurpose} onChange={e => setBookPurpose(e.target.value)} className="w-full p-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Meeting purpose..."></textarea>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Purpose</label>
+                                    <textarea rows={3} value={bookPurpose} onChange={e => setBookPurpose(e.target.value)} className="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100" placeholder="Meeting purpose..."></textarea>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-2">Attendees</label>
-                                    <p className="text-[10px] text-slate-400 mb-1 uppercase tracking-wider">Max capacity: {selectedRoomType.capacity} people</p>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Attendees</label>
+                                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mb-1 uppercase tracking-wider">Max capacity: {selectedRoomType.capacity} people</p>
                                     <input
                                         type="number"
                                         min="1"
@@ -766,7 +766,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                             }
                                         }}
                                         required
-                                        className="w-full p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary"
+                                        className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100"
                                     />
                                 </div>
 
@@ -793,8 +793,8 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
     return (
         <div className="max-w-7xl mx-auto px-6 py-8">
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-slate-800">Reserve a Space</h1>
-                <p className="text-slate-500 mt-2">Find and book the perfect conference room for your needs</p>
+                <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">Reserve a Space</h1>
+                <p className="text-slate-500 dark:text-slate-400 mt-2">Find and book the perfect conference room for your needs</p>
             </div>
 
             <div className="flex flex-col lg:flex-row gap-8">
