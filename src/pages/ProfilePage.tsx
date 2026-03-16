@@ -31,11 +31,14 @@ import {
     Check,
     X,
     CalendarBlank,
-    ArrowRight
+    ArrowRight,
+    SpeakerHigh,
+    SpeakerNone
 } from '@phosphor-icons/react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { fetchUserProfile, updateUserProfile, fetchUserBookings, User } from '../lib/api';
+import { soundManager } from '../lib/sound-manager';
 
 /**
  * ProfilePage — the authenticated user's personal settings and stats page.
@@ -76,6 +79,23 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
     const [pwLoading, setPwLoading] = useState(false);
     /** Feedback message to display after a password change attempt. */
     const [pwMsg, setPwMsg] = useState<{ ok: boolean; msg: string } | null>(null);
+
+    const [soundsEnabled, setSoundsEnabled] = useState(true);
+
+    useEffect(() => {
+        if (soundManager) {
+            setSoundsEnabled(soundManager.isEnabled());
+        }
+    }, []);
+
+    const toggleSounds = () => {
+        const newState = !soundsEnabled;
+        setSoundsEnabled(newState);
+        soundManager?.setEnabled(newState);
+        if (newState) {
+            soundManager?.play('click');
+        }
+    };
 
     useEffect(() => {
         if (!authUser) return;
@@ -301,6 +321,39 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
                                     </button>
                                 </div>
                             )}
+                        </div>
+                    </div>
+                    {/* App Preferences */}
+                    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                        <div className="p-4 border-b border-slate-100 bg-slate-50/50">
+                            <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                                <SpeakerHigh size={20} /> App Preferences
+                            </h3>
+                        </div>
+                        <div className="p-6">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className={`p-2 rounded-lg ${soundsEnabled ? 'bg-primary/10 text-primary' : 'bg-slate-100 text-slate-400'}`}>
+                                        {soundsEnabled ? <SpeakerHigh size={20} /> : <SpeakerNone size={20} />}
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-semibold text-slate-800">Interface Sounds</p>
+                                        <p className="text-xs text-slate-500">Enable audio feedback for clicks and actions</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={toggleSounds}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                                        soundsEnabled ? 'bg-primary' : 'bg-slate-200'
+                                    }`}
+                                >
+                                    <span
+                                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                            soundsEnabled ? 'translate-x-6' : 'translate-x-1'
+                                        }`}
+                                    />
+                                </button>
+                            </div>
                         </div>
                     </div>
 

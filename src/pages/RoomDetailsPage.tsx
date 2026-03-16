@@ -20,6 +20,7 @@ import { fetchRoom, createBooking, fetchRoomAvailability, getCurrentUser, Room, 
 import { getDirectImageUrl } from '../lib/imageUtils';
 import { BookingResult } from '../App';
 import LoginPage from './LoginPage';
+import { useUISound } from '../hooks/use-ui-sound';
 
 interface RoomDetailsPageProps {
     room: { catalog_id: string; room_id: string } | null;
@@ -42,6 +43,7 @@ const ALL_SLOTS = Array.from({ length: 9 }, (_, i) => {
 type SlotStatus = 'available' | 'booked' | 'past';
 
 const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack, onBookingSuccess }) => {
+    const { playSuccess, playError } = useUISound();
     const [room, setRoom] = useState<Room | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -260,6 +262,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                 attendees: attendeeCount,
                 per_date_choices: perDateChoices
             });
+            playSuccess();
             setBookResult({ ok: true, msg: `Booking created! ID: ${result.booking_id}` });
             setDateSlots({});
             setSelectedDates([todayStr]);
@@ -283,6 +286,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                 });
             }, 800);
         } catch (err: any) {
+            playError();
             setBookResult({ ok: false, msg: err.message });
         } finally {
             setSubmitting(false);

@@ -17,6 +17,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import NotificationsPage from './pages/NotificationsPage'
 import { useAuth } from './context/AuthContext'
+import { useUISound } from './hooks/use-ui-sound'
 
 export interface SelectedRoom {
     catalog_id: string;
@@ -102,6 +103,7 @@ export interface BookingResult {
 function App() {
     const [currentView, setCurrentView] = useState('home');
     const { isLoading } = useAuth();
+    const { playClick } = useUISound();
     const [selectedRoom, setSelectedRoom] = useState<SelectedRoom | null>(null);
     const [lastBooking, setLastBooking] = useState<BookingResult | null>(null);
     const [initialSearchFilters, setInitialSearchFilters] = useState<{ location: string; capacity: string; date: string } | undefined>();
@@ -109,12 +111,15 @@ function App() {
     const [resetEmail, setResetEmail] = useState('');
 
     const navigateTo = (view: string, data?: any) => {
+        if (view === currentView) return; // Prevent sound on same page click if redundant
+        
         if (view === 'search' && data && data.location) {
             setInitialSearchFilters(data);
         } else if (view === 'search') {
             setInitialSearchFilters(undefined);
         }
         setCurrentView(view);
+        playClick();
         window.scrollTo(0, 0);
     };
 

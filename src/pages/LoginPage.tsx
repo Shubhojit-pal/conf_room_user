@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { API_URL } from '../lib/api';
 import { Buildings, EnvelopeSimple, Lock, User, Phone, Briefcase, X, Eye, EyeSlash } from '@phosphor-icons/react';
+import { useUISound } from '../hooks/use-ui-sound';
 
 interface LoginPageProps {
     onSuccess: () => void;
@@ -12,6 +13,7 @@ interface LoginPageProps {
 
 const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, onClose }) => {
     const { login, register } = useAuth();
+    const { playSuccess, playError } = useUISound();
     const [mode, setMode] = useState<'login' | 'register' | 'verify'>('login');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -39,8 +41,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
         setError('');
         try {
             await login(email, password);
+            playSuccess();
             onSuccess();
         } catch (err: any) {
+            playError();
             setError(err.message);
         } finally {
             setLoading(false);
@@ -54,9 +58,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
         try {
             const uid = `U-${Date.now().toString().slice(-6)}`;
             await register({ uid, name: regName, email: regEmail, password: regPassword, dept: regDept, phone_no: regPhone, userrole_id: regRole });
+            playSuccess();
             setVerifyEmail(regEmail);
             setMode('verify');
         } catch (err: any) {
+            playError();
             setError(err.message);
         } finally {
             setLoading(false);
