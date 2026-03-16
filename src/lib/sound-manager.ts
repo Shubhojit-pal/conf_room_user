@@ -68,6 +68,12 @@ class SoundManager {
         localStorage.setItem('ui_sounds_enabled', String(enabled));
     }
 
+    public toggleEnabled(): boolean {
+        this.enabled = !this.enabled;
+        localStorage.setItem('ui_sounds_enabled', String(this.enabled));
+        return this.enabled;
+    }
+
     public isEnabled(): boolean {
         return this.enabled;
     }

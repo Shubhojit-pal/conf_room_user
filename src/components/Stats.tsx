@@ -47,7 +47,7 @@ const Stats: React.FC<StatsProps> = ({ onNavigate }) => {
                     <button 
                         key={index} 
                         onClick={() => stat.route && onNavigate && onNavigate(stat.route)}
-                        className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 flex flex-col items-start gap-3 sm:gap-4 hover:shadow-md hover:border-slate-300 transition-all text-left w-full group focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col items-start gap-3 sm:gap-4 hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all text-left w-full group focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     >
                         <div className={`p-2 sm:p-3 rounded-lg ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform`}>
                             <div className="scale-75 sm:scale-100 origin-top-left flex items-center justify-center">
@@ -55,8 +55,8 @@ const Stats: React.FC<StatsProps> = ({ onNavigate }) => {
                             </div>
                         </div>
                         <div>
-                            <h3 className="text-2xl sm:text-3xl font-bold text-slate-800">{stat.value}</h3>
-                            <p className="text-xs sm:text-sm font-medium text-slate-500 leading-tight">{stat.label}</p>
+                            <h3 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-100">{stat.value}</h3>
+                            <p className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 leading-tight">{stat.label}</p>
                         </div>
                     </button>
                 ))}

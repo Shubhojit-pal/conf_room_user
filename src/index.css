@@ -4,6 +4,7 @@
 
 @layer base {
     body {
-        @apply antialiased text-slate-800 bg-slate-50 font-sans;
+        @apply antialiased text-slate-800 bg-slate-50 font-sans transition-colors duration-300;
+        @apply dark:text-slate-100 dark:bg-slate-900;
     }
 }

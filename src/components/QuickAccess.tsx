@@ -68,23 +68,23 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
         <section className="pb-20 px-6">
             <div className="max-w-7xl mx-auto relative">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-slate-900 mb-2">Quick Access</h2>
-                    <p className="text-slate-500">Manage your bookings and discover your favorite spaces</p>
+                    <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">Quick Access</h2>
+                    <p className="text-slate-500 dark:text-slate-400">Manage your bookings and discover your favorite spaces</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {/* Available Today */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 border-t-4 border-t-secondary hover:shadow-md transition-shadow cursor-pointer" onClick={onViewAvailableToday}>
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 border-t-4 border-t-secondary hover:shadow-md transition-shadow cursor-pointer" onClick={onViewAvailableToday}>
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="p-2 rounded-lg bg-secondary-light text-secondary">
+                            <div className="p-2 rounded-lg bg-secondary-light dark:bg-secondary/20 text-secondary">
                                 <Calendar size={24} weight="fill" />
                             </div>
-                            <h3 className="text-lg font-bold text-slate-800">Available Today</h3>
+                            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Available Today</h3>
                         </div>
 
                         <div className="flex flex-col gap-3">
                             {todayAvailableRooms.map((room, idx) => (
-                                <div key={idx} className="flex gap-3 p-3 rounded-lg border border-slate-100 hover:border-secondary/30 transition-colors">
+                                <div key={idx} className="flex gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-secondary/30 transition-colors">
                                     <div
                                         className="w-14 h-14 rounded-lg bg-slate-200 shrink-0 bg-cover bg-center"
                                         style={{ backgroundImage: `url(${getDirectImageUrl(room.image)})` }}
@@ -105,12 +105,12 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                     </div>
 
                     {/* Quick Booking - Desktop Only */}
-                    <div className="hidden lg:block bg-white rounded-2xl p-6 shadow-sm border border-slate-200 border-t-4 border-t-primary">
+                    <div className="hidden lg:block bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 border-t-4 border-t-primary">
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="p-2 rounded-lg bg-primary-light text-primary">
+                            <div className="p-2 rounded-lg bg-primary-light dark:bg-primary/20 text-primary">
                                 <CalendarPlus size={24} weight="fill" />
                             </div>
-                            <h3 className="text-lg font-bold text-slate-800">Quick Booking</h3>
+                            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Quick Booking</h3>
                         </div>
 
                         <form className="flex flex-col gap-4" onSubmit={handleFindRooms}>
@@ -119,7 +119,7 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                                 <select
                                     value={location}
                                     onChange={(e) => setLocation(e.target.value)}
-                                    className="w-full p-3 rounded-lg border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white"
+                                    className="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-slate-800"
                                 >
                                     <option>All Locations</option>
                                     <option>Downtown Office</option>
@@ -131,7 +131,7 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                                 <select
                                     value={capacity}
                                     onChange={(e) => setCapacity(e.target.value)}
-                                    className="w-full p-3 rounded-lg border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white"
+                                    className="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-slate-800"
                                 >
                                     <option>Any Capacity</option>
                                     <option>2-6 People</option>
@@ -144,7 +144,7 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                                     type="date"
                                     value={date}
                                     onChange={(e) => setDate(e.target.value)}
-                                    className="w-full p-3 rounded-lg border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                                    className="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-slate-800"
                                 />
                             </div>
                             <button type="submit" className="mt-2 w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 rounded-lg transition-colors">
@@ -157,20 +157,20 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                     </div>
 
                     {/* Favorite Rooms */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
                         <div className="flex justify-between items-center mb-6">
                             <div className="flex items-center gap-4">
-                                <div className="p-2 rounded-lg bg-accent-orangeLight text-accent-orange">
+                                <div className="p-2 rounded-lg bg-accent-orangeLight dark:bg-accent-orange/20 text-accent-orange">
                                     <Star size={24} weight="fill" />
                                 </div>
-                                <h3 className="text-lg font-bold text-slate-800">Favorite Rooms</h3>
+                                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Favorite Rooms</h3>
                             </div>
                             <button onClick={onViewFavorites} className="text-primary text-sm font-medium hover:underline">View All</button>
                         </div>
 
                         <div className="flex flex-col gap-4">
                             {rooms.map((room, idx) => (
-                                <div key={idx} className="flex gap-4 p-3 rounded-xl border border-slate-100 hover:border-primary/30 transition-colors group">
+                                <div key={idx} className="flex gap-4 p-3 rounded-xl border border-slate-100 dark:border-slate-800 hover:border-primary/30 transition-colors group">
                                     <div
                                         className="w-16 h-16 rounded-lg bg-slate-200 shrink-0 bg-cover bg-center"
                                         style={{ backgroundImage: `url(${getDirectImageUrl(room.image)})` }}
@@ -202,13 +202,13 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                     </div>
 
                     {/* Recent Activity */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
                         <div className="flex justify-between items-center mb-6">
                             <div className="flex items-center gap-4">
-                                <div className="p-2 rounded-lg bg-accent-purpleLight text-accent-purple">
+                                <div className="p-2 rounded-lg bg-accent-purpleLight dark:bg-accent-purple/20 text-accent-purple">
                                     <ClockCounterClockwise size={24} weight="fill" />
                                 </div>
-                                <h3 className="text-lg font-bold text-slate-800">Recent Activity</h3>
+                                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Recent Activity</h3>
                             </div>
                             <button onClick={onViewActivity} className="text-primary text-sm font-medium hover:underline">View All</button>
                         </div>
@@ -224,7 +224,7 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                                             {item.icon}
                                         </div>
                                         <div>
-                                            <h4 className="text-sm font-semibold text-slate-800">{item.title}</h4>
+                                            <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">{item.title}</h4>
                                             <p className="text-xs text-slate-500 mt-0.5 leading-snug">{item.desc}</p>
                                             <span className="text-[10px] text-slate-400 font-medium mt-1 block">{item.time}</span>
                                         </div>
@@ -246,29 +246,29 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
 
             {/* ── MOBILE: Quick Booking Modal ── */}
             {isMobileModalOpen && (
-                <div className="lg:hidden fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm flex items-end justify-center p-4">
-                    <div className="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl relative animate-in slide-in-from-bottom-8 duration-300">
+                <div className="lg:hidden fixed inset-0 z-[100] bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm flex items-end justify-center p-4">
+                    <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-6 shadow-2xl relative animate-in slide-in-from-bottom-8 duration-300 border border-transparent dark:border-slate-800">
                         <button
                             onClick={() => setIsMobileModalOpen(false)}
-                            className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 bg-slate-100 rounded-full"
+                            className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-800 rounded-full"
                         >
                             <X size={20} weight="bold" />
                         </button>
                         
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="p-2 rounded-xl bg-primary-light text-primary">
+                            <div className="p-2 rounded-xl bg-primary-light dark:bg-primary/20 text-primary">
                                 <CalendarPlus size={24} weight="fill" />
                             </div>
-                            <h3 className="text-xl font-bold text-slate-800">Quick Booking</h3>
+                            <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">Quick Booking</h3>
                         </div>
 
                         <form className="flex flex-col gap-5" onSubmit={handleFindRooms}>
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Location</label>
+                                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Location</label>
                                 <select
                                     value={location}
                                     onChange={(e) => setLocation(e.target.value)}
-                                    className="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-slate-50 font-medium"
+                                    className="w-full p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-slate-50 dark:bg-slate-800 font-medium"
                                 >
                                     <option>All Locations</option>
                                     <option>Downtown Office</option>
@@ -276,11 +276,11 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Capacity</label>
+                                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Capacity</label>
                                 <select
                                     value={capacity}
                                     onChange={(e) => setCapacity(e.target.value)}
-                                    className="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-slate-50 font-medium"
+                                    className="w-full p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-slate-50 dark:bg-slate-800 font-medium"
                                 >
                                     <option>Any Capacity</option>
                                     <option>2-6 People</option>
@@ -288,12 +288,12 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Date</label>
+                                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Date</label>
                                 <input
                                     type="date"
                                     value={date}
                                     onChange={(e) => setDate(e.target.value)}
-                                    className="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-slate-50 font-medium"
+                                    className="w-full p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-slate-50 dark:bg-slate-800 font-medium"
                                 />
                             </div>
                             <button type="submit" className="mt-4 w-full bg-primary hover:bg-primary-dark text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-transform active:scale-[0.98]">

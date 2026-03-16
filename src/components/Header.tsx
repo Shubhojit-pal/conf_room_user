@@ -1,7 +1,12 @@
-import { Buildings, Bell, User, CirclesFour, MagnifyingGlass, CalendarBlank, Ticket, SignOut, List, X } from '@phosphor-icons/react';
+import { 
+    Buildings, Bell, User, CirclesFour, MagnifyingGlass, CalendarBlank, 
+    Ticket, SignOut, List, X, Sun, Moon, SpeakerHigh, SpeakerNone 
+} from '@phosphor-icons/react';
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { fetchNotifications, markNotificationAsRead, markAllNotificationsAsRead } from '../lib/api';
+import { useTheme } from '../context/ThemeContext';
+import { soundManager } from '../lib/sound-manager';
 
 interface HeaderProps {
     currentView: string;
@@ -23,6 +28,15 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
     const [notifications, setNotifications] = useState<NotificationItem[]>([]);
     const notifRef = useRef<HTMLDivElement>(null);
     const { user, logout } = useAuth();
+    const { theme, toggleTheme } = useTheme();
+    const [soundsEnabled, setSoundsEnabled] = useState(soundManager?.isEnabled() ?? true);
+
+    const toggleSounds = () => {
+        const newState = soundManager?.toggleEnabled();
+        if (newState !== undefined) {
+            setSoundsEnabled(newState);
+        }
+    };
 
     const navItems = [
         { id: 'home', label: 'Home', icon: <CirclesFour size={20} /> },
@@ -101,11 +115,11 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
     return (
         <>
             {/* ─── Top Header ─── */}
-            <header className="sticky top-0 z-50 bg-white border-b border-slate-200 py-4">
+            <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-4 transition-colors">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center">
                     {/* Logo */}
                     <div
-                        className="flex items-center gap-3 font-bold text-xl text-slate-800 cursor-pointer"
+                        className="flex items-center gap-3 font-bold text-xl text-slate-800 dark:text-slate-100 cursor-pointer"
                         onClick={() => navigate('home')}
                     >
                         <div className="bg-primary text-white p-1.5 rounded-md flex">
@@ -115,14 +129,14 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                     </div>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex gap-1 bg-slate-50 p-1.5 rounded-xl border border-slate-100">
+                    <nav className="hidden md:flex gap-1 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-xl border border-slate-100 dark:border-slate-700">
                         {navItems.map((item) => (
                             <button
                                 key={item.id}
                                 onClick={() => navigate(item.id)}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${currentView === item.id
-                                    ? 'bg-white text-primary shadow-sm'
-                                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+                                    ? 'bg-white dark:bg-slate-700 text-primary shadow-sm'
+                                    : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700'
                                     }`}
                             >
                                 {item.label}
@@ -131,8 +145,8 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                         <button
                             onClick={() => navigate('help')}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${currentView === 'help'
-                                ? 'bg-white text-primary shadow-sm'
-                                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+                                ? 'bg-white dark:bg-slate-700 text-primary shadow-sm'
+                                : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700'
                                 }`}
                         >
                             Help
@@ -176,11 +190,11 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                     {/* Notification Dropdown — constrained for mobile */}
                                     {showNotifications && (
                                         <div
-                                            className="absolute top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-sm bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden z-[100]"
+                                            className="absolute top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-sm bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden z-[100]"
                                             style={{ right: 0, maxHeight: '70vh' }}
                                         >
-                                            <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                                                <h3 className="font-bold text-slate-800">Notifications</h3>
+                                            <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
+                                                <h3 className="font-bold text-slate-800 dark:text-slate-100">Notifications</h3>
                                                 <button
                                                     onClick={handleMarkAllRead}
                                                     className="text-xs text-primary font-medium hover:underline"
@@ -223,6 +237,25 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                     )}
                                 </div>
 
+                                {/* Theme & Sound Toggles (Desktop) */}
+                                <div className="hidden sm:flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700">
+                                    <button
+                                        onClick={toggleTheme}
+                                        title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+                                        className="p-1.5 rounded-md text-slate-500 hover:text-primary hover:bg-white dark:hover:bg-slate-700 transition-all"
+                                    >
+                                        {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                                    </button>
+                                    <div className="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-0.5" />
+                                    <button
+                                        onClick={toggleSounds}
+                                        title={soundsEnabled ? 'Disable UI Sounds' : 'Enable UI Sounds'}
+                                        className={`p-1.5 rounded-md transition-all ${soundsEnabled ? 'text-primary' : 'text-slate-400 hover:text-slate-600'}`}
+                                    >
+                                        {soundsEnabled ? <SpeakerHigh size={20} /> : <SpeakerNone size={20} />}
+                                    </button>
+                                </div>
+
                                 {/* Profile Button (desktop) */}
                                 <button
                                     onClick={() => navigate('profile')}
@@ -255,7 +288,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
 
                 {/* Mobile Dropdown Menu */}
                 {showMobileMenu && (
-                    <div className="md:hidden border-t border-slate-100 bg-white px-4 pb-4 pt-2">
+                    <div className="md:hidden border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pb-4 pt-2">
                         <div className="flex flex-col gap-1">
                             {navItems.map((item) => (
                                 <button
@@ -296,6 +329,27 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                         <SignOut size={20} />
                                         Sign Out
                                     </button>
+                                    <hr className="my-1 border-slate-100 dark:border-slate-800" />
+                                    <div className="flex items-center justify-between px-4 py-3">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Appearance</span>
+                                        <button
+                                            onClick={toggleTheme}
+                                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
+                                        >
+                                            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+                                            <span className="text-xs uppercase font-bold">{theme === 'light' ? 'Dark' : 'Light'}</span>
+                                        </button>
+                                    </div>
+                                    <div className="flex items-center justify-between px-4 py-3">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Interface Sounds</span>
+                                        <button
+                                            onClick={toggleSounds}
+                                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all ${soundsEnabled ? 'bg-primary/10 text-primary border-primary/20' : 'bg-slate-50 dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'}`}
+                                        >
+                                            {soundsEnabled ? <SpeakerHigh size={18} /> : <SpeakerNone size={18} />}
+                                            <span className="text-xs uppercase font-bold">{soundsEnabled ? 'On' : 'Off'}</span>
+                                        </button>
+                                    </div>
                                 </>
                             )}
                         </div>
@@ -305,7 +359,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
 
             {/* ─── Mobile Bottom Navigation Bar (authenticated only) ─── */}
             {user && (
-                <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 shadow-lg">
+                <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-lg">
                     <div className="flex justify-around items-center px-1 py-2">
                         {navItems.map((item) => {
                             const isActive = currentView === item.id;
