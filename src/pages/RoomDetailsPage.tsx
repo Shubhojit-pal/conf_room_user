@@ -877,7 +877,18 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
                         <div className="mt-8 pt-6 border-t border-theme-border">
                             <h3 className="font-semibold text-theme-primary mb-3">Location Details</h3>
-                            <p className="text-sm text-theme-secondary opacity-70">{room.location} — Floor {room.floor_no}, Room {room.room_number}</p>
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <p className="text-sm text-theme-secondary opacity-70">{room.location} — Floor {room.floor_no}, Room {room.room_number}</p>
+                                {room.mapLink && (
+                                    <button
+                                        onClick={() => window.open(room.mapLink, '_blank')}
+                                        className="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary text-sm font-bold rounded-xl transition-all"
+                                    >
+                                        <MapPin size={18} weight="fill" />
+                                        <span>View on Map</span>
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

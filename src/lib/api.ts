@@ -15,6 +15,7 @@ export interface Room {
     image_url?: string;
     image_urls?: string[];
     room_type?: string;
+    mapLink?: string;
 }
 
 export interface Booking {
