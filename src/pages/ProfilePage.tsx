@@ -4,7 +4,7 @@
  *
  * Features:
  *  - Displays the user's name, role, department, email, and phone number.
- *  - Shows booking statistics (total, confirmed, pending).
+ *  - Shows booking statistics (total, confirmed).
  *  - Allows editing of name, department, and phone number.
  *  - Provides a form to change the account password inline.
  *  - Includes a "Sign Out" button at the bottom.

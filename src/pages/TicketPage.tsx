@@ -74,7 +74,7 @@ const TicketPage: React.FC<TicketPageProps> = ({ booking, onHome, onViewBookings
         stream += `BT\n1 1 1 rg\n/F1 11 Tf\n${mx + 20} ${y - 52} Td\n(${esc(booking.location || '')}) Tj\nET\n`;
 
         // Status badge text
-        const statusText = booking.status === 'confirmed' ? 'CONFIRMED' : 'PENDING';
+        const statusText = 'CONFIRMED';
         stream += `BT\n1 1 1 rg\n/F1 9 Tf\n${mx + cw - 100} ${y - 30} Td\n(${statusText}) Tj\nET\n`;
 
         y -= 110;
@@ -196,14 +196,14 @@ const TicketPage: React.FC<TicketPageProps> = ({ booking, onHome, onViewBookings
         <div className="max-w-2xl mx-auto py-12 px-6">
             {/* Success Header */}
             <div className="text-center mb-10">
-                <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 ${booking.status === 'confirmed' ? 'bg-green-100 text-green-500 animate-bounce' : 'bg-amber-100 text-amber-500 animate-pulse'}`}>
+                <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 bg-green-100 text-green-500 animate-bounce`}>
                     <CheckCircle size={48} weight="fill" />
                 </div>
                 <h1 className="text-3xl font-bold text-slate-900">
-                    {booking.status === 'confirmed' ? 'Booking Confirmed!' : 'Booking Pending'}
+                    Booking Confirmed!
                 </h1>
                 <p className="text-slate-500 mt-2">
-                    {booking.status === 'confirmed' ? 'Your conference room has been reserved successfully' : 'Your conference room request is awaiting admin approval'}
+                    Your conference room has been reserved successfully
                 </p>
             </div>
 
@@ -216,11 +216,8 @@ const TicketPage: React.FC<TicketPageProps> = ({ booking, onHome, onViewBookings
                             <h2 className="text-xl font-bold">{booking.room_name}</h2>
                             <p className="text-white/80 text-sm mt-1">{booking.location}</p>
                         </div>
-                        <span className={`px-3 py-1 text-xs rounded-full font-semibold backdrop-blur-sm ${booking.status === 'confirmed'
-                            ? 'bg-green-500/20 text-white border border-green-400/30'
-                            : 'bg-white/20 text-white'
-                            }`}>
-                            {booking.status === 'confirmed' ? 'Confirmed' : 'Pending Approval'}
+                        <span className={`px-3 py-1 text-xs rounded-full font-semibold backdrop-blur-sm bg-green-500/20 text-white border border-green-400/30`}>
+                            Confirmed
                         </span>
                     </div>
                 </div>
@@ -317,9 +314,7 @@ const TicketPage: React.FC<TicketPageProps> = ({ booking, onHome, onViewBookings
                     )}
 
                     <p className="text-xs text-center text-slate-400 mt-4">
-                        {booking.status === 'confirmed'
-                            ? 'Your booking has been approved. Download your ticket for reference.'
-                            : 'Your booking is pending admin approval. You\'ll receive a confirmation once approved.'}
+                        Your booking has been approved. Download your ticket for reference.
                     </p>
                 </div>
             </div>
@@ -329,14 +324,12 @@ const TicketPage: React.FC<TicketPageProps> = ({ booking, onHome, onViewBookings
                 <button onClick={onHome} className="flex-1 py-4 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-xl transition-colors flex items-center justify-center gap-2">
                     <House size={20} /> Back to Home
                 </button>
-                {booking.status === 'confirmed' && (
-                    <button
-                        onClick={handleDownloadPDF}
-                        className="flex-1 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25"
-                    >
-                        <DownloadSimple size={20} weight="bold" /> Download PDF
-                    </button>
-                )}
+                <button
+                    onClick={handleDownloadPDF}
+                    className="flex-1 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25"
+                >
+                    <DownloadSimple size={20} weight="bold" /> Download PDF
+                </button>
                 <button onClick={onViewBookings} className="flex-1 py-4 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2">
                     View My Bookings <ArrowRight size={18} />
                 </button>

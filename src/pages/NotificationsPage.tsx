@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Bell, CheckCircle, XCircle, Clock, Info, BellSlash, Checks, ArrowRight } from '@phosphor-icons/react';
+import { Bell, CheckCircle, XCircle, Info, BellSlash, Checks, ArrowRight } from '@phosphor-icons/react';
 import { fetchNotifications, markNotificationAsRead, markAllNotificationsAsRead, fetchUserBookings, getCurrentUser } from '../lib/api';
 
 interface NotificationItem {
@@ -106,8 +106,8 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ onNavigate, onVie
             return { icon: <XCircle size={22} weight="fill" className="text-red-500" />, bg: 'bg-red-50' };
         if (t.includes('cancel'))
             return { icon: <XCircle size={22} weight="fill" className="text-slate-400" />, bg: 'bg-slate-100' };
-        if (t.includes('pending'))
-            return { icon: <Clock size={22} weight="fill" className="text-yellow-500" />, bg: 'bg-yellow-50' };
+        if (t.includes('confirmed') || t.includes('cancelled'))
+            return { icon: <CheckCircle size={22} weight="fill" className="text-green-500" />, bg: 'bg-green-50' };
         return { icon: <Info size={22} weight="fill" className="text-primary" />, bg: 'bg-blue-50' };
     };
 

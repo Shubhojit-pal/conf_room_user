@@ -27,8 +27,8 @@ const HelpCenterPage: React.FC<HelpCenterPageProps> = ({ onNavigate, onAlert }) 
             answer: "Yes, you can cancel your booking from the 'My Schedule' section. Click on the reserved date in the calendar and select 'Cancel Reservation' in the details popup. If an Admin cancels your booking, it will appear as 'Cancelled' in your history."
         },
         {
-            question: "What does a 'Pending' status mean?",
-            answer: "Certain high-capacity rooms or special equipment requests require Admin approval. Your booking will remain marked 'Pending' until an administrator reviews and approves it from their dashboard."
+            question: "How do I know my booking is confirmed?",
+            answer: "All bookings in our system are instantly confirmed. You can view your active bookings in the 'My Bookings' tab or check the Calendar."
         },
         {
             question: "Can I edit an existing booking?",
@@ -55,7 +55,7 @@ const HelpCenterPage: React.FC<HelpCenterPageProps> = ({ onNavigate, onAlert }) 
                     <MagnifyingGlass size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                         type="text"
-                        placeholder="Search for help... (e.g. 'cancel', 'pending')"
+                        placeholder="Search for help... (e.g. 'cancel', 'confirmed')"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-sm transition-all"

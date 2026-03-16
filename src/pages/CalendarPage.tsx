@@ -28,7 +28,7 @@ interface BookingEvent {
     location?: string;
     timeSlot?: string;
     purpose: string;
-    status: 'booked' | 'pending' | 'available';
+    status: 'booked' | 'available';
     capacity: number;
     selectedSlots?: string;
     selectedDates?: string;
@@ -54,8 +54,8 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
     // Applied filters (used for actual filtering)
     const [filterLocation, setFilterLocation] = useState('all');
     const [filterTimeSlot, setFilterTimeSlot] = useState('all');
-    const [pendingLocation, setPendingLocation] = useState('all');
-    const [pendingTimeSlot, setPendingTimeSlot] = useState('all');
+    const [tempLocation, setTempLocation] = useState('all');
+    const [tempTimeSlot, setTempTimeSlot] = useState('all');
 
     // State for Mobile Filter Modal
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
@@ -95,7 +95,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                             bookedBy: b.user_name || user.name,
                             duration: '',
                             purpose: b.purpose || '',
-                            status: (b.status === 'confirmed' ? 'booked' : b.status === 'pending' ? 'pending' : 'available') as BookingEvent['status'],
+                            status: 'booked' as BookingEvent['status'],
                             capacity: 0,
                             selectedSlots: b.selected_slots,
                             selectedDates: b.selected_dates
@@ -321,12 +321,10 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
         });
     };
 
-    const getDateStatus = (date: string): 'booked' | 'pending' | 'available' => {
+    const getDateStatus = (date: string): 'booked' | 'available' => {
         const bookings = getBookingsForDate(date);
         if (bookings.length === 0) return 'available';
-        if (bookings.some(b => b.status === 'booked')) return 'booked';
-        if (bookings.some(b => b.status === 'pending')) return 'pending';
-        return 'available';
+        return 'booked';
     };
 
     // Get the start of the current week (Sunday)
@@ -404,8 +402,8 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                         <label className="block text-sm font-medium text-slate-600 mb-2">Filter by Location</label>
                         <select
                             className="w-full p-3 rounded-lg border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary text-slate-700"
-                            value={pendingLocation}
-                            onChange={e => setPendingLocation(e.target.value)}
+                            value={tempLocation}
+                            onChange={e => setTempLocation(e.target.value)}
                         >
                             <option value="all">All Locations</option>
                             {[...new Set(availableRooms.map(r => r.location).filter(Boolean))].map(loc => (
@@ -417,8 +415,8 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                         <label className="block text-sm font-medium text-slate-600 mb-2">Filter by Time Slot</label>
                         <select
                             className="w-full p-3 rounded-lg border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary text-slate-700"
-                            value={pendingTimeSlot}
-                            onChange={e => setPendingTimeSlot(e.target.value)}
+                            value={tempTimeSlot}
+                            onChange={e => setTempTimeSlot(e.target.value)}
                         >
                             <option value="all">All Time Slots</option>
                             {ALL_SLOTS.map(s => (
@@ -438,8 +436,8 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => {
-                                setPendingLocation('all');
-                                setPendingTimeSlot('all');
+                                setTempLocation('all');
+                                setTempTimeSlot('all');
                                 setFilterLocation('all');
                                 setFilterTimeSlot('all');
                             }}
@@ -449,8 +447,8 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                         </button>
                         <button
                             onClick={() => {
-                                setFilterLocation(pendingLocation);
-                                setFilterTimeSlot(pendingTimeSlot);
+                                setFilterLocation(tempLocation);
+                                setFilterTimeSlot(tempTimeSlot);
                             }}
                             className="text-sm bg-primary hover:bg-primary-dark text-white font-bold px-6 py-2 rounded-lg transition-colors shadow-sm shadow-primary/20"
                         >
@@ -499,8 +497,8 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Location</label>
                                 <select
                                     className="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 font-medium"
-                                    value={pendingLocation}
-                                    onChange={e => setPendingLocation(e.target.value)}
+                                    value={tempLocation}
+                                    onChange={e => setTempLocation(e.target.value)}
                                 >
                                     <option value="all">All Locations</option>
                                     {[...new Set(availableRooms.map(r => r.location).filter(Boolean))].map(loc => (
@@ -512,8 +510,8 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Time Slot</label>
                                 <select
                                     className="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary bg-slate-50 font-medium"
-                                    value={pendingTimeSlot}
-                                    onChange={e => setPendingTimeSlot(e.target.value)}
+                                    value={tempTimeSlot}
+                                    onChange={e => setTempTimeSlot(e.target.value)}
                                 >
                                     <option value="all">All Time Slots</option>
                                     {ALL_SLOTS.map(s => (
@@ -525,8 +523,8 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                             <div className="flex gap-3 mt-2">
                                 <button
                                     onClick={() => {
-                                        setPendingLocation('all');
-                                        setPendingTimeSlot('all');
+                                        setTempLocation('all');
+                                        setTempTimeSlot('all');
                                         setFilterLocation('all');
                                         setFilterTimeSlot('all');
                                         setIsMobileFilterOpen(false);
@@ -537,8 +535,8 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                 </button>
                                 <button 
                                     onClick={() => {
-                                        setFilterLocation(pendingLocation);
-                                        setFilterTimeSlot(pendingTimeSlot);
+                                        setFilterLocation(tempLocation);
+                                        setFilterTimeSlot(tempTimeSlot);
                                         setIsMobileFilterOpen(false);
                                     }}
                                     className="flex-[2] bg-primary hover:bg-primary-dark text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-transform active:scale-[0.98]"
@@ -701,10 +699,6 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                         <span className="text-xs sm:text-sm text-slate-600 whitespace-nowrap">Booked</span>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
-                        <div className="w-3 h-3 sm:w-4 sm:h-4 bg-yellow-100 border-2 border-yellow-500 rounded"></div>
-                        <span className="text-xs sm:text-sm text-slate-600 whitespace-nowrap">Pending</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 shrink-0">
                         <div className="w-3 h-3 sm:w-4 sm:h-4 bg-indigo-100 border-2 border-indigo-400 rounded"></div>
                         <span className="text-xs sm:text-sm text-slate-600 whitespace-nowrap">Available</span>
                     </div>
@@ -732,7 +726,6 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
 
                                 const statusColors = {
                                     booked: 'bg-green-100 border-green-400',
-                                    pending: 'bg-yellow-100 border-yellow-400',
                                     available: 'bg-blue-50 border-blue-300'
                                 };
 
@@ -788,7 +781,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                             )}
                                         </div>
 
-                                        {/* Hover Tooltip for Booked/Pending */}
+                                        {/* Hover Tooltip for Booked */}
                                         {hoveredBooking && hoveredDate === dateStr && (dayBookings.length > 0) && !isPast && (
                                             <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-lg z-20 whitespace-nowrap pointer-events-none">
                                                 <p className="font-semibold text-sm">{hoveredBooking.room}</p>
@@ -798,7 +791,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                                 )}
                                                 <p className="text-xs text-slate-300">Purpose: {hoveredBooking.purpose}</p>
                                                 <p className={`text-xs font-semibold mt-1 ${hoveredBooking.status === 'booked' ? 'text-green-400' : 'text-yellow-400'}`}>
-                                                    {hoveredBooking.status === 'booked' ? 'Confirmed' : 'Pending Approval'}
+                                                <p className={`text-xs font-semibold mt-1 text-green-400`}>Confirmed</p>
                                                 </p>
                                                 <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-slate-900"></div>
                                             </div>
@@ -1110,11 +1103,11 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                                                 }}
                                                             >
                                                                 <div className="flex items-center justify-between">
-                                                                    <p className={`font-bold text-sm ${booking.status === 'booked' ? 'text-green-800' : 'text-yellow-800'}`}>
+                                                                    <p className={`font-bold text-sm text-green-800`}>
                                                                         {booking.room}
                                                                     </p>
-                                                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${booking.status === 'booked' ? 'bg-green-200 text-green-700' : 'bg-yellow-200 text-yellow-700'}`}>
-                                                                        {booking.status === 'booked' ? '✓ Confirmed' : '⏳ Pending'}
+                                                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-200 text-green-700`}>
+                                                                        ✓ Confirmed
                                                                     </span>
                                                                 </div>
                                                                 <div className="flex items-center gap-4 mt-1">

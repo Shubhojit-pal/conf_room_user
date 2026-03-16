@@ -29,7 +29,6 @@ interface Notification {
 
 const statusColors: Record<string, string> = {
     confirmed: 'bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200',
-    pending: 'bg-amber-100 text-amber-700 ring-1 ring-amber-200',
     cancelled: 'bg-rose-100 text-rose-600 ring-1 ring-rose-200',
     rejected: 'bg-slate-100 text-slate-600 ring-1 ring-slate-200',
 };
@@ -293,17 +292,15 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                             </div>
                         ) : (
                             filteredBookings.map(booking => {
-                                const isPending = booking.status === 'pending';
                                 const isConfirmed = booking.status === 'confirmed';
 
                                 let cardClasses = "group border rounded-[2.5rem] p-8 transition-all duration-500 relative hover:-translate-y-1 overflow-hidden ";
                                 if (isConfirmed) cardClasses += "bg-white border-emerald-100 hover:border-emerald-200 shadow-xl shadow-emerald-900/5";
-                                else if (isPending) cardClasses += "bg-gradient-to-br from-slate-900 to-slate-800 border-slate-800 text-white shadow-xl shadow-slate-900/40";
                                 else cardClasses += "bg-white border-rose-100 hover:border-rose-200 shadow-xl shadow-rose-900/5";
 
-                                const statBoxClasses = isPending ? "bg-slate-800 border-slate-700" : (isConfirmed ? "bg-emerald-50 border-emerald-100/50" : "bg-rose-50 border-rose-100/50");
-                                const statValueClasses = isPending ? "text-white" : (isConfirmed ? "text-emerald-950" : "text-rose-950");
-                                const titleClasses = isPending ? "text-white" : "text-slate-900";
+                                const statBoxClasses = isConfirmed ? "bg-emerald-50 border-emerald-100/50" : "bg-rose-50 border-rose-100/50";
+                                const statValueClasses = isConfirmed ? "text-emerald-950" : "text-rose-950";
+                                const titleClasses = "text-slate-900";
 
                                 return (
                                     <div
@@ -311,26 +308,26 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                         className={cardClasses}
                                     >
                                     {/* Background Watermark Icon */}
-                                    <div className={`absolute -right-4 -bottom-4 opacity-[0.03] transform  transition-transform duration-700 pointer-events-none ${isPending ? 'text-white' : 'text-slate-900'} group-hover:scale-110 group-hover:-rotate-12`}>
+                                    <div className={`absolute -right-4 -bottom-4 opacity-[0.03] transform  transition-transform duration-700 pointer-events-none text-slate-900 group-hover:scale-110 group-hover:-rotate-12`}>
                                         {isConfirmed ? <Calendar size={200} weight="fill" /> : <VideoCamera size={200} weight="fill" />}
                                     </div>
 
                                     <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                                         <div className="flex items-center gap-5">
-                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ${isPending ? 'bg-slate-800 text-primary group-hover:bg-primary group-hover:text-white' : 'bg-slate-50 text-primary group-hover:bg-primary group-hover:text-white'}`}>
+                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 bg-slate-50 text-primary group-hover:bg-primary group-hover:text-white`}>
                                                 <VideoCamera size={28} weight="bold" />
                                             </div>
                                             <div>
                                                 <h3 className={`text-2xl font-black leading-tight tracking-tight ${titleClasses}`}>
                                                     {booking.room_name || `Room ${booking.room_id}`}
                                                 </h3>
-                                                <p className={`${isPending ? 'text-slate-500' : 'text-slate-400'} font-bold uppercase text-[10px] tracking-widest mt-1`}>
+                                                <p className={`text-slate-400 font-bold uppercase text-[10px] tracking-widest mt-1`}>
                                                     Reserved for {booking.user_name || 'Individual'}
                                                 </p>
                                             </div>
                                         </div>
                                         <span className={`px-5 py-2 text-[10px] font-black rounded-full uppercase tracking-widest transition-all ${statusColors[booking.status] || 'bg-slate-100 text-slate-600'} shadow-sm`}>
-                                            {booking.status === 'confirmed' ? '✓ ' : booking.status === 'pending' ? '⏳ ' : ''}
+                                            {booking.status === 'confirmed' ? '✓ ' : ''}
                                             {booking.status}
                                         </span>
                                     </div>
@@ -371,12 +368,12 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                                 Access Ticket
                                             </button>
                                         )}
-                                        {(booking.status === 'pending' || booking.status === 'confirmed') && (
+                                        {booking.status === 'confirmed' && (
                                             <button
                                                 onClick={() => openCancelModal(booking)}
                                                 disabled={cancellingId === booking.booking_id}
                                                 className={`w-full md:w-auto px-8 py-5 rounded-[1.25rem] text-xs font-black uppercase tracking-widest transition-all disabled:opacity-50 border border-transparent 
-                                                    ${isPending ? 'bg-rose-500/20 text-rose-500 hover:bg-rose-500 hover:text-white' : 'bg-rose-50 text-rose-500 hover:bg-rose-100 hover:border-rose-200 shadow-sm shadow-rose-900/5'}`}
+                                                     bg-rose-50 text-rose-500 hover:bg-rose-100 hover:border-rose-200 shadow-sm shadow-rose-900/5`}
                                             >
                                                 {cancellingId === booking.booking_id ? 'Wait...' : 'Cancel'}
                                             </button>
@@ -391,13 +388,13 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
 
                                     {/* Granular Segments Display */}
                                     {(booking.selected_dates || booking.selected_slots) && booking.status !== 'cancelled' && (
-                                        <div className={`mt-8 pt-8 border-t ${isPending ? 'border-slate-800' : 'border-slate-50'} space-y-4`}>
+                                        <div className={`mt-8 pt-8 border-t border-slate-50 space-y-4`}>
                                             {booking.selected_dates && booking.selected_dates.split(',').length > 1 && (
                                                 <div>
-                                                    <label className={`text-[10px] font-black uppercase tracking-widest mb-2 block ${isPending ? 'text-slate-500' : 'text-slate-400'}`}>Reserved Dates</label>
+                                                    <label className={`text-[10px] font-black uppercase tracking-widest mb-2 block text-slate-400`}>Reserved Dates</label>
                                                     <div className="flex flex-wrap gap-2">
                                                         {booking.selected_dates.split(',').sort().map(d => (
-                                                            <span key={d} className={`px-3 py-1 rounded-lg text-xs font-bold border ${isPending ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-slate-50 text-slate-600 border-slate-100'}`}>
+                                                            <span key={d} className={`px-3 py-1 rounded-lg text-xs font-bold border bg-slate-50 text-slate-600 border-slate-100`}>
                                                                 {new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                                                             </span>
                                                         ))}
@@ -406,10 +403,10 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                             )}
                                             {booking.selected_slots && (
                                                 <div>
-                                                    <label className={`text-[10px] font-black uppercase tracking-widest mb-2 block ${isPending ? 'text-slate-500' : 'text-slate-400'}`}>Daily Time Blocks</label>
+                                                    <label className={`text-[10px] font-black uppercase tracking-widest mb-2 block text-slate-400`}>Daily Time Blocks</label>
                                                     <div className="flex flex-wrap gap-2">
                                                         {booking.selected_slots.split(',').sort().map(s => (
-                                                            <span key={s} className={`px-3 py-1 rounded-lg text-xs font-bold border flex items-center gap-1 ${isPending ? 'bg-primary/10 text-primary border-primary/20' : 'bg-primary/5 text-primary border-primary/10'}`}>
+                                                            <span key={s} className={`px-3 py-1 rounded-lg text-xs font-bold border flex items-center gap-1 bg-primary/5 text-primary border-primary/10`}>
                                                                 <Clock size={12} weight="bold" />
                                                                 {s.split('-')[0].slice(0, 5)} - {s.split('-')[1].slice(0, 5)}
                                                             </span>
@@ -611,7 +608,6 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                                 <h4 className="font-bold text-slate-800 text-lg">{booking.room_name || `Room ${booking.room_id}`}</h4>
                                                 <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider
                                                     ${booking.status === 'confirmed' ? 'bg-emerald-100 text-emerald-600' :
-                                                        booking.status === 'pending' ? 'bg-amber-100 text-amber-600' :
                                                             'bg-rose-100 text-rose-600'}
                                                 `}>
                                                     {booking.status}
