@@ -7,7 +7,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ onReserveClick, onCalendarClick }) => {
     return (
-        <section className="relative w-full overflow-hidden text-center text-white flex items-center justify-center min-h-[350px] sm:min-h-[500px]">
+        <section className="relative w-full overflow-hidden text-center text-white flex items-center justify-center py-20 sm:py-32">
             {/* Background Image with Overlay */}
             <div
                 className="absolute inset-0 z-0 bg-cover bg-center"
@@ -19,23 +19,23 @@ const Hero: React.FC<HeroProps> = ({ onReserveClick, onCalendarClick }) => {
             </div>
 
             {/* Content */}
-            <div className="relative z-10 max-w-3xl px-4 py-10 sm:py-0">
+            <div className="relative z-10 w-full max-w-3xl px-6">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 leading-tight drop-shadow-sm">
                     Book Conference Rooms with Confidence
                 </h1>
-                <p className="text-sm sm:text-lg md:text-xl mb-6 sm:mb-10 text-slate-100 max-w-2xl mx-auto drop-shadow-sm">
+                <p className="text-sm sm:text-lg md:text-xl mb-8 sm:mb-10 text-slate-100 max-w-2xl mx-auto drop-shadow-sm">
                     Eliminate booking conflicts and manage meeting spaces across all your office locations with our intelligent reservation system
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
                     <button
                         onClick={onReserveClick}
-                        className="bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-all shadow-lg hover:shadow-xl"
+                        className="bg-primary hover:bg-primary-dark text-white font-semibold py-3.5 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl w-full sm:w-auto"
                     >
                         Reserve a Space Now
                     </button>
                     <button
                         onClick={onCalendarClick}
-                        className="bg-theme-card hover:bg-theme-bg text-theme-primary font-semibold py-3 px-6 rounded-lg transition-all shadow-lg border border-theme-border"
+                        className="bg-theme-card hover:bg-theme-bg text-theme-primary font-semibold py-3.5 px-6 rounded-xl transition-all shadow-lg border border-theme-border w-full sm:w-auto"
                     >
                         View Calendar
                     </button>
