@@ -292,10 +292,11 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
         return () => clearInterval(interval);
     }, []);
 
+    // Generate filter options dynamically based on available rooms
     const filters = {
-        roomType: ['Conference Room', 'Meeting Room', 'Training Room', 'Auditorium'],
-        location: ['Downtown Office', 'Tech Park Campus', 'Business District'],
-        amenities: ['Video Conferencing', 'Whiteboard', 'Projector', 'WiFi', 'Audio System', 'Fooding', 'Lodging'],
+        roomType: Array.from(new Set(rooms.map(r => r.type).filter(Boolean))),
+        location: Array.from(new Set(rooms.map(r => r.location).filter(Boolean))),
+        amenities: Array.from(new Set(rooms.flatMap(r => r.amenities).filter(Boolean))),
         capacity: ['2-6 People', '6-12 People', '12-20 People', '20+ People'],
     };
 

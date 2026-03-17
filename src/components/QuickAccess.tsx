@@ -11,8 +11,9 @@ import {
     Calendar,
     X
 } from '@phosphor-icons/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getDirectImageUrl } from '../lib/imageUtils';
+import { fetchRooms, Room } from '../lib/api';
 
 interface QuickAccessProps {
     onViewAvailableToday?: () => void;
@@ -23,16 +24,29 @@ interface QuickAccessProps {
 
 const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearch, onViewFavorites, onViewActivity }) => {
     // State to toggle stars
-    const [favorites, setFavorites] = useState<{ [key: number]: boolean }>({ 0: true, 1: true, 2: true });
+    const [favorites, setFavorites] = useState<{ [key: string]: boolean }>({});
     const [location, setLocation] = useState('All Locations');
     const [capacity, setCapacity] = useState('Any Capacity');
     const [date, setDate] = useState('');
 
+    const [apiRooms, setApiRooms] = useState<Room[]>([]);
+    const [locations, setLocations] = useState<string[]>([]);
+    
+    useEffect(() => {
+        fetchRooms()
+            .then(rooms => {
+                setApiRooms(rooms);
+                const uniqueLocs = Array.from(new Set(rooms.map(r => r.location).filter(Boolean)));
+                setLocations(uniqueLocs);
+            })
+            .catch(console.error);
+    }, []);
+
     // State for mobile Quick Booking modal
     const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
 
-    const toggleFavorite = (index: number) => {
-        setFavorites(prev => ({ ...prev, [index]: !prev[index] }));
+    const toggleFavorite = (id: string) => {
+        setFavorites(prev => ({ ...prev, [id]: !prev[id] }));
     };
 
     const handleFindRooms = (e: React.FormEvent) => {
@@ -45,17 +59,9 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
         onSearch?.();
     };
 
-    const rooms = [
-        { name: 'Executive Boardroom', location: 'Downtown Office', capacity: 12, type: 'Conference Room', image: 'https://images.unsplash.com/photo-1577412647305-991150c7d163?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80' },
-        { name: 'Innovation Lab', location: 'Tech Park Campus', capacity: 20, type: 'Meeting Room', image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80' },
-        { name: 'Grand Auditorium', location: 'Business District', capacity: 200, type: 'Auditorium', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80' },
-    ];
-
-    const todayAvailableRooms = [
-        { name: 'Executive Boardroom', location: 'Downtown Office', capacity: 12, image: 'https://images.unsplash.com/photo-1577412647305-991150c7d163?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80' },
-        { name: 'Team Collaboration Space', location: 'Tech Park Campus', capacity: 8, image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80' },
-        { name: 'Meeting Room B', location: 'Downtown Office', capacity: 6, image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80' },
-    ];
+    // Use fetched rooms or fallback empty state
+    const displayRooms = apiRooms.slice(0, 3);
+    const todayAvailableRooms = apiRooms.filter(r => r.status === 'active' || r.status === 'available' || r.availability === 'available').slice(0, 3);
 
     const activities = [
         { title: 'Booking Confirmed', desc: 'Executive Boardroom for tomorrow at 10:00 AM', time: '2 hours ago', icon: <CheckCircle size={20} />, bg: 'bg-primary-light', color: 'text-primary' },
@@ -83,14 +89,14 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                         </div>
 
                         <div className="flex flex-col gap-3">
-                            {todayAvailableRooms.map((room, idx) => (
-                                <div key={idx} className="flex gap-3 p-3 rounded-lg border border-theme-border hover:border-secondary/30 transition-colors bg-theme-bg/50">
+                            {todayAvailableRooms.length > 0 ? todayAvailableRooms.map((room) => (
+                                <div key={room.room_id} className="flex gap-3 p-3 rounded-lg border border-theme-border hover:border-secondary/30 transition-colors bg-theme-bg/50">
                                     <div
                                         className="w-14 h-14 rounded-lg bg-slate-200 shrink-0 bg-cover bg-center"
-                                        style={{ backgroundImage: `url(${getDirectImageUrl(room.image)})` }}
+                                        style={{ backgroundImage: `url(${getDirectImageUrl(room.image_url)})` }}
                                     ></div>
                                     <div className="flex-1 min-w-0">
-                                        <h4 className="font-semibold text-theme-primary text-sm truncate">{room.name}</h4>
+                                        <h4 className="font-semibold text-theme-primary text-sm truncate">{room.room_name}</h4>
                                         <p className="text-xs text-theme-secondary flex items-center gap-1 mt-0.5">
                                             <MapPin size={12} /> {room.location}
                                         </p>
@@ -99,7 +105,9 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                                         </span>
                                     </div>
                                 </div>
-                            ))}
+                            )) : (
+                                <p className="text-sm text-theme-secondary p-4 text-center">No rooms available right now.</p>
+                            )}
                         </div>
                         <p className="text-center text-primary text-sm font-medium hover:underline mt-4">View all available rooms →</p>
                     </div>
@@ -122,8 +130,7 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                                     className="w-full p-3 rounded-lg border border-theme-border text-theme-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-theme-bg"
                                 >
                                     <option>All Locations</option>
-                                    <option>Downtown Office</option>
-                                    <option>Tech Park Campus</option>
+                                    {locations.map(loc => <option key={loc}>{loc}</option>)}
                                 </select>
                             </div>
                             <div>
@@ -169,14 +176,14 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                         </div>
 
                         <div className="flex flex-col gap-4">
-                            {rooms.map((room, idx) => (
-                                <div key={idx} className="flex gap-4 p-3 rounded-xl border border-theme-border hover:border-primary/30 transition-colors bg-theme-bg/30 group">
+                            {displayRooms.map((room) => (
+                                <div key={room.room_id} className="flex gap-4 p-3 rounded-xl border border-theme-border hover:border-primary/30 transition-colors bg-theme-bg/30 group">
                                     <div
                                         className="w-16 h-16 rounded-lg bg-theme-bg shrink-0 bg-cover bg-center border border-theme-border/50"
-                                        style={{ backgroundImage: `url(${getDirectImageUrl(room.image)})` }}
+                                        style={{ backgroundImage: `url(${getDirectImageUrl(room.image_url)})` }}
                                     ></div>
                                     <div className="flex-1 min-w-0">
-                                        <h4 className="font-semibold text-slate-800 text-sm truncate">{room.name}</h4>
+                                        <h4 className="font-semibold text-slate-800 text-sm truncate">{room.room_name}</h4>
                                         <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
                                             <MapPin size={12} /> {room.location}
                                         </p>
@@ -185,12 +192,12 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                                                 <Users size={12} /> {room.capacity}
                                             </span>
                                             <span className="text-[10px] bg-theme-bg px-1.5 py-0.5 rounded text-theme-secondary font-medium border border-theme-border">
-                                                {room.type}
+                                                {room.room_type}
                                             </span>
                                         </div>
                                     </div>
-                                    <button onClick={() => toggleFavorite(idx)} className="self-start">
-                                        {favorites[idx] ? (
+                                    <button onClick={() => toggleFavorite(room.room_id)} className="self-start">
+                                        {favorites[room.room_id] ? (
                                             <Star size={20} weight="fill" className="text-accent-orange" />
                                         ) : (
                                             <Star size={20} className="text-theme-secondary opacity-40 hover:text-accent-orange" />
@@ -271,8 +278,7 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                                     className="w-full p-3.5 rounded-xl border border-theme-border text-theme-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-theme-bg font-medium"
                                 >
                                     <option>All Locations</option>
-                                    <option>Downtown Office</option>
-                                    <option>Tech Park Campus</option>
+                                    {locations.map(loc => <option key={loc}>{loc}</option>)}
                                 </select>
                             </div>
                             <div>
