@@ -187,11 +187,11 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                         )}
                                     </button>
 
-                                    {/* Notification Dropdown — constrained for mobile */}
+                                    {/* Notification Dropdown — fixed for mobile, absolute for desktop */}
                                     {showNotifications && (
                                         <div
-                                            className="absolute top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-sm bg-theme-card rounded-xl shadow-xl border border-theme-border overflow-hidden z-[100]"
-                                            style={{ right: 0, maxHeight: '70vh' }}
+                                            className="fixed sm:absolute top-[70px] sm:top-full left-4 sm:left-auto right-4 sm:right-0 sm:w-80 max-w-sm bg-theme-card rounded-xl shadow-xl border border-theme-border overflow-hidden z-[100]"
+                                            style={{ maxHeight: '70vh' }}
                                         >
                                             <div className="p-4 border-b border-theme-border flex justify-between items-center bg-theme-bg">
                                                 <h3 className="font-bold text-theme-primary">Notifications</h3>
