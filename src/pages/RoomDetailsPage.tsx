@@ -838,7 +838,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                     className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-fade-in" 
                                     onClick={() => setBookOpen(false)}
                                 />
-                                <div className="relative z-10 w-full max-w-lg bg-theme-bg rounded-t-[32px] min-[500px]:rounded-[32px] shadow-2xl overflow-hidden animate-slide-up-modal flex flex-col max-h-[92vh]">
+                                <div className="relative z-10 w-full max-w-lg bg-theme-bg rounded-t-[32px] min-[500px]:rounded-[32px] shadow-2xl overflow-hidden animate-slide-up-modal flex flex-col max-h-[88vh]">
                                     {/* Pull Handle for Mobile */}
                                     <div className="flex justify-center pt-3 shrink-0">
                                         <div className="w-12 h-1.5 bg-theme-border rounded-full opacity-40" />
@@ -857,7 +857,9 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                         </button>
                                     </div>
                                     <div className="flex-grow overflow-y-auto overflow-x-hidden">
-                                        {renderBookingForm()}
+                                        <div className="pb-32">
+                                            {renderBookingForm()}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
