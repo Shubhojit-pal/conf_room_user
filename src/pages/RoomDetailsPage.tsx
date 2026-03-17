@@ -564,16 +564,9 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
                         // Responsive cell size: target fitting ~10 cols in ~320px (min phone) = 32px minimum
                         // On larger screens use 40px. We'll compute in CSS via clamp.
-                        const CELL_PX = 34; // used for JS grid dimensions
+                        const CELL_PX = 38; // slightly larger to fit labels well
                         const GRID_W = cols * CELL_PX;
                         const GRID_H = rows * CELL_PX;
-
-                        const occupantAt = (col: number, row: number) =>
-                            elements.find(el => {
-                                const w = el.w ?? 1;
-                                const h = el.h ?? 1;
-                                return col >= el.x && col < el.x + w && row >= el.y && row < el.y + h;
-                            });
 
                         const uniqueTypes = [...new Set(elements.map(e => e.type))];
 
@@ -604,7 +597,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                                 className="relative border-2 border-theme-border rounded-xl bg-white/60 dark:bg-slate-900/60 shadow-inner mx-auto"
                                                 style={{ width: GRID_W, height: GRID_H, minWidth: GRID_W }}
                                             >
-                                                {/* Grid lines */}
+                                                {/* Background Grid lines */}
                                                 <div
                                                     className="absolute inset-0 grid"
                                                     style={{
@@ -612,37 +605,44 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                                         gridTemplateRows: `repeat(${rows}, ${CELL_PX}px)`,
                                                     }}
                                                 >
-                                                    {Array.from({ length: rows }, (_, row) =>
-                                                        Array.from({ length: cols }, (_, col) => {
-                                                            const occ = occupantAt(col, row);
-                                                            const info = occ ? (TYPE_INFO[occ.type] || { icon: '?', label: occ.type, color: '', border: '' }) : null;
-                                                            const isOrigin = occ?.x === col && occ?.y === row;
-                                                            return (
-                                                                <div
-                                                                    key={`${col}-${row}`}
-                                                                    className={`
-                                                                        border border-slate-100/70 dark:border-slate-800/50
-                                                                        flex items-center justify-center select-none
-                                                                        transition-colors
-                                                                        ${occ && info
-                                                                            ? `${info.color} border ${info.border}`
-                                                                            : 'bg-transparent'
-                                                                        }
-                                                                    `}
-                                                                    style={{
-                                                                        gridColumn: `${col + 1}`,
-                                                                        gridRow: `${row + 1}`,
-                                                                        fontSize: CELL_PX < 32 ? '0.65rem' : '0.85rem',
-                                                                    }}
-                                                                    title={info?.label}
-                                                                >
-                                                                    {occ && isOrigin && info && (
-                                                                        <span className="leading-none">{info.icon}</span>
-                                                                    )}
-                                                                </div>
-                                                            );
-                                                        })
-                                                    )}
+                                                    {Array.from({ length: rows * cols }).map((_, i) => (
+                                                        <div key={i} className="border border-slate-100/70 dark:border-slate-800/30" />
+                                                    ))}
+                                                </div>
+
+                                                {/* Placed Elements Grid */}
+                                                <div
+                                                    className="absolute inset-0 grid pointer-events-none"
+                                                    style={{
+                                                        gridTemplateColumns: `repeat(${cols}, ${CELL_PX}px)`,
+                                                        gridTemplateRows: `repeat(${rows}, ${CELL_PX}px)`,
+                                                    }}
+                                                >
+                                                    {elements.map((el: any, idx: number) => {
+                                                        const info = TYPE_INFO[el.type] || { icon: '?', label: el.type, color: 'bg-slate-200 dark:bg-slate-800/50', border: 'border-slate-300 dark:border-slate-700' };
+                                                        const w = el.w ?? 1;
+                                                        const h = el.h ?? 1;
+                                                        return (
+                                                            <div
+                                                                key={idx}
+                                                                className={`
+                                                                    pointer-events-auto flex flex-col items-center justify-center select-none overflow-hidden
+                                                                    transition-colors z-10 m-[1px] rounded
+                                                                    ${info.color} border ${info.border}
+                                                                `}
+                                                                style={{
+                                                                    gridColumn: `${el.x + 1} / span ${w}`,
+                                                                    gridRow: `${el.y + 1} / span ${h}`,
+                                                                }}
+                                                                title={info.label}
+                                                            >
+                                                                <span className="text-[13px] sm:text-[15px] leading-none drop-shadow-sm">{info.icon}</span>
+                                                                <span className="text-[6.5px] sm:text-[7.5px] font-black uppercase tracking-wider mt-0.5 opacity-80 whitespace-nowrap overflow-hidden text-ellipsis px-0.5 w-full text-center">
+                                                                    {info.label}
+                                                                </span>
+                                                            </div>
+                                                        );
+                                                    })}
                                                 </div>
                                             </div>
                                         </div>
@@ -659,10 +659,10 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                     <div className="px-4 py-3 border-t border-theme-border bg-theme-bg/50">
                                         <p className="text-[9px] font-bold uppercase tracking-widest text-theme-secondary opacity-40 mb-2">Legend</p>
                                         <div className="flex flex-wrap gap-2">
-                                            {uniqueTypes.map(type => {
-                                                const info = TYPE_INFO[type] || { icon: '?', label: type, color: '', border: '' };
+                                            {uniqueTypes.map((type: any) => {
+                                                const info = TYPE_INFO[type as string] || { icon: '?', label: String(type), color: '', border: '' };
                                                 return (
-                                                    <div key={type} className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border ${info.color} ${info.border}`}>
+                                                    <div key={String(type)} className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border ${info.color} ${info.border}`}>
                                                         <span className="text-sm leading-none">{info.icon}</span>
                                                         <span className="text-[11px] font-semibold text-theme-secondary">{info.label}</span>
                                                     </div>
@@ -673,8 +673,8 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
                                     {/* Stats bar */}
                                     <div className="px-4 py-2.5 border-t border-theme-border flex items-center gap-4 text-[11px] text-theme-secondary opacity-60">
-                                        <span><strong className="text-theme-primary opacity-100">{elements.filter(e => e.type === 'seat').length}</strong> seats</span>
-                                        <span><strong className="text-theme-primary opacity-100">{elements.filter(e => e.type === 'table').length}</strong> tables</span>
+                                        <span><strong className="text-theme-primary opacity-100">{elements.filter((e: any) => e.type === 'seat').length}</strong> seats</span>
+                                        <span><strong className="text-theme-primary opacity-100">{elements.filter((e: any) => e.type === 'table').length}</strong> tables</span>
                                         <span><strong className="text-theme-primary opacity-100">{elements.length}</strong> total items</span>
                                     </div>
                                 </div>
