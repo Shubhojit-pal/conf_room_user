@@ -28,14 +28,14 @@ interface RoomDetailsPageProps {
     onBookingSuccess: (booking: BookingResult) => void;
 }
 
-// Generate all 1-hour slots for the day (9 AM â€“ 6 PM)
+// Generate all 1-hour slots for the day (9 AM Ã¢â‚¬â€œ 6 PM)
 const ALL_SLOTS = Array.from({ length: 9 }, (_, i) => {
     const startH = 9 + i;
     const endH = startH + 1;
     return {
         start: `${String(startH).padStart(2, '0')}:00:00`,
         end: `${String(endH).padStart(2, '0')}:00:00`,
-        label: `${String(startH).padStart(2, '0')}:00 â€“ ${String(endH).padStart(2, '0')}:00`,
+        label: `${String(startH).padStart(2, '0')}:00 Ã¢â‚¬â€œ ${String(endH).padStart(2, '0')}:00`,
         startH,
     };
 });
@@ -160,11 +160,11 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
     const isSlotInBooking = (slotLabel: string, b: BookedSlot) => {
         if (!b.selected_slots) {
             // Fallback for legacy (pure range)
-            const [slotStart, slotEnd] = slotLabel.split(' â€“ ').map(s => s.trim());
+            const [slotStart, slotEnd] = slotLabel.split(' Ã¢â‚¬â€œ ').map(s => s.trim());
             return b.start_time.slice(0, 5) < slotEnd && b.end_time.slice(0, 5) > slotStart;
         }
 
-        const [sStart, sEnd] = slotLabel.split(' â€“ ').map(s => s.trim());
+        const [sStart, sEnd] = slotLabel.split(' Ã¢â‚¬â€œ ').map(s => s.trim());
         const slotsArray = b.selected_slots.split(',');
         return slotsArray.some(s => {
             const [bStart, bEnd] = s.split('-').map(part => part.slice(0, 5));
@@ -409,7 +409,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             <div className="text-center">
                                 <SquaresFour size={64} className="text-primary/40 mx-auto mb-3" />
                                 <h3 className="text-2xl font-bold text-primary/60">{room.room_name}</h3>
-                                <p className="text-primary/40">Room {room.room_number} â€¢ Floor {room.floor_no}</p>
+                                <p className="text-primary/40">Room {room.room_number} Ã¢â‚¬Â¢ Floor {room.floor_no}</p>
                             </div>
                         </div>
                     )}
@@ -479,9 +479,9 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                 </div>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-8 relative z-10 bg-theme-bg">
+            <div className="flex flex-col gap-8 relative z-10 bg-theme-bg">
                 {/* Main Info */}
-                <div className="flex-1 space-y-8">
+                <div className="space-y-8">
                     <div>
                         <h1 className="text-3xl font-bold text-theme-primary mb-3">{room.room_name}</h1>
                         <div className="flex flex-col gap-3">
@@ -550,13 +550,13 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                     {/* Room Layout Viewer */}
                     {room.layout && room.layout.elements && room.layout.elements.length > 0 && (() => {
                         const TYPE_INFO: Record<string, { icon: string; label: string; color: string; border: string }> = {
-                            seat:       { icon: 'ðŸª‘', label: 'Seat',       color: 'bg-blue-100 dark:bg-blue-900/50',    border: 'border-blue-200 dark:border-blue-800' },
-                            table:      { icon: 'â–¬',  label: 'Table',      color: 'bg-amber-100 dark:bg-amber-900/50',  border: 'border-amber-200 dark:border-amber-800' },
-                            screen:     { icon: 'ðŸ“º', label: 'Screen',     color: 'bg-slate-200 dark:bg-slate-700/60',  border: 'border-slate-300 dark:border-slate-600' },
-                            whiteboard: { icon: 'ðŸ“‹', label: 'Board',      color: 'bg-green-100 dark:bg-green-900/50',  border: 'border-green-200 dark:border-green-800' },
-                            podium:     { icon: 'ðŸŽ¤', label: 'Podium',     color: 'bg-purple-100 dark:bg-purple-900/50',border: 'border-purple-200 dark:border-purple-800' },
-                            door:       { icon: 'ðŸšª', label: 'Door',       color: 'bg-orange-100 dark:bg-orange-900/50',border: 'border-orange-200 dark:border-orange-800' },
-                            plant:      { icon: 'ðŸŒ¿', label: 'Plant',      color: 'bg-emerald-100 dark:bg-emerald-900/50',border:'border-emerald-200 dark:border-emerald-800' },
+                            seat:       { icon: 'Ã°Å¸Âªâ€˜', label: 'Seat',       color: 'bg-blue-100 dark:bg-blue-900/50',    border: 'border-blue-200 dark:border-blue-800' },
+                            table:      { icon: 'Ã¢â€“Â¬',  label: 'Table',      color: 'bg-amber-100 dark:bg-amber-900/50',  border: 'border-amber-200 dark:border-amber-800' },
+                            screen:     { icon: 'Ã°Å¸â€œÂº', label: 'Screen',     color: 'bg-slate-200 dark:bg-slate-700/60',  border: 'border-slate-300 dark:border-slate-600' },
+                            whiteboard: { icon: 'Ã°Å¸â€œâ€¹', label: 'Board',      color: 'bg-green-100 dark:bg-green-900/50',  border: 'border-green-200 dark:border-green-800' },
+                            podium:     { icon: 'Ã°Å¸Å½Â¤', label: 'Podium',     color: 'bg-purple-100 dark:bg-purple-900/50',border: 'border-purple-200 dark:border-purple-800' },
+                            door:       { icon: 'Ã°Å¸Å¡Âª', label: 'Door',       color: 'bg-orange-100 dark:bg-orange-900/50',border: 'border-orange-200 dark:border-orange-800' },
+                            plant:      { icon: 'Ã°Å¸Å’Â¿', label: 'Plant',      color: 'bg-emerald-100 dark:bg-emerald-900/50',border:'border-emerald-200 dark:border-emerald-800' },
                         };
                         const { rows, cols, elements } = room.layout;
 
@@ -648,7 +648,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                         {/* Scroll hint label */}
                                         {GRID_W > 320 && (
                                             <p className="text-center text-[10px] text-theme-secondary opacity-40 py-1 font-medium tracking-wide">
-                                                â† scroll to explore â†’
+                                                Ã¢â€ Â scroll to explore Ã¢â€ â€™
                                             </p>
                                         )}
                                     </div>
@@ -679,319 +679,126 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             </div>
                         );
                     })()}
-                </div>
 
-                {/* Right Sidebar - Booking Card */}
-                <div className="w-full lg:w-[420px] shrink-0">
-                    <div className="sticky top-24">
+                    {/* ── Book a Space: inline dropdown ── */}
+                    <div className="mt-6">
+                        <button
+                            type="button"
+                            onClick={() => setBookOpen(prev => !prev)}
+                            className="w-full flex items-center justify-between px-6 py-4 bg-gradient-to-r from-secondary to-primary text-white font-bold text-base rounded-2xl shadow-lg shadow-blue-200 dark:shadow-blue-900/30 transition-all active:scale-[0.99] hover:opacity-95"
+                        >
+                            <span className="flex items-center gap-2">
+                                <Check size={20} weight="bold" />
+                                Book a Space
+                            </span>
+                            <span className={`transition-transform duration-300 ${bookOpen ? 'rotate-180' : ''}`}>▼</span>
+                        </button>
 
-                        {/* â”€â”€ COLLAPSED: "Book a Space" preview card â”€â”€ */}
-                        {!bookOpen && (
-                            <div className="bg-theme-card border border-theme-border rounded-2xl shadow-lg overflow-hidden cursor-pointer" onClick={() => setBookOpen(true)}>
-                                {/* Gradient banner */}
-                                <div className="bg-gradient-to-r from-secondary to-primary p-5">
-                                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/60 mb-1">Ready to Reserve?</p>
-                                    <h3 className="text-2xl font-black text-white">Book a Space</h3>
-                                    <p className="text-sm text-white/70 mt-1 font-medium">{room.room_name}</p>
-                                </div>
-                                {/* Quick info row */}
-                                <div className="px-5 py-3 flex items-center gap-5 border-b border-theme-border text-xs text-theme-secondary">
-                                    <span className="flex items-center gap-1.5">
-                                        <Users size={13} weight="bold" className="text-primary" />
-                                        <span>Up to <strong className="text-theme-primary">{room.capacity}</strong> people</span>
-                                    </span>
-                                    {room.floor_no && (
-                                        <span className="flex items-center gap-1.5">
-                                            <MapPin size={13} weight="bold" className="text-primary" />
-                                            <span>Floor <strong className="text-theme-primary">{room.floor_no}</strong></span>
-                                        </span>
-                                    )}
-                                </div>
-                                {/* CTA Button */}
-                                <div className="p-4">
-                                    <button
-                                        type="button"
-                                        onClick={e => { e.stopPropagation(); setBookOpen(true); }}
-                                        className="w-full py-3.5 bg-secondary hover:bg-secondary/90 active:scale-[0.98] text-white text-base font-bold rounded-xl shadow-lg shadow-blue-200 dark:shadow-blue-900/30 transition-all flex items-center justify-center gap-2"
-                                    >
-                                        <Check size={18} weight="bold" />
-                                        Reserve This Room
-                                    </button>
-                                    <p className="text-center text-[10px] text-theme-secondary opacity-40 mt-2 font-medium">Tap to select time slots &amp; confirm</p>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* â”€â”€ EXPANDED: Full booking form â”€â”€ */}
                         {bookOpen && (
-                            <div className="bg-theme-card rounded-2xl shadow-sm border border-theme-border overflow-hidden">
-                                {/* Header */}
+                            <div className="mt-3 bg-theme-card rounded-2xl border border-theme-border shadow-xl overflow-hidden">
                                 <div className="flex items-center justify-between px-5 py-4 border-b border-theme-border bg-gradient-to-r from-secondary/10 to-primary/5">
                                     <div>
                                         <h3 className="text-lg font-black text-theme-primary">Book a Space</h3>
-                                        <p className="text-[11px] text-theme-secondary opacity-50">{room.room_name}</p>
+                                        <p className="text-[11px] text-theme-secondary opacity-50">Fill in the details below to reserve this room</p>
                                     </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => setBookOpen(false)}
-                                        className="p-2 rounded-full hover:bg-theme-bg transition-colors text-theme-secondary opacity-60 hover:opacity-100"
-                                        title="Collapse"
-                                    >
+                                    <button type="button" onClick={() => setBookOpen(false)} className="p-2 rounded-full hover:bg-theme-bg transition-colors text-theme-secondary opacity-60 hover:opacity-100" title="Close">
                                         <X size={18} weight="bold" />
                                     </button>
                                 </div>
-
-                                {/* Form body */}
                                 <div className="p-5">
                                     {bookResult && (
                                         <div className={`mb-4 p-3 rounded-lg text-sm font-medium ${bookResult.ok ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-600 border border-red-200'}`}>
                                             {bookResult.msg}
                                         </div>
                                     )}
-
                                     <form onSubmit={handleBook} className="space-y-5">
-                                        {/* Date Selection Mode Toggle */}
-                                        <div className="flex bg-theme-bg p-1 rounded-xl mb-4 border border-theme-border">
-                                            <button
-                                                type="button"
-                                                onClick={() => { setDateMode('single'); setSelectedDates([todayStr]); setActiveDate(todayStr); setDateSlots({}); }}
-                                                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'single' ? 'bg-theme-card shadow text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}
-                                            >
-                                                Single Day
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => { setDateMode('range'); setRangeStart(''); setRangeEnd(''); setSelectedDates([]); setActiveDate(null); setDateSlots({}); }}
-                                                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'range' ? 'bg-theme-card shadow text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}
-                                            >
-                                                Consecutive Days
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => { setDateMode('custom'); setSelectedDates([]); setActiveDate(null); setDateSlots({}); }}
-                                                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'custom' ? 'bg-theme-card shadow text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}
-                                            >
-                                                Custom Days
-                                            </button>
+                                        <div className="flex bg-theme-bg p-1 rounded-xl border border-theme-border">
+                                            <button type="button" onClick={() => { setDateMode('single'); setSelectedDates([todayStr]); setActiveDate(todayStr); setDateSlots({}); }} className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'single' ? 'bg-theme-card shadow text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}>Single Day</button>
+                                            <button type="button" onClick={() => { setDateMode('range'); setRangeStart(''); setRangeEnd(''); setSelectedDates([]); setActiveDate(null); setDateSlots({}); }} className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'range' ? 'bg-theme-card shadow text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}>Consecutive Days</button>
+                                            <button type="button" onClick={() => { setDateMode('custom'); setSelectedDates([]); setActiveDate(null); setDateSlots({}); }} className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'custom' ? 'bg-theme-card shadow text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}>Custom Days</button>
                                         </div>
-
-                                        {/* Date Picker Interfaces */}
                                         {dateMode === 'single' && (
                                             <div>
-                                                <label className="block text-sm font-semibold text-theme-primary mb-1.5 font-sans">Reservation Date</label>
-                                                <input
-                                                    type="date"
-                                                    min={todayStr}
-                                                    value={selectedDates[0] || todayStr}
-                                                    onChange={e => {
-                                                        const val = e.target.value;
-                                                        if (val) { setSelectedDates([val]); setActiveDate(val); }
-                                                    }}
-                                                    className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm transition-all text-theme-primary"
-                                                />
+                                                <label className="block text-sm font-semibold text-theme-primary mb-1.5">Reservation Date</label>
+                                                <input type="date" min={todayStr} value={selectedDates[0] || todayStr} onChange={e => { const v = e.target.value; if (v) { setSelectedDates([v]); setActiveDate(v); } }} className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm text-theme-primary" />
                                             </div>
                                         )}
-
                                         {dateMode === 'range' && (
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div>
-                                                    <label className="block text-sm font-semibold text-theme-primary mb-1.5 font-sans">Start Date</label>
-                                                    <input
-                                                        type="date"
-                                                        min={todayStr}
-                                                        value={rangeStart}
-                                                        onChange={e => {
-                                                            const val = e.target.value;
-                                                            setRangeStart(val);
-                                                            let endVal = rangeEnd;
-                                                            if (!rangeEnd || val > rangeEnd) { setRangeEnd(val); endVal = val; }
-                                                            if (val && endVal) { const dates = calculateDateRange(val, endVal); setSelectedDates(dates); setActiveDate(dates[0] || null); }
-                                                        }}
-                                                        className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm transition-all text-theme-primary"
-                                                    />
+                                                    <label className="block text-sm font-semibold text-theme-primary mb-1.5">Start Date</label>
+                                                    <input type="date" min={todayStr} value={rangeStart} onChange={e => { const v = e.target.value; setRangeStart(v); let end = rangeEnd; if (!rangeEnd || v > rangeEnd) { setRangeEnd(v); end = v; } if (v && end) { const d = calculateDateRange(v, end); setSelectedDates(d); setActiveDate(d[0] || null); } }} className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm text-theme-primary" />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-sm font-semibold text-theme-primary mb-1.5 font-sans">End Date</label>
-                                                    <input
-                                                        type="date"
-                                                        min={rangeStart || todayStr}
-                                                        value={rangeEnd}
-                                                        onChange={e => {
-                                                            const val = e.target.value;
-                                                            setRangeEnd(val);
-                                                            if (rangeStart && val) {
-                                                                const dates = calculateDateRange(rangeStart, val);
-                                                                setSelectedDates(dates);
-                                                                if (activeDate && !dates.includes(activeDate)) setActiveDate(dates[0]);
-                                                                else if (!activeDate) setActiveDate(dates[0]);
-                                                            }
-                                                        }}
-                                                        className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm transition-all text-theme-primary"
-                                                    />
+                                                    <label className="block text-sm font-semibold text-theme-primary mb-1.5">End Date</label>
+                                                    <input type="date" min={rangeStart || todayStr} value={rangeEnd} onChange={e => { const v = e.target.value; setRangeEnd(v); if (rangeStart && v) { const d = calculateDateRange(rangeStart, v); setSelectedDates(d); if (activeDate && !d.includes(activeDate)) setActiveDate(d[0]); else if (!activeDate) setActiveDate(d[0]); } }} className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm text-theme-primary" />
                                                 </div>
                                             </div>
                                         )}
-
                                         {dateMode === 'custom' && (
                                             <div>
-                                                <label className="block text-sm font-semibold text-theme-primary mb-1.5 font-sans">Add Dates</label>
-                                                <input
-                                                    type="date"
-                                                    min={todayStr}
-                                                    onChange={e => {
-                                                        const val = e.target.value;
-                                                        if (val && !selectedDates.includes(val)) {
-                                                            setSelectedDates(prev => [...prev, val].sort());
-                                                            setActiveDate(val);
-                                                        }
-                                                    }}
-                                                    className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm transition-all text-theme-primary"
-                                                />
+                                                <label className="block text-sm font-semibold text-theme-primary mb-1.5">Add Dates</label>
+                                                <input type="date" min={todayStr} onChange={e => { const v = e.target.value; if (v && !selectedDates.includes(v)) { setSelectedDates(prev => [...prev, v].sort()); setActiveDate(v); } }} className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm text-theme-primary" />
                                             </div>
                                         )}
-
-                                        {/* Selected Dates Display */}
                                         {(dateMode === 'custom' || dateMode === 'range') && selectedDates.length > 0 && (
-                                            <div className="mt-2">
+                                            <div>
                                                 <label className="block text-xs font-bold text-theme-secondary opacity-50 uppercase mb-2">Selected Dates ({selectedDates.length})</label>
                                                 <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
                                                     {selectedDates.map(date => (
-                                                        <div
-                                                            key={date}
-                                                            onClick={() => setActiveDate(date)}
-                                                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer transition-all border
-                                                                ${activeDate === date
-                                                                    ? 'bg-primary text-white border-primary shadow-md'
-                                                                    : 'bg-primary/5 text-primary border-primary/20 hover:bg-primary/10'}`}
-                                                        >
+                                                        <div key={date} onClick={() => setActiveDate(date)} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer transition-all border ${activeDate === date ? 'bg-primary text-white border-primary shadow-md' : 'bg-primary/5 text-primary border-primary/20 hover:bg-primary/10'}`}>
                                                             {formatLocalDate(date)}
                                                             {dateMode === 'custom' && (
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        const newDates = selectedDates.filter(d => d !== date);
-                                                                        setSelectedDates(newDates);
-                                                                        if (activeDate === date) setActiveDate(newDates.length > 0 ? newDates[0] : null);
-                                                                        setDateSlots(prev => { const s = { ...prev }; delete s[date]; return s; });
-                                                                    }}
-                                                                    className={`ml-1 hover:text-red-500 ${activeDate === date ? 'text-white/70' : ''}`}
-                                                                >
-                                                                    <X size={12} weight="bold" />
-                                                                </button>
+                                                                <button type="button" onClick={e => { e.stopPropagation(); const nd = selectedDates.filter(d => d !== date); setSelectedDates(nd); if (activeDate === date) setActiveDate(nd.length > 0 ? nd[0] : null); setDateSlots(prev => { const s = { ...prev }; delete s[date]; return s; }); }} className={`ml-1 hover:text-red-500 ${activeDate === date ? 'text-white/70' : ''}`}><X size={12} weight="bold" /></button>
                                                             )}
                                                         </div>
                                                     ))}
                                                 </div>
                                             </div>
                                         )}
-
-                                        {/* Time Slot Grid */}
                                         <div className={!activeDate ? 'opacity-50 pointer-events-none' : ''}>
                                             <div className="flex justify-between items-center mb-1.5">
                                                 <label className="block text-sm font-semibold text-theme-primary">
                                                     Select Time Slots {activeDate && <span className="text-primary font-black ml-1">for {formatLocalDate(activeDate)}</span>}
                                                 </label>
                                                 {selectedDates.length > 1 && (
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => {
-                                                            if (!activeDate) return;
-                                                            const currentSlots = dateSlots[activeDate] || [];
-                                                            setDateSlots(prev => {
-                                                                const next = { ...prev };
-                                                                selectedDates.forEach(d => { next[d] = [...currentSlots]; });
-                                                                return next;
-                                                            });
-                                                        }}
-                                                        className="text-[10px] font-bold text-primary hover:underline bg-primary/10 px-2 py-1 rounded transition-colors"
-                                                    >
-                                                        Apply to all dates
-                                                    </button>
+                                                    <button type="button" onClick={() => { if (!activeDate) return; const cur = dateSlots[activeDate] || []; setDateSlots(prev => { const n = { ...prev }; selectedDates.forEach(d => { n[d] = [...cur]; }); return n; }); }} className="text-[10px] font-bold text-primary hover:underline bg-primary/10 px-2 py-1 rounded">Apply to all dates</button>
                                                 )}
                                             </div>
-                                            <p className="text-[10px] text-theme-secondary opacity-50 mb-3 uppercase tracking-wider">
-                                                {activeDate ? 'Click time slots to select or deselect them' : 'Select a date above to define slots'}
-                                            </p>
-
+                                            <p className="text-[10px] text-theme-secondary opacity-50 mb-3 uppercase tracking-wider">{activeDate ? 'Click time slots to select or deselect them' : 'Select a date above to define slots'}</p>
                                             {loadingSlots ? (
-                                                <div className="grid grid-cols-2 gap-2">
-                                                    {Array.from({ length: 6 }).map((_, i) => (
-                                                        <div key={i} className="h-12 bg-theme-bg rounded-xl animate-pulse" />
-                                                    ))}
-                                                </div>
+                                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-12 bg-theme-bg rounded-xl animate-pulse" />)}</div>
                                             ) : (
-                                                <div className="grid grid-cols-2 gap-2">
+                                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                                     {ALL_SLOTS.map((slot, index) => {
                                                         const status = getSlotStatus(slot);
                                                         const selected = isSlotSelected(index);
-                                                        let classes = 'relative flex items-center gap-2 px-3 py-3 rounded-xl text-xs font-bold transition-all border-2 ';
-                                                        if (status === 'past') classes += 'bg-theme-bg text-theme-secondary opacity-30 border-theme-border cursor-not-allowed line-through';
-                                                        else if (status === 'booked') classes += 'bg-rose-50 dark:bg-rose-950/20 text-rose-500 border-rose-100 dark:border-rose-900/30 cursor-pointer hover:bg-rose-100 dark:hover:bg-rose-900/40';
-                                                        else if (selected) classes += 'bg-primary text-white border-primary shadow-lg shadow-primary/25 scale-[1.02]';
-                                                        else classes += 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 border-emerald-100 dark:border-emerald-900/30 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 hover:border-emerald-300 cursor-pointer hover:scale-[1.02] active:scale-95';
-
+                                                        let cls = 'relative flex items-center gap-2 px-3 py-3 rounded-xl text-xs font-bold transition-all border-2 ';
+                                                        if (status === 'past') cls += 'bg-theme-bg text-theme-secondary opacity-30 border-theme-border cursor-not-allowed line-through';
+                                                        else if (status === 'booked') cls += 'bg-rose-50 dark:bg-rose-950/20 text-rose-500 border-rose-100 dark:border-rose-900/30 cursor-pointer hover:bg-rose-100';
+                                                        else if (selected) cls += 'bg-primary text-white border-primary shadow-lg shadow-primary/25 scale-[1.02]';
+                                                        else cls += 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 border-emerald-100 dark:border-emerald-900/30 hover:bg-emerald-100 cursor-pointer hover:scale-[1.02] active:scale-95';
                                                         return (
                                                             <div key={slot.start} className="relative">
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => {
-                                                                        if (status === 'past') return;
-                                                                        if (status === 'booked') setViewingBookedSlot(viewingBookedSlot === index ? null : index);
-                                                                        else handleSlotClick(index);
-                                                                    }}
-                                                                    className={classes}
-                                                                >
+                                                                <button type="button" onClick={() => { if (status === 'past') return; if (status === 'booked') setViewingBookedSlot(viewingBookedSlot === index ? null : index); else handleSlotClick(index); }} className={cls}>
                                                                     {status === 'past' && <Clock size={14} />}
-                                                                    {status === 'booked' && (<><Lock size={14} /><span>{slot.label}</span><Eye size={14} className="ml-auto opacity-70" /></>)}
+                                                                    {status === 'booked' && <><Lock size={14} /><span>{slot.label}</span><Eye size={14} className="ml-auto opacity-70" /></>}
                                                                     {status === 'available' && !selected && <Clock size={14} />}
                                                                     {selected && <Check size={14} weight="bold" />}
                                                                     {status !== 'booked' && <span>{slot.label}</span>}
                                                                 </button>
-
-                                                                {status === 'booked' && viewingBookedSlot === index && (() => {
-                                                                    const mb = getMatchingBooking(slot);
-                                                                    if (!mb) return null;
-                                                                    return (
-                                                                        <div className="absolute z-50 left-0 right-0 top-full mt-1 bg-theme-card border-2 border-rose-200 dark:border-rose-900/50 rounded-xl shadow-xl p-4 animate-fade-in">
-                                                                            <div className="flex justify-between items-start mb-2">
-                                                                                <span className="text-xs font-black text-rose-500 uppercase tracking-wide">Booked</span>
-                                                                                <button onClick={e => { e.stopPropagation(); setViewingBookedSlot(null); }} className="text-theme-secondary opacity-50 hover:opacity-100 transition-opacity">
-                                                                                    <X size={14} />
-                                                                                </button>
-                                                                            </div>
-                                                                            <p className="text-sm font-bold text-theme-primary">{mb.user_name || 'Unknown'}</p>
-                                                                            {mb.email && <p className="text-xs text-theme-secondary opacity-60">{mb.email}</p>}
-                                                                            {mb.phone_no && <p className="text-xs text-theme-secondary opacity-60">ðŸ“ž {mb.phone_no}</p>}
-                                                                            {mb.purpose && <p className="text-xs text-theme-secondary opacity-80 mt-1">ðŸ“‹ {mb.purpose}</p>}
-                                                                            <p className="text-xs text-theme-secondary opacity-40 mt-1">{mb.start_time.slice(0, 5)} â€“ {mb.end_time.slice(0, 5)}</p>
-                                                                        </div>
-                                                                    );
-                                                                })()}
+                                                                {status === 'booked' && viewingBookedSlot === index && (() => { const mb = getMatchingBooking(slot); if (!mb) return null; return (<div className="absolute z-50 left-0 right-0 top-full mt-1 bg-theme-card border-2 border-rose-200 dark:border-rose-900/50 rounded-xl shadow-xl p-4"><div className="flex justify-between items-start mb-2"><span className="text-xs font-black text-rose-500 uppercase">Booked</span><button onClick={e => { e.stopPropagation(); setViewingBookedSlot(null); }} className="text-theme-secondary opacity-50 hover:opacity-100"><X size={14} /></button></div><p className="text-sm font-bold text-theme-primary">{mb.user_name || 'Unknown'}</p>{mb.email && <p className="text-xs text-theme-secondary opacity-60">{mb.email}</p>}{mb.purpose && <p className="text-xs text-theme-secondary opacity-80 mt-1">📋 {mb.purpose}</p>}<p className="text-xs text-theme-secondary opacity-40 mt-1">{mb.start_time.slice(0,5)} – {mb.end_time.slice(0,5)}</p></div>); })()}
                                                             </div>
                                                         );
                                                     })}
                                                 </div>
                                             )}
-
-                                            {/* Legend */}
                                             <div className="flex gap-4 mt-3 justify-center">
-                                                <div className="flex items-center gap-1.5">
-                                                    <div className="w-3 h-3 rounded bg-emerald-100 dark:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-900/60" />
-                                                    <span className="text-[10px] text-theme-secondary opacity-50 font-bold uppercase tracking-wide">Available</span>
-                                                </div>
-                                                <div className="flex items-center gap-1.5">
-                                                    <div className="w-3 h-3 rounded bg-rose-100 dark:bg-rose-900/40 border border-rose-200 dark:border-rose-900/60" />
-                                                    <span className="text-[10px] text-theme-secondary opacity-50 font-bold uppercase tracking-wide">Booked</span>
-                                                </div>
-                                                <div className="flex items-center gap-1.5">
-                                                    <div className="w-3 h-3 rounded bg-theme-bg border border-theme-border" />
-                                                    <span className="text-[10px] text-theme-secondary opacity-50 font-bold uppercase tracking-wide">Past</span>
-                                                </div>
+                                                <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded bg-emerald-100 dark:bg-emerald-900/40 border border-emerald-200" /><span className="text-[10px] text-theme-secondary opacity-50 font-bold uppercase">Available</span></div>
+                                                <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded bg-rose-100 dark:bg-rose-900/40 border border-rose-200" /><span className="text-[10px] text-theme-secondary opacity-50 font-bold uppercase">Booked</span></div>
+                                                <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded bg-theme-bg border border-theme-border" /><span className="text-[10px] text-theme-secondary opacity-50 font-bold uppercase">Past</span></div>
                                             </div>
                                         </div>
-
-                                        {/* Reservation summary */}
                                         {totalSelectedHoures > 0 && (
                                             <div className="bg-primary/5 border border-primary/20 p-4 rounded-xl">
                                                 <p className="text-xs font-bold text-primary uppercase tracking-wide mb-1">Reservation Summary</p>
@@ -999,42 +806,25 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                                 <p className="text-xs text-theme-secondary opacity-60 mt-1">{totalSelectedHoures} total hour(s) selected</p>
                                             </div>
                                         )}
-
                                         <div>
                                             <label className="block text-sm font-semibold text-theme-primary mb-1.5">Attendees</label>
                                             <p className="text-[10px] text-theme-secondary opacity-50 mb-1 uppercase tracking-wider">Max capacity: {room.capacity} people</p>
-                                            <input
-                                                type="number"
-                                                min="1"
-                                                max={room.capacity}
-                                                value={attendees}
-                                                onChange={e => {
-                                                    const val = e.target.value;
-                                                    if (val === '') setAttendees('');
-                                                    else setAttendees(parseInt(val) || 1);
-                                                }}
-                                                required
-                                                className="w-full text-sm p-3 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg text-theme-primary"
-                                            />
+                                            <input type="number" min="1" max={room.capacity} value={attendees} onChange={e => { const v = e.target.value; if (v === '') setAttendees(''); else setAttendees(parseInt(v) || 1); }} required className="w-full text-sm p-3 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg text-theme-primary" />
                                         </div>
                                         <div>
                                             <label className="block text-sm font-semibold text-theme-primary mb-1.5">Purpose</label>
                                             <textarea rows={2} value={purpose} onChange={e => setPurpose(e.target.value)} className="w-full text-sm p-3 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg text-theme-primary" placeholder="Meeting purpose..." />
                                         </div>
-                                        <button
-                                            type="submit"
-                                            disabled={submitting || totalSelectedHoures === 0 || (room && Number(attendees) > room.capacity) || selectedDates.length === 0}
-                                            className="w-full py-4 bg-secondary hover:bg-secondary-dark text-white text-lg font-bold rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
-                                        >
+                                        <button type="submit" disabled={submitting || totalSelectedHoures === 0 || (room && Number(attendees) > room.capacity) || selectedDates.length === 0} className="w-full py-4 bg-secondary hover:bg-secondary/90 text-white text-lg font-bold rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed">
                                             {submitting ? 'Booking...' : (room && Number(attendees) > room.capacity) ? 'Capacity Exceeded' : totalSelectedHoures === 0 ? 'Select a time slot' : 'Book This Space'}
                                         </button>
                                     </form>
                                 </div>
                             </div>
                         )}
-
                     </div>
                 </div>
+            </div>
 
             {showLoginModal && (
                 <LoginPage
