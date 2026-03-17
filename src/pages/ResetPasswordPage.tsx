@@ -126,7 +126,7 @@ const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({ email: initialEma
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             required
-                            className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+                            className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm text-slate-900"
                         />
                     </div>
                     <div className="relative">
@@ -138,7 +138,7 @@ const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({ email: initialEma
                             onChange={e => setOtp(e.target.value)}
                             required
                             maxLength={6}
-                            className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm text-center font-bold tracking-widest"
+                            className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm text-center font-bold tracking-widest text-slate-900"
                         />
                     </div>
                     <div className="relative">
@@ -149,7 +149,7 @@ const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({ email: initialEma
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             required
-                            className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+                            className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm text-slate-900"
                         />
                     </div>
                     <div className="relative">
@@ -160,7 +160,7 @@ const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({ email: initialEma
                             value={confirm}
                             onChange={e => setConfirm(e.target.value)}
                             required
-                            className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+                            className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm text-slate-900"
                         />
                     </div>
                     <button

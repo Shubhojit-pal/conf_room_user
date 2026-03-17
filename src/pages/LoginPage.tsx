@@ -169,7 +169,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
                                 onChange={e => setOtp(e.target.value)}
                                 required
                                 maxLength={6}
-                                className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-center text-lg font-bold tracking-[0.5em] transition-all"
+                                className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-center text-lg font-bold tracking-[0.5em] transition-all text-slate-900"
                             />
                         </div>
                         <button
@@ -204,7 +204,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             required
-                            className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm transition-all"
+                            className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm transition-all text-slate-900"
                         />
                     </div>
                     <div className="relative">
@@ -215,7 +215,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             required
-                            className="w-full pl-10 pr-10 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm transition-all"
+                            className="w-full pl-10 pr-10 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm transition-all text-slate-900"
                         />
                         <button
                             type="button"
@@ -248,11 +248,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
                 <form onSubmit={handleRegister} className="space-y-3">
                     <div className="relative">
                         <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                        <input type="text" placeholder="Full Name" value={regName} onChange={e => setRegName(e.target.value)} required className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm" />
+                        <input type="text" placeholder="Full Name" value={regName} onChange={e => setRegName(e.target.value)} required className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm text-slate-900" />
                     </div>
                     <div className="relative">
                         <EnvelopeSimple size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                        <input type="email" placeholder="Email address" value={regEmail} onChange={e => setRegEmail(e.target.value)} required className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm" />
+                        <input type="email" placeholder="Email address" value={regEmail} onChange={e => setRegEmail(e.target.value)} required className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm text-slate-900" />
                     </div>
                     <div className="relative">
                         <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -262,7 +262,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
                             value={regPassword} 
                             onChange={e => setRegPassword(e.target.value)} 
                             required 
-                            className="w-full pl-10 pr-10 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm" 
+                            className="w-full pl-10 pr-10 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm text-slate-900" 
                         />
                         <button
                             type="button"
@@ -274,11 +274,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
                     </div>
                     <div className="relative">
                         <Briefcase size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                        <input type="text" placeholder="Department" value={regDept} onChange={e => setRegDept(e.target.value)} required className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm" />
+                        <input type="text" placeholder="Department" value={regDept} onChange={e => setRegDept(e.target.value)} required className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm text-slate-900" />
                     </div>
                     <div className="relative">
                         <Phone size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                        <input type="tel" placeholder="Phone number" value={regPhone} onChange={e => setRegPhone(e.target.value)} required className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm" />
+                        <input type="tel" placeholder="Phone number" value={regPhone} onChange={e => setRegPhone(e.target.value)} required className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm text-slate-900" />
                     </div>
 
                     <button
