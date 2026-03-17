@@ -269,6 +269,17 @@ const TicketPage: React.FC<TicketPageProps> = ({ booking, onHome, onViewBookings
                             <div>
                                 <p className="text-xs text-slate-400 dark:text-slate-500 uppercase font-bold tracking-wider underline decoration-primary/30 underline-offset-2">Location</p>
                                 <p className="text-slate-900 dark:text-slate-100 font-semibold">{booking.location}</p>
+                                {booking.mapLink && (
+                                    <a 
+                                        href={booking.mapLink} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="text-[10px] text-primary hover:underline font-bold flex items-center gap-1 mt-0.5"
+                                    >
+                                        <span>VIEW LOCATION</span>
+                                        <ArrowRight size={10} />
+                                    </a>
+                                )}
                             </div>
                         </div>
                         <div className="flex items-start gap-3">

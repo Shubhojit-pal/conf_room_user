@@ -38,6 +38,7 @@ export interface BookingResult {
     email?: string;
     status?: string;
     ticket_id?: string;
+    mapLink?: string;
 }
 
 /**

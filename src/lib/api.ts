@@ -56,6 +56,7 @@ export interface Booking {
     user_name?: string;
     email?: string;
     ticket_id?: string;
+    mapLink?: string;
 }
 
 export interface User {
