@@ -548,13 +548,14 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
                     {/* Room Layout Viewer */}
                     {room.layout && room.layout.elements && room.layout.elements.length > 0 && (() => {
-                        const EMOJI_MAP: Record<string, string> = {
-                            seat: '🪑', table: '🟫', screen: '📺',
-                            whiteboard: '🗂️', podium: '🎙️', door: '🚪', plant: '🌿',
-                        };
-                        const LABEL_MAP: Record<string, string> = {
-                            seat: 'Seat', table: 'Table', screen: 'Screen',
-                            whiteboard: 'Board', podium: 'Podium', door: 'Door', plant: 'Plant',
+                        const TYPE_INFO: Record<string, { icon: string; label: string; color: string }> = {
+                            seat:       { icon: '🪑', label: 'Seat',       color: 'bg-blue-50 dark:bg-blue-900/30' },
+                            table:      { icon: '▬',  label: 'Table',      color: 'bg-amber-50 dark:bg-amber-900/30' },
+                            screen:     { icon: '📺', label: 'Screen',     color: 'bg-slate-100 dark:bg-slate-700/40' },
+                            whiteboard: { icon: '📋', label: 'Whiteboard', color: 'bg-green-50 dark:bg-green-900/30' },
+                            podium:     { icon: '🎤', label: 'Podium',     color: 'bg-purple-50 dark:bg-purple-900/30' },
+                            door:       { icon: '🚪', label: 'Door',       color: 'bg-orange-50 dark:bg-orange-900/30' },
+                            plant:      { icon: '🌿', label: 'Plant',      color: 'bg-emerald-50 dark:bg-emerald-900/30' },
                         };
                         const { rows, cols, elements } = room.layout;
                         const cellSize = 40;
@@ -591,18 +592,19 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                             {Array.from({ length: rows }, (_, row) =>
                                                 Array.from({ length: cols }, (_, col) => {
                                                     const occ = occupantAt(col, row);
+                                                    const info = occ ? (TYPE_INFO[occ.type] || { icon: '?', label: occ.type, color: '' }) : null;
                                                     const isOrigin = occ?.x === col && occ?.y === row;
                                                     return (
                                                         <div
                                                             key={`${col}-${row}`}
-                                                            className={`border border-slate-100 dark:border-slate-800 flex items-center justify-center text-base select-none ${
-                                                                occ ? 'bg-primary/5' : ''
+                                                            className={`border border-slate-100 dark:border-slate-800 flex items-center justify-center text-sm select-none ${
+                                                                occ && info ? info.color : ''
                                                             }`}
                                                             style={{ gridColumn: `${col + 1}`, gridRow: `${row + 1}` }}
-                                                            title={occ ? LABEL_MAP[occ.type] || occ.type : undefined}
+                                                            title={info?.label}
                                                         >
-                                                            {occ && isOrigin && (
-                                                                <span className="leading-none">{EMOJI_MAP[occ.type] || '📦'}</span>
+                                                            {occ && isOrigin && info && (
+                                                                <span className="leading-none">{info.icon}</span>
                                                             )}
                                                         </div>
                                                     );
@@ -613,12 +615,15 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
                                     {/* Legend */}
                                     <div className="flex flex-wrap gap-3 mt-3 pt-3 border-t border-theme-border">
-                                        {uniqueTypes.map(type => (
-                                            <div key={type} className="flex items-center gap-1.5">
-                                                <span className="text-sm">{EMOJI_MAP[type] || '📦'}</span>
-                                                <span className="text-[11px] font-semibold text-theme-secondary opacity-70 capitalize">{LABEL_MAP[type] || type}</span>
-                                            </div>
-                                        ))}
+                                        {uniqueTypes.map(type => {
+                                            const info = TYPE_INFO[type] || { icon: '?', label: type, color: '' };
+                                            return (
+                                                <div key={type} className="flex items-center gap-1.5">
+                                                    <span className={`text-sm w-6 h-6 flex items-center justify-center rounded ${info.color}`}>{info.icon}</span>
+                                                    <span className="text-[11px] font-semibold text-theme-secondary opacity-70">{info.label}</span>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             </div>
