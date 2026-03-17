@@ -490,7 +490,8 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                 )}
                             </div>
                             <div className="p-6">
-                                <h3 className="text-lg font-bold text-theme-primary mb-2">{room.type}</h3>
+                                <h3 className="text-lg font-bold text-theme-primary mb-2">{room.name}</h3>
+                                <p className="text-sm font-semibold text-primary mb-2">{room.type}</p>
                                 <p className="text-theme-secondary text-sm mb-4">{room.description}</p>
                                 <div className="flex items-center gap-4 text-sm text-theme-secondary mb-4">
                                     <div className="flex items-center gap-1.5">
@@ -1072,13 +1073,13 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                 <div className="p-6">
                                     <h3 className="text-xl font-bold text-theme-primary mb-2 group-hover:text-primary transition-colors">{office.name}</h3>
                                     <p className="text-theme-secondary text-sm mb-4">
-                                        {getRoomTypesForOffice(office.location).length} room types available
+                                        {Array.from(new Set(getRoomTypesForOffice(office.location).map(r => r.type).filter(Boolean))).length} room types available
                                     </p>
 
                                     {/* Room Types Preview */}
                                     <div className="space-y-2 mb-6">
-                                        {[...new Set(getRoomTypesForOffice(office.location).map(r => r.type))].map((type) => (
-                                            <span key={type} className="inline-block px-3 py-1 bg-theme-bg text-theme-secondary text-xs rounded-full mr-2 mb-2 border border-theme-border">
+                                        {Array.from(new Set(getRoomTypesForOffice(office.location).map(r => r.type).filter(Boolean))).map((type) => (
+                                            <span key={`${office.location}-${type}`} className="inline-block px-3 py-1 bg-theme-bg text-theme-secondary text-xs rounded-full mr-2 mb-2 border border-theme-border flex-none gap-1.5 transition-colors group-hover:border-primary/30 group-hover:text-primary">
                                                 {type}
                                             </span>
                                         ))}
