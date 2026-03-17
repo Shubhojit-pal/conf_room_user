@@ -1,4 +1,4 @@
-﻿import {
+import {
     ArrowLeft,
     MapPin,
     Users,
@@ -28,14 +28,14 @@ interface RoomDetailsPageProps {
     onBookingSuccess: (booking: BookingResult) => void;
 }
 
-// Generate all 1-hour slots for the day (9 AM Ã¢â‚¬â€œ 6 PM)
+// Generate all 1-hour slots for the day (9 AM - 6 PM)
 const ALL_SLOTS = Array.from({ length: 9 }, (_, i) => {
     const startH = 9 + i;
     const endH = startH + 1;
     return {
         start: `${String(startH).padStart(2, '0')}:00:00`,
         end: `${String(endH).padStart(2, '0')}:00:00`,
-        label: `${String(startH).padStart(2, '0')}:00 Ã¢â‚¬â€œ ${String(endH).padStart(2, '0')}:00`,
+        label: `${String(startH).padStart(2, '0')}:00 - ${String(endH).padStart(2, '0')}:00`,
         startH,
     };
 });
@@ -409,7 +409,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             <div className="text-center">
                                 <SquaresFour size={64} className="text-primary/40 mx-auto mb-3" />
                                 <h3 className="text-2xl font-bold text-primary/60">{room.room_name}</h3>
-                                <p className="text-primary/40">Room {room.room_number} Ã¢â‚¬Â¢ Floor {room.floor_no}</p>
+                                <p className="text-primary/40">Room {room.room_number} • Floor {room.floor_no}</p>
                             </div>
                         </div>
                     )}
@@ -479,7 +479,9 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                 </div>
             </div>
 
-            <div className="flex flex-col gap-8 relative z-10 bg-theme-bg">
+            {/* Restrict main content width */}
+            <div className="max-w-5xl mx-auto pb-24">
+                <div className="flex flex-col gap-8 relative z-10 bg-theme-bg">
                 {/* Main Info */}
                 <div className="space-y-8">
                     <div>
@@ -550,13 +552,13 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                     {/* Room Layout Viewer */}
                     {room.layout && room.layout.elements && room.layout.elements.length > 0 && (() => {
                         const TYPE_INFO: Record<string, { icon: string; label: string; color: string; border: string }> = {
-                            seat:       { icon: 'Ã°Å¸Âªâ€˜', label: 'Seat',       color: 'bg-blue-100 dark:bg-blue-900/50',    border: 'border-blue-200 dark:border-blue-800' },
-                            table:      { icon: 'Ã¢â€“Â¬',  label: 'Table',      color: 'bg-amber-100 dark:bg-amber-900/50',  border: 'border-amber-200 dark:border-amber-800' },
-                            screen:     { icon: 'Ã°Å¸â€œÂº', label: 'Screen',     color: 'bg-slate-200 dark:bg-slate-700/60',  border: 'border-slate-300 dark:border-slate-600' },
-                            whiteboard: { icon: 'Ã°Å¸â€œâ€¹', label: 'Board',      color: 'bg-green-100 dark:bg-green-900/50',  border: 'border-green-200 dark:border-green-800' },
-                            podium:     { icon: 'Ã°Å¸Å½Â¤', label: 'Podium',     color: 'bg-purple-100 dark:bg-purple-900/50',border: 'border-purple-200 dark:border-purple-800' },
-                            door:       { icon: 'Ã°Å¸Å¡Âª', label: 'Door',       color: 'bg-orange-100 dark:bg-orange-900/50',border: 'border-orange-200 dark:border-orange-800' },
-                            plant:      { icon: 'Ã°Å¸Å’Â¿', label: 'Plant',      color: 'bg-emerald-100 dark:bg-emerald-900/50',border:'border-emerald-200 dark:border-emerald-800' },
+                            seat:       { icon: '🪑', label: 'Seat',       color: 'bg-blue-100 dark:bg-blue-900/50',    border: 'border-blue-200 dark:border-blue-800' },
+                            table:      { icon: '▬',  label: 'Table',      color: 'bg-amber-100 dark:bg-amber-900/50',  border: 'border-amber-200 dark:border-amber-800' },
+                            screen:     { icon: '📺', label: 'Screen',     color: 'bg-slate-200 dark:bg-slate-700/60',  border: 'border-slate-300 dark:border-slate-600' },
+                            whiteboard: { icon: '📋', label: 'Board',      color: 'bg-green-100 dark:bg-green-900/50',  border: 'border-green-200 dark:border-green-800' },
+                            podium:     { icon: '🎤', label: 'Podium',     color: 'bg-purple-100 dark:bg-purple-900/50',border: 'border-purple-200 dark:border-purple-800' },
+                            door:       { icon: '🚪', label: 'Door',       color: 'bg-orange-100 dark:bg-orange-900/50',border: 'border-orange-200 dark:border-orange-800' },
+                            plant:      { icon: '🌿', label: 'Plant',      color: 'bg-emerald-100 dark:bg-emerald-900/50',border:'border-emerald-200 dark:border-emerald-800' },
                         };
                         const { rows, cols, elements } = room.layout;
 
@@ -648,7 +650,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                         {/* Scroll hint label */}
                                         {GRID_W > 320 && (
                                             <p className="text-center text-[10px] text-theme-secondary opacity-40 py-1 font-medium tracking-wide">
-                                                Ã¢â€ Â scroll to explore Ã¢â€ â€™
+                                                ← scroll to explore →
                                             </p>
                                         )}
                                     </div>
@@ -767,20 +769,20 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                             </div>
                                             <p className="text-[10px] text-theme-secondary opacity-50 mb-3 uppercase tracking-wider">{activeDate ? 'Click time slots to select or deselect them' : 'Select a date above to define slots'}</p>
                                             {loadingSlots ? (
-                                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-12 bg-theme-bg rounded-xl animate-pulse" />)}</div>
+                                                <div className="grid grid-cols-1 min-[400px]:grid-cols-2 sm:grid-cols-3 gap-2.5">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-12 bg-theme-bg rounded-xl animate-pulse" />)}</div>
                                             ) : (
-                                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                                <div className="grid grid-cols-1 min-[400px]:grid-cols-2 sm:grid-cols-3 gap-2.5">
                                                     {ALL_SLOTS.map((slot, index) => {
                                                         const status = getSlotStatus(slot);
                                                         const selected = isSlotSelected(index);
-                                                        let cls = 'relative flex items-center gap-2 px-3 py-3 rounded-xl text-xs font-bold transition-all border-2 ';
+                                                        let cls = 'relative flex items-center justify-center sm:justify-start gap-2 px-2 sm:px-3 py-3 rounded-xl text-[11px] sm:text-xs font-bold transition-all border-2 ';
                                                         if (status === 'past') cls += 'bg-theme-bg text-theme-secondary opacity-30 border-theme-border cursor-not-allowed line-through';
                                                         else if (status === 'booked') cls += 'bg-rose-50 dark:bg-rose-950/20 text-rose-500 border-rose-100 dark:border-rose-900/30 cursor-pointer hover:bg-rose-100';
                                                         else if (selected) cls += 'bg-primary text-white border-primary shadow-lg shadow-primary/25 scale-[1.02]';
                                                         else cls += 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 border-emerald-100 dark:border-emerald-900/30 hover:bg-emerald-100 cursor-pointer hover:scale-[1.02] active:scale-95';
                                                         return (
-                                                            <div key={slot.start} className="relative">
-                                                                <button type="button" onClick={() => { if (status === 'past') return; if (status === 'booked') setViewingBookedSlot(viewingBookedSlot === index ? null : index); else handleSlotClick(index); }} className={cls}>
+                                                            <div key={slot.start} className="relative w-full">
+                                                                <button type="button" onClick={() => { if (status === 'past') return; if (status === 'booked') setViewingBookedSlot(viewingBookedSlot === index ? null : index); else handleSlotClick(index); }} className={`w-full ${cls}`}>
                                                                     {status === 'past' && <Clock size={14} />}
                                                                     {status === 'booked' && <><Lock size={14} /><span>{slot.label}</span><Eye size={14} className="ml-auto opacity-70" /></>}
                                                                     {status === 'available' && !selected && <Clock size={14} />}
@@ -824,6 +826,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                         )}
                     </div>
                 </div>
+            </div> {/* End max-w-5xl */}
             </div>
 
             {showLoginModal && (
