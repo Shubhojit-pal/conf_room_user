@@ -548,17 +548,22 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
                     {/* Room Layout Viewer */}
                     {room.layout && room.layout.elements && room.layout.elements.length > 0 && (() => {
-                        const TYPE_INFO: Record<string, { icon: string; label: string; color: string }> = {
-                            seat:       { icon: '🪑', label: 'Seat',       color: 'bg-blue-50 dark:bg-blue-900/30' },
-                            table:      { icon: '▬',  label: 'Table',      color: 'bg-amber-50 dark:bg-amber-900/30' },
-                            screen:     { icon: '📺', label: 'Screen',     color: 'bg-slate-100 dark:bg-slate-700/40' },
-                            whiteboard: { icon: '📋', label: 'Whiteboard', color: 'bg-green-50 dark:bg-green-900/30' },
-                            podium:     { icon: '🎤', label: 'Podium',     color: 'bg-purple-50 dark:bg-purple-900/30' },
-                            door:       { icon: '🚪', label: 'Door',       color: 'bg-orange-50 dark:bg-orange-900/30' },
-                            plant:      { icon: '🌿', label: 'Plant',      color: 'bg-emerald-50 dark:bg-emerald-900/30' },
+                        const TYPE_INFO: Record<string, { icon: string; label: string; color: string; border: string }> = {
+                            seat:       { icon: '🪑', label: 'Seat',       color: 'bg-blue-100 dark:bg-blue-900/50',    border: 'border-blue-200 dark:border-blue-800' },
+                            table:      { icon: '▬',  label: 'Table',      color: 'bg-amber-100 dark:bg-amber-900/50',  border: 'border-amber-200 dark:border-amber-800' },
+                            screen:     { icon: '📺', label: 'Screen',     color: 'bg-slate-200 dark:bg-slate-700/60',  border: 'border-slate-300 dark:border-slate-600' },
+                            whiteboard: { icon: '📋', label: 'Board',      color: 'bg-green-100 dark:bg-green-900/50',  border: 'border-green-200 dark:border-green-800' },
+                            podium:     { icon: '🎤', label: 'Podium',     color: 'bg-purple-100 dark:bg-purple-900/50',border: 'border-purple-200 dark:border-purple-800' },
+                            door:       { icon: '🚪', label: 'Door',       color: 'bg-orange-100 dark:bg-orange-900/50',border: 'border-orange-200 dark:border-orange-800' },
+                            plant:      { icon: '🌿', label: 'Plant',      color: 'bg-emerald-100 dark:bg-emerald-900/50',border:'border-emerald-200 dark:border-emerald-800' },
                         };
                         const { rows, cols, elements } = room.layout;
-                        const cellSize = 40;
+
+                        // Responsive cell size: target fitting ~10 cols in ~320px (min phone) = 32px minimum
+                        // On larger screens use 40px. We'll compute in CSS via clamp.
+                        const CELL_PX = 34; // used for JS grid dimensions
+                        const GRID_W = cols * CELL_PX;
+                        const GRID_H = rows * CELL_PX;
 
                         const occupantAt = (col: number, row: number) =>
                             elements.find(el => {
@@ -571,59 +576,103 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
                         return (
                             <div>
-                                <div className="flex items-center justify-between mb-4">
-                                    <h2 className="text-xl font-bold text-theme-primary">Room Layout</h2>
+                                {/* Header */}
+                                <div className="flex items-center justify-between mb-3">
+                                    <div>
+                                        <h2 className="text-xl font-bold text-theme-primary">Room Layout</h2>
+                                        <p className="text-[11px] text-theme-secondary opacity-50 mt-0.5">Designed floor plan</p>
+                                    </div>
                                     <span className="text-[10px] font-bold text-theme-secondary opacity-50 uppercase tracking-widest bg-theme-card border border-theme-border px-2 py-1 rounded-full">
                                         Floor Plan
                                     </span>
                                 </div>
-                                <div className="bg-theme-card border border-theme-border rounded-2xl p-4 shadow-sm">
-                                    {/* Canvas */}
-                                    <div className="overflow-auto rounded-xl bg-white dark:bg-slate-900 border border-theme-border shadow-inner p-3">
+
+                                <div className="bg-theme-card border border-theme-border rounded-2xl overflow-hidden shadow-sm">
+                                    {/* Scrollable grid container with right-fade hint */}
+                                    <div className="relative">
+                                        {/* Fade-right gradient scroll hint */}
+                                        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-10 z-10 bg-gradient-to-l from-white/80 dark:from-slate-900/80 to-transparent rounded-r" />
                                         <div
-                                            className="grid"
-                                            style={{
-                                                gridTemplateColumns: `repeat(${cols}, ${cellSize}px)`,
-                                                gridTemplateRows: `repeat(${rows}, ${cellSize}px)`,
-                                                width: cols * cellSize,
-                                                height: rows * cellSize,
-                                            }}
+                                            className="overflow-x-auto overflow-y-hidden p-3 pb-1"
+                                            style={{ WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
                                         >
-                                            {Array.from({ length: rows }, (_, row) =>
-                                                Array.from({ length: cols }, (_, col) => {
-                                                    const occ = occupantAt(col, row);
-                                                    const info = occ ? (TYPE_INFO[occ.type] || { icon: '?', label: occ.type, color: '' }) : null;
-                                                    const isOrigin = occ?.x === col && occ?.y === row;
-                                                    return (
-                                                        <div
-                                                            key={`${col}-${row}`}
-                                                            className={`border border-slate-100 dark:border-slate-800 flex items-center justify-center text-sm select-none ${
-                                                                occ && info ? info.color : ''
-                                                            }`}
-                                                            style={{ gridColumn: `${col + 1}`, gridRow: `${row + 1}` }}
-                                                            title={info?.label}
-                                                        >
-                                                            {occ && isOrigin && info && (
-                                                                <span className="leading-none">{info.icon}</span>
-                                                            )}
-                                                        </div>
-                                                    );
-                                                })
-                                            )}
+                                            {/* Outer room border */}
+                                            <div
+                                                className="relative border-2 border-theme-border rounded-xl bg-white/60 dark:bg-slate-900/60 shadow-inner mx-auto"
+                                                style={{ width: GRID_W, height: GRID_H, minWidth: GRID_W }}
+                                            >
+                                                {/* Grid lines */}
+                                                <div
+                                                    className="absolute inset-0 grid"
+                                                    style={{
+                                                        gridTemplateColumns: `repeat(${cols}, ${CELL_PX}px)`,
+                                                        gridTemplateRows: `repeat(${rows}, ${CELL_PX}px)`,
+                                                    }}
+                                                >
+                                                    {Array.from({ length: rows }, (_, row) =>
+                                                        Array.from({ length: cols }, (_, col) => {
+                                                            const occ = occupantAt(col, row);
+                                                            const info = occ ? (TYPE_INFO[occ.type] || { icon: '?', label: occ.type, color: '', border: '' }) : null;
+                                                            const isOrigin = occ?.x === col && occ?.y === row;
+                                                            return (
+                                                                <div
+                                                                    key={`${col}-${row}`}
+                                                                    className={`
+                                                                        border border-slate-100/70 dark:border-slate-800/50
+                                                                        flex items-center justify-center select-none
+                                                                        transition-colors
+                                                                        ${occ && info
+                                                                            ? `${info.color} border ${info.border}`
+                                                                            : 'bg-transparent'
+                                                                        }
+                                                                    `}
+                                                                    style={{
+                                                                        gridColumn: `${col + 1}`,
+                                                                        gridRow: `${row + 1}`,
+                                                                        fontSize: CELL_PX < 32 ? '0.65rem' : '0.85rem',
+                                                                    }}
+                                                                    title={info?.label}
+                                                                >
+                                                                    {occ && isOrigin && info && (
+                                                                        <span className="leading-none">{info.icon}</span>
+                                                                    )}
+                                                                </div>
+                                                            );
+                                                        })
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Scroll hint label */}
+                                        {GRID_W > 320 && (
+                                            <p className="text-center text-[10px] text-theme-secondary opacity-40 py-1 font-medium tracking-wide">
+                                                ← scroll to explore →
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Legend strip */}
+                                    <div className="px-4 py-3 border-t border-theme-border bg-theme-bg/50">
+                                        <p className="text-[9px] font-bold uppercase tracking-widest text-theme-secondary opacity-40 mb-2">Legend</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {uniqueTypes.map(type => {
+                                                const info = TYPE_INFO[type] || { icon: '?', label: type, color: '', border: '' };
+                                                return (
+                                                    <div key={type} className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border ${info.color} ${info.border}`}>
+                                                        <span className="text-sm leading-none">{info.icon}</span>
+                                                        <span className="text-[11px] font-semibold text-theme-secondary">{info.label}</span>
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     </div>
 
-                                    {/* Legend */}
-                                    <div className="flex flex-wrap gap-3 mt-3 pt-3 border-t border-theme-border">
-                                        {uniqueTypes.map(type => {
-                                            const info = TYPE_INFO[type] || { icon: '?', label: type, color: '' };
-                                            return (
-                                                <div key={type} className="flex items-center gap-1.5">
-                                                    <span className={`text-sm w-6 h-6 flex items-center justify-center rounded ${info.color}`}>{info.icon}</span>
-                                                    <span className="text-[11px] font-semibold text-theme-secondary opacity-70">{info.label}</span>
-                                                </div>
-                                            );
-                                        })}
+                                    {/* Stats bar */}
+                                    <div className="px-4 py-2.5 border-t border-theme-border flex items-center gap-4 text-[11px] text-theme-secondary opacity-60">
+                                        <span><strong className="text-theme-primary opacity-100">{elements.filter(e => e.type === 'seat').length}</strong> seats</span>
+                                        <span><strong className="text-theme-primary opacity-100">{elements.filter(e => e.type === 'table').length}</strong> tables</span>
+                                        <span><strong className="text-theme-primary opacity-100">{elements.length}</strong> total items</span>
                                     </div>
                                 </div>
                             </div>
