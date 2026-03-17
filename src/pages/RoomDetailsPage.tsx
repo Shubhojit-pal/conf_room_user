@@ -340,7 +340,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
             </button>
 
             {/* Image Gallery / Hero */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 h-[260px] md:h-[400px]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 h-[260px] md:h-[400px] overflow-hidden">
                 <div className="md:col-span-2 h-full rounded-xl overflow-hidden bg-slate-900 group relative shadow-2xl">
                     {gallery.length > 0 ? (
                         <>
@@ -478,17 +478,36 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                 </div>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-8">
+            <div className="flex flex-col lg:flex-row gap-8 relative z-10 bg-theme-bg">
                 {/* Main Info */}
                 <div className="flex-1 space-y-8">
                     <div>
-                        <h1 className="text-3xl font-bold text-theme-primary mb-2">{room.room_name}</h1>
-                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-theme-secondary">
-                            <span className="flex items-center gap-1.5 font-bold"><MapPin size={18} className="text-primary" /> {room.location}</span>
-                            <span className="hidden md:block w-1 h-1 rounded-full bg-theme-border"></span>
-                            <span className="flex items-center gap-1.5 opacity-70 ml-6 md:ml-0"><SquaresFour size={18} /> Floor {room.floor_no}, Room {room.room_number}</span>
+                        <h1 className="text-3xl font-bold text-theme-primary mb-3">{room.room_name}</h1>
+                        <div className="flex flex-col gap-3">
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                                <span className="flex items-center gap-1.5 font-bold text-theme-primary">
+                                    <MapPin size={20} className="text-primary" weight="fill" />
+                                    {room.location}
+                                </span>
+                                <span className="hidden md:block w-1.5 h-1.5 rounded-full bg-theme-border"></span>
+                                <span className="flex items-center gap-1.5 text-theme-secondary opacity-70">
+                                    <SquaresFour size={18} />
+                                    Floor {room.floor_no}, Room {room.room_number}
+                                </span>
+                            </div>
+
+                            {/* Mobile View on Map Button */}
+                            {room.mapLink && (
+                                <button
+                                    onClick={() => window.open(room.mapLink, '_blank')}
+                                    className="md:hidden flex items-center justify-center gap-2 w-full py-2.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-black rounded-xl transition-all border border-primary/20"
+                                >
+                                    <MapPin size={16} weight="fill" />
+                                    <span>OPEN IN GOOGLE MAPS</span>
+                                </button>
+                            )}
                         </div>
-                        <p className="mt-4 text-theme-secondary leading-relaxed opacity-80">
+                        <p className="mt-6 text-theme-secondary leading-relaxed opacity-80 border-l-2 border-primary/20 pl-4 italic">
                             Located on Floor {room.floor_no}, this room has a capacity of {room.capacity} people.
                             {room.availability ? ` ${room.availability}` : ' Available for booking.'}
                         </p>
