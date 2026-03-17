@@ -1,6 +1,22 @@
 export const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000/api';
 
 // ── Types ──────────────────────────────────────────────────
+export interface RoomLayoutElement {
+    id: string;
+    type: 'seat' | 'table' | 'screen' | 'door' | 'plant' | 'podium' | 'whiteboard';
+    x: number;
+    y: number;
+    w?: number;
+    h?: number;
+    label?: string;
+}
+
+export interface RoomLayout {
+    rows: number;
+    cols: number;
+    elements: RoomLayoutElement[];
+}
+
 export interface Room {
     catalog_id: string;
     room_id: string;
@@ -16,6 +32,7 @@ export interface Room {
     image_urls?: string[];
     room_type?: string;
     mapLink?: string;
+    layout?: RoomLayout | null;
 }
 
 export interface Booking {

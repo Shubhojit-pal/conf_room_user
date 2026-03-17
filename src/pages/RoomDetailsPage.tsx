@@ -545,6 +545,85 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             </div>
                         </div>
                     )}
+
+                    {/* Room Layout Viewer */}
+                    {room.layout && room.layout.elements && room.layout.elements.length > 0 && (() => {
+                        const EMOJI_MAP: Record<string, string> = {
+                            seat: '🪑', table: '🟫', screen: '📺',
+                            whiteboard: '🗂️', podium: '🎙️', door: '🚪', plant: '🌿',
+                        };
+                        const LABEL_MAP: Record<string, string> = {
+                            seat: 'Seat', table: 'Table', screen: 'Screen',
+                            whiteboard: 'Board', podium: 'Podium', door: 'Door', plant: 'Plant',
+                        };
+                        const { rows, cols, elements } = room.layout;
+                        const cellSize = 40;
+
+                        const occupantAt = (col: number, row: number) =>
+                            elements.find(el => {
+                                const w = el.w ?? 1;
+                                const h = el.h ?? 1;
+                                return col >= el.x && col < el.x + w && row >= el.y && row < el.y + h;
+                            });
+
+                        const uniqueTypes = [...new Set(elements.map(e => e.type))];
+
+                        return (
+                            <div>
+                                <div className="flex items-center justify-between mb-4">
+                                    <h2 className="text-xl font-bold text-theme-primary">Room Layout</h2>
+                                    <span className="text-[10px] font-bold text-theme-secondary opacity-50 uppercase tracking-widest bg-theme-card border border-theme-border px-2 py-1 rounded-full">
+                                        Floor Plan
+                                    </span>
+                                </div>
+                                <div className="bg-theme-card border border-theme-border rounded-2xl p-4 shadow-sm">
+                                    {/* Canvas */}
+                                    <div className="overflow-auto rounded-xl bg-white dark:bg-slate-900 border border-theme-border shadow-inner p-3">
+                                        <div
+                                            className="grid"
+                                            style={{
+                                                gridTemplateColumns: `repeat(${cols}, ${cellSize}px)`,
+                                                gridTemplateRows: `repeat(${rows}, ${cellSize}px)`,
+                                                width: cols * cellSize,
+                                                height: rows * cellSize,
+                                            }}
+                                        >
+                                            {Array.from({ length: rows }, (_, row) =>
+                                                Array.from({ length: cols }, (_, col) => {
+                                                    const occ = occupantAt(col, row);
+                                                    const isOrigin = occ?.x === col && occ?.y === row;
+                                                    return (
+                                                        <div
+                                                            key={`${col}-${row}`}
+                                                            className={`border border-slate-100 dark:border-slate-800 flex items-center justify-center text-base select-none ${
+                                                                occ ? 'bg-primary/5' : ''
+                                                            }`}
+                                                            style={{ gridColumn: `${col + 1}`, gridRow: `${row + 1}` }}
+                                                            title={occ ? LABEL_MAP[occ.type] || occ.type : undefined}
+                                                        >
+                                                            {occ && isOrigin && (
+                                                                <span className="leading-none">{EMOJI_MAP[occ.type] || '📦'}</span>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                })
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Legend */}
+                                    <div className="flex flex-wrap gap-3 mt-3 pt-3 border-t border-theme-border">
+                                        {uniqueTypes.map(type => (
+                                            <div key={type} className="flex items-center gap-1.5">
+                                                <span className="text-sm">{EMOJI_MAP[type] || '📦'}</span>
+                                                <span className="text-[11px] font-semibold text-theme-secondary opacity-70 capitalize">{LABEL_MAP[type] || type}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })()}
                 </div>
 
                 {/* Right Sidebar - Booking Card */}
