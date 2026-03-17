@@ -189,11 +189,14 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
     const TabButton = ({ id, label, count }: { id: typeof activeTab; label: string; count: number }) => (
         <button
             onClick={() => { setActiveTab(id); setSelectedDateFilter(null); }}
-            className={`flex-1 py-3 px-6 rounded-full text-sm font-bold transition-all flex items-center justify-center gap-2
-                ${activeTab === id ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'text-theme-secondary hover:text-theme-primary hover:bg-theme-bg'}`}
+            className={`flex-1 py-3.5 px-6 rounded-[2rem] text-sm font-black transition-all flex items-center justify-center gap-3 relative overflow-hidden group
+                ${activeTab === id ? 'text-white' : 'text-theme-secondary hover:text-theme-primary hover:bg-theme-bg'}`}
         >
-            {label}
-            <span className={`text-[10px] px-2 py-0.5 rounded-full shadow-inner ${activeTab === id ? 'bg-black/20 text-white' : 'bg-theme-card text-theme-secondary'}`}>
+            {activeTab === id && (
+                <div className="absolute inset-0 bg-gradient-to-r from-primary to-emerald-500 rounded-[2rem] shadow-lg shadow-primary/25 pointer-events-none" />
+            )}
+            <span className="relative z-10">{label}</span>
+            <span className={`relative z-10 text-[10px] px-2.5 py-1 rounded-full shadow-inner backdrop-blur-sm ${activeTab === id ? 'bg-black/20 text-white' : 'bg-theme-card text-theme-secondary'}`}>
                 {count}
             </span>
         </button>
@@ -239,11 +242,14 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
             </div>
 
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 sm:mb-12 gap-4">
-                <div className="text-left">
-                    <h1 className="text-3xl sm:text-5xl font-black text-theme-primary tracking-tight mb-2 sm:mb-3">Booking Dashboard</h1>
-                    <p className="text-theme-secondary text-sm sm:text-lg flex items-center gap-2">
-                        <Calendar size={20} className="text-primary" weight="bold" />
-                        Manage your conference schedule and requests
+                <div className="text-left relative z-10">
+                    <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest mb-4">
+                        <Calendar size={14} weight="bold" />
+                        Your Workspace
+                    </div>
+                    <h1 className="text-4xl sm:text-6xl font-black text-theme-primary tracking-tight mb-3">Booking Dashboard</h1>
+                    <p className="text-theme-secondary sm:text-lg font-medium max-w-lg">
+                        Manage your conference schedule, upcoming reservations, and history all in one place.
                     </p>
                 </div>
 
@@ -294,12 +300,12 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                             filteredBookings.map(booking => {
                                 const isConfirmed = booking.status === 'confirmed';
 
-                                let cardClasses = "group border rounded-[2.5rem] p-8 transition-all duration-500 relative hover:-translate-y-1 overflow-hidden ";
-                                if (isConfirmed) cardClasses += "bg-theme-card border-emerald-100 dark:border-emerald-900/30 hover:border-emerald-200 dark:hover:border-emerald-900/50 shadow-xl shadow-emerald-900/5";
-                                else cardClasses += "bg-theme-card border-rose-100 dark:border-rose-900/30 hover:border-rose-200 dark:hover:border-rose-900/50 shadow-xl shadow-rose-900/5";
+                                let cardClasses = "group rounded-[2.5rem] p-8 transition-all duration-500 relative hover:-translate-y-1 overflow-hidden border backdrop-blur-xl ";
+                                if (isConfirmed) cardClasses += "bg-gradient-to-br from-theme-card to-emerald-50/10 dark:to-emerald-900/10 border-emerald-100/50 dark:border-emerald-900/30 hover:border-emerald-200/80 shadow-2xl shadow-emerald-900/5";
+                                else cardClasses += "bg-gradient-to-br from-theme-card to-rose-50/10 dark:to-rose-900/10 border-rose-100/50 dark:border-rose-900/30 hover:border-rose-200/80 shadow-2xl shadow-rose-900/5";
 
-                                const statBoxClasses = isConfirmed ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-100/50" : "bg-rose-50 dark:bg-rose-950/20 border-rose-100/50";
-                                const statValueClasses = isConfirmed ? "text-emerald-950 dark:text-emerald-500" : "text-rose-950 dark:text-rose-500";
+                                const statBoxClasses = isConfirmed ? "bg-white/50 dark:bg-emerald-950/20 backdrop-blur border-emerald-100/50 shadow-sm" : "bg-white/50 dark:bg-rose-950/20 backdrop-blur border-rose-100/50 shadow-sm";
+                                const statValueClasses = isConfirmed ? "text-emerald-950 dark:text-emerald-400" : "text-rose-950 dark:text-rose-400";
                                 const titleClasses = "text-theme-primary";
 
                                 return (
@@ -307,8 +313,10 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                         key={booking.booking_id}
                                         className={cardClasses}
                                     >
+                                    <div className={`absolute top-0 right-0 w-64 h-64 opacity-20 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none ${isConfirmed?'bg-emerald-400':'bg-rose-400'}`}></div>
+
                                     {/* Background Watermark Icon */}
-                                    <div className={`absolute -right-4 -bottom-4 opacity-[0.03] transform  transition-transform duration-700 pointer-events-none text-theme-primary group-hover:scale-110 group-hover:-rotate-12`}>
+                                    <div className={`absolute -right-4 -bottom-4 opacity-[0.03] transform transition-transform duration-700 pointer-events-none text-theme-primary group-hover:scale-110 group-hover:-rotate-12`}>
                                         {isConfirmed ? <Calendar size={200} weight="fill" /> : <VideoCamera size={200} weight="fill" />}
                                     </div>
 
@@ -425,32 +433,40 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
             {/* Left Column: Personal Calendar & Stats */}
             <div className="lg:col-span-5 space-y-8">
                     {/* Quick Stats Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="bg-theme-card border border-theme-border rounded-[2.5rem] p-6 text-theme-primary relative overflow-hidden group hover:scale-[1.02] transition-transform shadow-xl shadow-slate-900/5">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <div className="col-span-2 sm:col-span-1 bg-gradient-to-br from-theme-card to-theme-bg backdrop-blur-xl border border-theme-border rounded-[2rem] p-6 text-theme-primary relative overflow-hidden group hover:-translate-y-1 transition-transform shadow-2xl shadow-theme-border/20">
                             <div className="relative z-10 flex flex-col h-full justify-between">
-                                <p className="text-theme-secondary opacity-50 text-[10px] font-black uppercase tracking-widest mb-1">Upcoming Booking</p>
-                                <h4 className="text-3xl font-black">{stats.upcoming}</h4>
-                            </div>
-                            <div className="absolute -bottom-4 -right-4 text-theme-primary opacity-[0.03] transform group-hover:-rotate-12 transition-transform">
-                                <Calendar size={80} weight="fill" />
+                                <div className="p-2.5 bg-theme-bg rounded-2xl w-max mb-4 shadow-inner ring-1 ring-black/5">
+                                    <Calendar size={20} className="text-primary" weight="duotone" />
+                                </div>
+                                <div>
+                                    <h4 className="text-3xl font-black mb-1">{stats.upcoming}</h4>
+                                    <p className="text-theme-secondary text-[10px] font-bold uppercase tracking-widest">Upcoming</p>
+                                </div>
                             </div>
                         </div>
-                        <div className="bg-gradient-to-br from-primary to-primary-dark rounded-[2.5rem] p-6 text-white relative overflow-hidden group hover:scale-[1.02] transition-transform shadow-xl shadow-primary/20">
+                        <div className="bg-gradient-to-br from-emerald-400 to-teal-500 rounded-[2rem] p-6 text-white relative overflow-hidden group hover:-translate-y-1 transition-transform shadow-2xl shadow-emerald-500/30">
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent_50%)]" />
                             <div className="relative z-10 flex flex-col h-full justify-between">
-                                <p className="text-white/80 text-[10px] font-black uppercase tracking-widest mb-1">Total Bookings</p>
-                                <h4 className="text-3xl font-black">{bookings.length}</h4>
-                            </div>
-                            <div className="absolute -bottom-4 -right-4 text-white/10 transform group-hover:rotate-12 transition-transform">
-                                <VideoCamera size={80} weight="fill" />
+                                <div className="p-2.5 bg-white/20 backdrop-blur-md rounded-2xl w-max mb-4 shadow-inner">
+                                    <VideoCamera size={20} className="text-white" weight="duotone" />
+                                </div>
+                                <div>
+                                    <h4 className="text-3xl font-black mb-1">{bookings.length}</h4>
+                                    <p className="text-white/80 text-[10px] font-bold uppercase tracking-widest">Total</p>
+                                </div>
                             </div>
                         </div>
-                        <div className="bg-gradient-to-br from-rose-500 to-red-600 rounded-[2.5rem] p-6 text-white relative overflow-hidden group hover:scale-[1.02] transition-transform shadow-xl shadow-rose-500/20">
+                        <div className="bg-gradient-to-br from-rose-400 to-red-500 rounded-[2rem] p-6 text-white relative overflow-hidden group hover:-translate-y-1 transition-transform shadow-2xl shadow-rose-500/30">
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent_50%)]" />
                             <div className="relative z-10 flex flex-col h-full justify-between">
-                                <p className="text-rose-200 text-[10px] font-black uppercase tracking-widest mb-1">Cancelled Booking</p>
-                                <h4 className="text-3xl font-black">{stats.cancelled}</h4>
-                            </div>
-                            <div className="absolute -bottom-4 -right-4 text-white/10 transform group-hover:rotate-12 transition-transform">
-                                <Info size={80} weight="fill" />
+                                <div className="p-2.5 bg-white/20 backdrop-blur-md rounded-2xl w-max mb-4 shadow-inner">
+                                    <Info size={20} className="text-white" weight="duotone" />
+                                </div>
+                                <div>
+                                    <h4 className="text-3xl font-black mb-1">{stats.cancelled}</h4>
+                                    <p className="text-rose-100 text-[10px] font-bold uppercase tracking-widest">Cancelled</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -548,16 +564,19 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                         )}
                     </div>
 
-                    <div className="bg-emerald-500 text-white rounded-[2.5rem] p-10 relative overflow-hidden group cursor-pointer" onClick={onBrowse}>
-                        <div className="absolute top-0 right-0 p-10 transform translate-x-1/4 -translate-y-1/4 opacity-10 group-hover:scale-110 transition-transform">
-                            <VideoCamera size={200} weight="duotone" />
+                    <div className="bg-gradient-to-r from-emerald-400 via-teal-500 to-emerald-600 text-white rounded-[2.5rem] p-10 relative overflow-hidden group cursor-pointer shadow-2xl shadow-emerald-600/20" onClick={onBrowse}>
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.25),transparent_60%)]" />
+                        <div className="absolute -bottom-10 -right-10 p-10 opacity-[0.07] group-hover:scale-110 transition-transform duration-700 pointer-events-none">
+                            <VideoCamera size={240} weight="duotone" />
                         </div>
-                        <div className="relative z-10">
-                            <h3 className="text-3xl font-black mb-3">Instant Booking</h3>
-                            <p className="text-white/90 text-sm mb-8 leading-relaxed max-w-[240px] font-medium italic">Ready for your next breakout session? Browse live availability now.</p>
-                            <div className="bg-white text-emerald-600 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest inline-flex items-center gap-2 shadow-xl shadow-emerald-900/10">
+                        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                            <div>
+                                <h3 className="text-3xl sm:text-4xl font-black tracking-tight mb-2 drop-shadow-sm">Instant Booking</h3>
+                                <p className="text-emerald-50 text-sm sm:text-base leading-relaxed max-w-sm font-medium">Ready for your next breakout session? Browse live availability now.</p>
+                            </div>
+                            <div className="bg-white hover:bg-emerald-50 text-emerald-600 px-8 py-4 rounded-[1.5rem] font-black text-xs uppercase tracking-widest inline-flex items-center gap-2 shadow-2xl shadow-black/10 transition-colors active:scale-95">
                                 Browse Rooms
-                                <CaretRight size={14} weight="bold" />
+                                <CaretRight size={16} weight="bold" />
                             </div>
                         </div>
                     </div>
