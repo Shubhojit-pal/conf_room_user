@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ChartBar, Lightbulb, MapPin, Buildings, Monitor, Briefcase } from '@phosphor-icons/react';
-import { fetchAllBookings, Booking } from '../lib/api';
+import { fetchAllBookings, Booking, getCurrentUser } from '../lib/api';
 
 interface AnalyticsProps {
     onNavigate?: (view: string) => void;
@@ -12,6 +12,11 @@ const Analytics: React.FC<AnalyticsProps> = ({ onNavigate }) => {
 
     useEffect(() => {
         const loadData = async () => {
+            const user = getCurrentUser();
+            if (!user) {
+                setLoading(false);
+                return;
+            }
             try {
                 const data = await fetchAllBookings();
                 setBookings(data.filter(b => b.status === 'confirmed'));
