@@ -99,7 +99,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                             timeSlot: `${b.start_time.slice(0, 5)} - ${b.end_time.slice(0, 5)}`,
                             bookedBy: b.user_name || user.name,
                             email: b.email || user.email,
-                            phone: (b as any).phone_no || user.phone_no,
+                            phone: (b as any).phone_no || '',
                             duration: '',
                             purpose: b.purpose || '',
                             status: 'booked' as BookingEvent['status'],
