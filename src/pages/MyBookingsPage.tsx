@@ -99,11 +99,11 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
         if (isInitial) setLoading(true);
         try {
             const data = await fetchUserBookings(user.uid);
-            // Sort by start_date and start_time descending
+            // Sort by booking ID descending (newest booking first)
             const sortedData = data.sort((a, b) => {
-                const dateA = new Date(`${a.start_date.slice(0, 10)}T${a.start_time}`);
-                const dateB = new Date(`${b.start_date.slice(0, 10)}T${b.start_time}`);
-                return dateB.getTime() - dateA.getTime();
+                const numA = parseInt(a.booking_id.split('-')[1]) || 0;
+                const numB = parseInt(b.booking_id.split('-')[1]) || 0;
+                return numB - numA;
             });
             setBookings(sortedData);
             setError(null);
