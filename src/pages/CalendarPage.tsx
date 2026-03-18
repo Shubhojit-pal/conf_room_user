@@ -44,6 +44,9 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
     const viewRef = useRef<HTMLDivElement | null>(null);
     const [selectedDates, setSelectedDates] = useState<string[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const maxDateObj = new Date();
+    maxDateObj.setMonth(maxDateObj.getMonth() + 6);
+    const maxDateStr = maxDateObj.toISOString().slice(0, 10);
     const [hoveredDate, setHoveredDate] = useState<string | null>(null);
     const [hoveredBooking, setHoveredBooking] = useState<BookingEvent | null>(null);
     const [activeDateOptions, setActiveDateOptions] = useState<string | null>(null);
@@ -231,17 +234,27 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
     };
 
     const handleDateClick = (day: number) => {
-        const dateStr = formatDate(currentDate.getFullYear(), currentDate.getMonth(), day);
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth();
+        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        if (dateStr > maxDateStr) {
+            // Optional: Show a toast or just block
+            return;
+        }
+
         setSelectedDates(prev => {
-            const isSelected = prev.includes(dateStr);
-            if (isSelected) {
-                const updated = prev.filter(d => d !== dateStr);
-                if (activeDate === dateStr) setActiveDate(updated[0] || null);
-                return updated;
+            if (prev.includes(dateStr)) {
+                const next = prev.filter(d => d !== dateStr);
+                if (activeDate === dateStr) setActiveDate(next[0] || null);
+                return next;
             } else {
-                const updated = [...prev, dateStr].sort();
+                if (prev.length >= 180) {
+                    alert('A single booking cannot exceed 180 dates.');
+                    return prev;
+                }
+                const next = [...prev, dateStr].sort();
                 if (!activeDate) setActiveDate(dateStr);
-                return updated;
+                return next;
             }
         });
     };
@@ -1252,7 +1265,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                 <p className="text-[10px] text-theme-secondary opacity-50 mb-3 uppercase tracking-wider">
                                     {activeDate ? 'Click time slots to select or deselect them' : 'Select a date above to define slots'}
                                 </p>
-                                <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto pr-1 custom-scrollbar">
+                                <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto pr-1 pt-20 custom-scrollbar">
                                     {ALL_SLOTS.map((slot, index) => {
                                         const status = getCalendarSlotStatus(slot);
                                         const selected = isCalendarSlotSelected(index);
@@ -1299,13 +1312,17 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                                         >
                                                             <Eye size={14} className="text-rose-600 group-hover:text-rose-700 transition-colors" />
                                                             {matchingBooking && (
-                                                                <div className="absolute hidden group-hover:block bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 p-2 bg-slate-800 border border-slate-700 rounded-lg shadow-xl text-white text-xs z-[100] text-left font-normal pointer-events-none">
-                                                                    <p className="font-bold mb-1 border-b border-slate-700 pb-1">Booking Details</p>
-                                                                    <p><span className="text-slate-400">By:</span> {matchingBooking.user_name || 'Unknown'}</p>
-                                                                    {matchingBooking.email && <p><span className="text-slate-400">Email:</span> {matchingBooking.email}</p>}
-                                                                    {matchingBooking.phone_no && <p><span className="text-slate-400">Phone:</span> {matchingBooking.phone_no}</p>}
-                                                                    <p className="mt-1"><span className="text-slate-400">Purpose:</span> {matchingBooking.purpose || 'None specified'}</p>
-                                                                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-slate-800 rotate-45 -mt-1 border-r border-b border-slate-700"></div>
+                                                                <div className="absolute hidden group-hover:block bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-3 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl text-white text-xs z-[100] text-left font-normal pointer-events-none animate-in fade-in slide-in-from-bottom-1 duration-200">
+                                                                    <p className="font-bold mb-2 border-b border-slate-700 pb-1 text-sm text-slate-200 flex items-center gap-2">
+                                                                        <Eye size={14} /> Booking Details
+                                                                    </p>
+                                                                    <div className="space-y-1.5">
+                                                                        <p><span className="text-slate-400 font-medium">By:</span> {matchingBooking.user_name || 'Unknown'}</p>
+                                                                        {matchingBooking.email && <p className="break-all"><span className="text-slate-400 font-medium">Email:</span> {matchingBooking.email}</p>}
+                                                                        {matchingBooking.phone_no && <p><span className="text-slate-400 font-medium">Phone:</span> {matchingBooking.phone_no}</p>}
+                                                                        <p className="border-t border-slate-700/50 pt-1 mt-1"><span className="text-slate-400 font-medium">Purpose:</span> {matchingBooking.purpose || 'None specified'}</p>
+                                                                    </div>
+                                                                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-slate-800 rotate-45 -mt-1.25 border-r border-b border-slate-700"></div>
                                                                 </div>
                                                             )}
                                                         </div>
@@ -1369,7 +1386,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                             </button>
                             <button
                                 className={`px-8 py-2.5 rounded-lg font-bold shadow-lg transition-all active:scale-[0.98] 
-                                    ${(isSubmitting || (!!formData.room && Number(formData.attendees) > (availableRooms.find(r => `${r.catalog_id}:${r.room_id}` === formData.room)?.capacity || 0)))
+                                    ${(isSubmitting || (!!formData.room && Number(formData.attendees) > (availableRooms.find(r => `${r.catalog_id}:${r.room_id}` === formData.room)?.capacity || 0)) || selectedDates.length > 180 || selectedDates.some(d => d > maxDateStr))
                                         ? 'bg-slate-300 cursor-not-allowed text-slate-500 shadow-none'
                                         : 'bg-primary hover:bg-primary-dark text-white shadow-teal-200/50'}`}
                                 onClick={() => {

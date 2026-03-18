@@ -58,6 +58,9 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
     
     // selectedDates holds the active array regardless of mode
     const [selectedDates, setSelectedDates] = useState<string[]>([todayStr]);
+    const maxDateObj = new Date();
+    maxDateObj.setMonth(maxDateObj.getMonth() + 6);
+    const maxDateStr = maxDateObj.toISOString().slice(0, 10);
     const [activeDate, setActiveDate] = useState<string | null>(todayStr);
     const [dateSlots, setDateSlots] = useState<Record<string, number[]>>({});
     const [purpose, setPurpose] = useState('');
@@ -75,7 +78,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
         const curr = new Date(sy, sm - 1, sd);
         const last = new Date(ey, em - 1, ed);
         
-        while (curr <= last && dates.length < 30) {
+        while (curr <= last && dates.length < 180) {
             const y = curr.getFullYear();
             const m = String(curr.getMonth() + 1).padStart(2, '0');
             const d = String(curr.getDate()).padStart(2, '0');
@@ -245,6 +248,17 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
             return;
         }
 
+        if (selectedDates.length > 180) {
+            setBookResult({ ok: false, msg: 'A single booking cannot exceed 180 dates.' });
+            return;
+        }
+
+        const tooFar = selectedDates.some(d => d > maxDateStr);
+        if (tooFar) {
+            setBookResult({ ok: false, msg: 'Bookings are only allowed up to 6 months in advance.' });
+            return;
+        }
+
         const attendeeCount = Number(attendees) || 1;
 
         if (attendeeCount > room.capacity) {
@@ -322,25 +336,25 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                     {dateMode === 'single' && (
                         <div>
                             <label className="block text-sm font-semibold text-theme-primary mb-1.5">Reservation Date</label>
-                            <input type="date" min={todayStr} value={selectedDates[0] || todayStr} onChange={e => { const v = e.target.value; if (v) { setSelectedDates([v]); setActiveDate(v); } }} className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm text-theme-primary" />
+                            <input type="date" min={todayStr} max={maxDateStr} value={selectedDates[0] || todayStr} onChange={e => { const v = e.target.value; if (v) { setSelectedDates([v]); setActiveDate(v); } }} className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm text-theme-primary" />
                         </div>
                     )}
                     {dateMode === 'range' && (
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-semibold text-theme-primary mb-1.5">Start Date</label>
-                                <input type="date" min={todayStr} value={rangeStart} onChange={e => { const v = e.target.value; setRangeStart(v); let end = rangeEnd; if (!rangeEnd || v > rangeEnd) { setRangeEnd(v); end = v; } if (v && end) { const d = calculateDateRange(v, end); setSelectedDates(d); setActiveDate(d[0] || null); } }} className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm text-theme-primary" />
+                                <input type="date" min={todayStr} max={maxDateStr} value={rangeStart} onChange={e => { const v = e.target.value; setRangeStart(v); let end = rangeEnd; if (!rangeEnd || v > rangeEnd) { setRangeEnd(v); end = v; } if (v && end) { const d = calculateDateRange(v, end); setSelectedDates(d); setActiveDate(d[0] || null); } }} className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm text-theme-primary" />
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-theme-primary mb-1.5">End Date</label>
-                                <input type="date" min={rangeStart || todayStr} value={rangeEnd} onChange={e => { const v = e.target.value; setRangeEnd(v); if (rangeStart && v) { const d = calculateDateRange(rangeStart, v); setSelectedDates(d); if (activeDate && !d.includes(activeDate)) setActiveDate(d[0]); else if (!activeDate) setActiveDate(d[0]); } }} className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm text-theme-primary" />
+                                <input type="date" min={rangeStart || todayStr} max={maxDateStr} value={rangeEnd} onChange={e => { const v = e.target.value; setRangeEnd(v); if (rangeStart && v) { const d = calculateDateRange(rangeStart, v); setSelectedDates(d); if (activeDate && !d.includes(activeDate)) setActiveDate(d[0]); else if (!activeDate) setActiveDate(d[0]); } }} className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm text-theme-primary" />
                             </div>
                         </div>
                     )}
                     {dateMode === 'custom' && (
                         <div>
                             <label className="block text-sm font-semibold text-theme-primary mb-1.5">Add Dates</label>
-                            <input type="date" min={todayStr} onChange={e => { const v = e.target.value; if (v && !selectedDates.includes(v)) { setSelectedDates(prev => [...prev, v].sort()); setActiveDate(v); } }} className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm text-theme-primary" />
+                            <input type="date" min={todayStr} max={maxDateStr} onChange={e => { const v = e.target.value; if (v && !selectedDates.includes(v)) { setSelectedDates(prev => [...prev, v].sort()); setActiveDate(v); } }} className="w-full bg-theme-bg p-4 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary font-medium text-sm text-theme-primary" />
                         </div>
                     )}
                     {(dateMode === 'custom' || dateMode === 'range') && selectedDates.length > 0 && (
