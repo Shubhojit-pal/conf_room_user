@@ -7,7 +7,24 @@ export default defineConfig({
     server: {
         port: 5173,
         strictPort: true,
-        host: '0.0.0.0'
+        host: '0.0.0.0',
+        proxy: {
+            '/admin': {
+                target: 'http://localhost:3000',
+                changeOrigin: true,
+                ws: true,
+            },
+            '/_next': {
+                target: 'http://localhost:3000',
+                changeOrigin: true,
+                ws: true,
+            },
+            '/auth-callback': {
+                target: 'http://localhost:3000',
+                changeOrigin: true,
+                ws: true,
+            }
+        }
     },
     build: {
         chunkSizeWarningLimit: 1200,

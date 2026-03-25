@@ -34,7 +34,7 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack, onReset
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 relative">
+            <div className="bg-white rounded-2xl shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] w-full max-w-md p-8 relative">
                 <button onClick={onBack} className="absolute top-6 left-6 text-slate-400 hover:text-slate-700 transition-colors flex items-center gap-1 text-sm font-medium">
                     <ArrowLeft size={16} /> Back
                 </button>
@@ -71,7 +71,7 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onBack, onReset
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-lg transition-all disabled:opacity-60 shadow-md"
+                        className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-lg transition-all disabled:opacity-60 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]"
                     >
                         {loading ? 'Sending...' : 'Send Reset Code'}
                     </button>

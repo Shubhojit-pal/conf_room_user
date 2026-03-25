@@ -216,8 +216,8 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Profile Card */}
                 <div className="lg:col-span-1">
-                    <div className="bg-theme-card rounded-2xl border border-theme-border p-8 text-center shadow-sm sticky top-24">
-                        <div className="w-28 h-28 bg-gradient-to-br from-primary to-indigo-600 text-white rounded-full mx-auto flex items-center justify-center text-4xl font-bold mb-4 ring-8 ring-primary/5 shadow-xl shadow-primary/20">
+                    <div className="bg-theme-card rounded-2xl border border-theme-border p-8 text-center shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] sticky top-24">
+                        <div className="w-28 h-28 bg-gradient-to-br from-primary to-indigo-600 text-white rounded-full mx-auto flex items-center justify-center text-4xl font-bold mb-4 ring-8 ring-primary/5 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/20">
                             {initials}
                         </div>
                         <h2 className="text-xl font-bold text-theme-primary">{profile?.name}</h2>
@@ -250,7 +250,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
                     {/* Stats */}
                     <button 
                         onClick={onViewBookings}
-                        className="w-full bg-theme-card p-6 rounded-2xl border border-theme-border flex items-center justify-between shadow-sm hover:shadow-md hover:border-primary transition-all group"
+                        className="w-full bg-theme-card p-6 rounded-2xl border border-theme-border flex items-center justify-between shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] hover:border-primary transition-all group"
                     >
                         <div className="text-left">
                             <div className="text-[11px] font-bold text-primary uppercase tracking-widest mb-1 flex items-center gap-2 opacity-70">
@@ -258,7 +258,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
                             </div>
                             <div className="text-4xl font-black text-theme-primary group-hover:text-primary transition-colors">{stats.total}</div>
                         </div>
-                        <div className="w-14 h-14 bg-theme-bg rounded-full flex items-center justify-center text-primary shadow-inner group-hover:scale-110 transition-transform">
+                        <div className="w-14 h-14 bg-theme-bg rounded-full flex items-center justify-center text-primary shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-inner group-hover:scale-110 transition-transform">
                             <CalendarBlank size={28} weight="duotone" />
                         </div>
                     </button>
@@ -431,7 +431,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onViewBookings }) => {
                         </div>
                     </div>
 
-                    <button onClick={logout} className="w-full py-4 text-rose-500 font-bold bg-theme-card border border-rose-100 dark:border-rose-900/30 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm">
+                    <button onClick={logout} className="w-full py-4 text-rose-500 font-bold bg-theme-card border border-rose-100 dark:border-rose-900/30 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]">
                         <SignOut size={20} />
                         Sign Out
                     </button>

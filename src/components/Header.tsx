@@ -135,7 +135,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                 key={item.id}
                                 onClick={() => navigate(item.id)}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${currentView === item.id
-                                    ? 'bg-theme-card text-primary shadow-sm'
+                                    ? 'bg-theme-card text-primary shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]'
                                     : 'text-theme-secondary hover:text-theme-primary hover:bg-theme-card'
                                     }`}
                             >
@@ -145,7 +145,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                         <button
                             onClick={() => navigate('help')}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${currentView === 'help'
-                                ? 'bg-theme-card text-primary shadow-sm'
+                                ? 'bg-theme-card text-primary shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]'
                                 : 'text-theme-secondary hover:text-theme-primary hover:bg-theme-card'
                                 }`}
                         >
@@ -159,7 +159,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                             <>
                                 <button
                                     onClick={() => navigate('login')}
-                                    className="bg-primary hover:bg-primary-dark text-white px-5 py-2 rounded-lg font-medium transition-colors shadow-sm text-sm"
+                                    className="bg-primary hover:bg-primary-dark text-white px-5 py-2 rounded-lg font-medium transition-colors shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] text-sm"
                                 >
                                     Log In
                                 </button>
@@ -190,7 +190,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                                     {/* Notification Dropdown — fixed for mobile, absolute for desktop */}
                                     {showNotifications && (
                                         <div
-                                            className="fixed sm:absolute top-[70px] sm:top-full left-4 sm:left-auto right-4 sm:right-0 sm:w-80 max-w-sm bg-theme-card rounded-xl shadow-xl border border-theme-border overflow-hidden z-[100]"
+                                            className="fixed sm:absolute top-[70px] sm:top-full left-4 sm:left-auto right-4 sm:right-0 sm:w-80 max-w-sm bg-theme-card rounded-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] border border-theme-border overflow-hidden z-[100]"
                                             style={{ maxHeight: '70vh' }}
                                         >
                                             <div className="p-4 border-b border-theme-border flex justify-between items-center bg-theme-bg">
@@ -288,14 +288,14 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
 
                 {/* Mobile Dropdown Menu */}
                 {showMobileMenu && (
-                    <div className="md:hidden border-t border-theme-border bg-theme-bg px-4 pb-4 pt-2 shadow-inner">
+                    <div className="md:hidden border-t border-theme-border bg-theme-bg px-4 pb-4 pt-2 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-inner">
                         <div className="flex flex-col gap-1">
                             {navItems.map((item) => (
                                 <button
                                     key={item.id}
                                     onClick={() => navigate(item.id)}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left transition-colors ${currentView === item.id
-                                        ? 'bg-theme-card text-primary shadow-sm border border-theme-border'
+                                        ? 'bg-theme-card text-primary shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] border border-theme-border'
                                         : 'text-theme-secondary hover:bg-theme-card hover:text-theme-primary'
                                         }`}
                                 >
@@ -306,7 +306,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                             <button
                                 onClick={() => navigate('help')}
                                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left transition-colors ${currentView === 'help'
-                                    ? 'bg-theme-card text-primary shadow-sm border border-theme-border'
+                                    ? 'bg-theme-card text-primary shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] border border-theme-border'
                                     : 'text-theme-secondary hover:bg-theme-card hover:text-theme-primary'
                                     }`}
                             >
@@ -359,7 +359,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
 
             {/* ─── Mobile Bottom Navigation Bar (authenticated only) ─── */}
             {user && (
-                <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-theme-bg border-t border-theme-border shadow-lg">
+                <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-theme-bg border-t border-theme-border shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]">
                     <div className="flex justify-around items-center px-1 py-2">
                         {navItems.map((item) => {
                             const isActive = currentView === item.id;

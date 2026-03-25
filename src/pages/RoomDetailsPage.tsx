@@ -26,6 +26,10 @@ interface RoomDetailsPageProps {
     room: { catalog_id: string; room_id: string } | null;
     onBack: () => void;
     onBookingSuccess: (booking: BookingResult) => void;
+    /** Optional dates pre-filled from the availability filter in SearchPage */
+    prefillDates?: string[];
+    /** Optional slots pre-filled from the availability filter in SearchPage */
+    prefillSlots?: number[];
 }
 
 // Generate all 1-hour slots for the day (9 AM - 6 PM)
@@ -42,7 +46,7 @@ const ALL_SLOTS = Array.from({ length: 9 }, (_, i) => {
 
 type SlotStatus = 'available' | 'booked' | 'past';
 
-const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack, onBookingSuccess }) => {
+const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack, onBookingSuccess, prefillDates, prefillSlots }) => {
     const { playSuccess, playError } = useUISound();
     const [room, setRoom] = useState<Room | null>(null);
     const [loading, setLoading] = useState(true);
@@ -52,17 +56,29 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
     // Booking form
     const todayStr = new Date().toISOString().slice(0, 10);
-    const [dateMode, setDateMode] = useState<'single' | 'range' | 'custom'>('single');
+    // If prefillDates are provided (from availability filter), use them;
+    // multiple dates → custom mode, single date → single day mode
+    const hasPrefill = prefillDates && prefillDates.length > 0;
+    const [dateMode, setDateMode] = useState<'single' | 'range' | 'custom'>(hasPrefill && prefillDates!.length > 1 ? 'custom' : 'single');
     const [rangeStart, setRangeStart] = useState<string>('');
     const [rangeEnd, setRangeEnd] = useState<string>('');
     
     // selectedDates holds the active array regardless of mode
-    const [selectedDates, setSelectedDates] = useState<string[]>([todayStr]);
+    const [selectedDates, setSelectedDates] = useState<string[]>(hasPrefill ? prefillDates! : [todayStr]);
     const maxDateObj = new Date();
     maxDateObj.setMonth(maxDateObj.getMonth() + 6);
     const maxDateStr = maxDateObj.toISOString().slice(0, 10);
-    const [activeDate, setActiveDate] = useState<string | null>(todayStr);
-    const [dateSlots, setDateSlots] = useState<Record<string, number[]>>({});
+    const [activeDate, setActiveDate] = useState<string | null>(hasPrefill ? prefillDates![0] : todayStr);
+    
+    // Initialize dateSlots with prefillSlots if provided
+    const initialDateSlots: Record<string, number[]> = {};
+    if (hasPrefill && prefillDates && prefillSlots && prefillSlots.length > 0) {
+        prefillDates.forEach(d => {
+            initialDateSlots[d] = [...prefillSlots];
+        });
+    }
+    const [dateSlots, setDateSlots] = useState<Record<string, number[]>>(initialDateSlots);
+    
     const [purpose, setPurpose] = useState('');
     const [attendees, setAttendees] = useState<number | string>(1);
     const [submitting, setSubmitting] = useState(false);
@@ -160,19 +176,20 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
         setCurrentImageIndex(prev => (prev - 1 + gallery.length) % gallery.length);
     };
 
-    const isSlotInBooking = (slotLabel: string, b: BookedSlot) => {
-        if (!b.selected_slots) {
-            // Fallback for legacy (pure range)
-            const [slotStart, slotEnd] = slotLabel.split(' Ã¢â‚¬â€œ ').map(s => s.trim());
-            return b.start_time.slice(0, 5) < slotEnd && b.end_time.slice(0, 5) > slotStart;
+    // Check if a slot overlaps with a booking using start/end times directly
+    const isSlotInBooking = (slot: typeof ALL_SLOTS[0], b: BookedSlot) => {
+        if (b.selected_slots) {
+            // Granular booking: check against each individual selected slot
+            const slotsArray = b.selected_slots.split(',');
+            return slotsArray.some(s => {
+                const [bStart, bEnd] = s.split('-').map(part => part.slice(0, 5));
+                return bStart === slot.start.slice(0, 5) && bEnd === slot.end.slice(0, 5);
+            });
         }
-
-        const [sStart, sEnd] = slotLabel.split(' Ã¢â‚¬â€œ ').map(s => s.trim());
-        const slotsArray = b.selected_slots.split(',');
-        return slotsArray.some(s => {
-            const [bStart, bEnd] = s.split('-').map(part => part.slice(0, 5));
-            return bStart === sStart && bEnd === sEnd;
-        });
+        // Fallback for legacy range-based booking: check hour overlap
+        const bStartH = parseInt(b.start_time.split(':')[0]);
+        const bEndH = parseInt(b.end_time.split(':')[0]);
+        return slot.startH >= bStartH && slot.startH < bEndH;
     };
 
     // Determine slot status
@@ -191,7 +208,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
         // Check if booked (any existing booking overlaps this slot)
         for (const booked of bookedSlots) {
-            if (isSlotInBooking(slot.label, booked)) {
+            if (isSlotInBooking(slot, booked)) {
                 return 'booked';
             }
         }
@@ -201,8 +218,9 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
     // Find the booking that overlaps a given slot
     const getMatchingBooking = (slot: typeof ALL_SLOTS[0]): BookedSlot | undefined => {
-        return bookedSlots.find(b => isSlotInBooking(slot.label, b));
+        return bookedSlots.find(b => isSlotInBooking(slot, b));
     };
+
 
     const handleSlotClick = (index: number) => {
         if (!activeDate) return;
@@ -329,9 +347,9 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                 )}
                 <form onSubmit={handleBook} className="space-y-5">
                     <div className="flex bg-theme-bg p-1 rounded-xl border border-theme-border">
-                        <button type="button" onClick={() => { setDateMode('single'); setSelectedDates([todayStr]); setActiveDate(todayStr); setDateSlots({}); }} className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'single' ? 'bg-theme-card shadow text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}>Single Day</button>
-                        <button type="button" onClick={() => { setDateMode('range'); setRangeStart(''); setRangeEnd(''); setSelectedDates([]); setActiveDate(null); setDateSlots({}); }} className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'range' ? 'bg-theme-card shadow text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}>Consecutive Days</button>
-                        <button type="button" onClick={() => { setDateMode('custom'); setSelectedDates([]); setActiveDate(null); setDateSlots({}); }} className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'custom' ? 'bg-theme-card shadow text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}>Custom Days</button>
+                        <button type="button" onClick={() => { setDateMode('single'); setSelectedDates([todayStr]); setActiveDate(todayStr); setDateSlots({}); }} className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'single' ? 'bg-theme-card shadow-[0_8px_32px_0_rgba(31,38,135,0.05)] text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}>Single Day</button>
+                        <button type="button" onClick={() => { setDateMode('range'); setRangeStart(''); setRangeEnd(''); setSelectedDates([]); setActiveDate(null); setDateSlots({}); }} className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'range' ? 'bg-theme-card shadow-[0_8px_32px_0_rgba(31,38,135,0.05)] text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}>Consecutive Days</button>
+                        <button type="button" onClick={() => { setDateMode('custom'); setSelectedDates([]); setActiveDate(null); setDateSlots({}); }} className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${dateMode === 'custom' ? 'bg-theme-card shadow-[0_8px_32px_0_rgba(31,38,135,0.05)] text-primary border border-theme-border' : 'text-theme-secondary opacity-50 hover:opacity-100'}`}>Custom Days</button>
                     </div>
                     {dateMode === 'single' && (
                         <div>
@@ -362,7 +380,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             <label className="block text-xs font-bold text-theme-secondary opacity-50 uppercase mb-2">Selected Dates ({selectedDates.length})</label>
                             <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
                                 {selectedDates.map(date => (
-                                    <div key={date} onClick={() => setActiveDate(date)} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer transition-all border ${activeDate === date ? 'bg-primary text-white border-primary shadow-md' : 'bg-primary/5 text-primary border-primary/20 hover:bg-primary/10'}`}>
+                                    <div key={date} onClick={() => setActiveDate(date)} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer transition-all border ${activeDate === date ? 'bg-primary text-white border-primary shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]' : 'bg-primary/5 text-primary border-primary/20 hover:bg-primary/10'}`}>
                                         {formatLocalDate(date)}
                                         {dateMode === 'custom' && (
                                             <button type="button" onClick={e => { e.stopPropagation(); const nd = selectedDates.filter(d => d !== date); setSelectedDates(nd); if (activeDate === date) setActiveDate(nd.length > 0 ? nd[0] : null); setDateSlots(prev => { const s = { ...prev }; delete s[date]; return s; }); }} className={`ml-1 hover:text-red-500 ${activeDate === date ? 'text-white/70' : ''}`}><X size={12} weight="bold" /></button>
@@ -392,7 +410,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                     let cls = 'relative flex items-center justify-center sm:justify-start gap-2 px-2 sm:px-3 py-3 rounded-xl text-[11px] sm:text-xs font-bold transition-all border-2 ';
                                     if (status === 'past') cls += 'bg-theme-bg text-theme-secondary opacity-30 border-theme-border cursor-not-allowed line-through';
                                     else if (status === 'booked') cls += 'bg-rose-50 dark:bg-rose-950/20 text-rose-500 border-rose-100 dark:border-rose-900/30 cursor-pointer hover:bg-rose-100';
-                                    else if (selected) cls += 'bg-primary text-white border-primary shadow-lg shadow-primary/25 scale-[1.02]';
+                                    else if (selected) cls += 'bg-primary text-white border-primary shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/25 scale-[1.02]';
                                     else cls += 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 border-emerald-100 dark:border-emerald-900/30 hover:bg-emerald-100 cursor-pointer hover:scale-[1.02] active:scale-95';
                                     return (
                                         <div key={slot.start} className="relative w-full">
@@ -403,7 +421,67 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                                 {selected && <Check size={14} weight="bold" />}
                                                 {status !== 'booked' && <span>{slot.label}</span>}
                                             </button>
-                                            {status === 'booked' && viewingBookedSlot === index && (() => { const mb = getMatchingBooking(slot); if (!mb) return null; return (<div className="absolute z-50 left-0 right-0 top-full mt-1 bg-theme-card border-2 border-rose-200 dark:border-rose-900/50 rounded-xl shadow-xl p-4"><div className="flex justify-between items-start mb-2"><span className="text-xs font-black text-rose-500 uppercase">Booked</span><button onClick={e => { e.stopPropagation(); setViewingBookedSlot(null); }} className="text-theme-secondary opacity-50 hover:opacity-100"><X size={14} /></button></div><p className="text-sm font-bold text-theme-primary">{mb.user_name || 'Unknown'}</p>{mb.email && <p className="text-xs text-theme-secondary opacity-60">{mb.email}</p>}{mb.purpose && <p className="text-xs text-theme-secondary opacity-80 mt-1">📋 {mb.purpose}</p>}<p className="text-xs text-theme-secondary opacity-40 mt-1">{mb.start_time.slice(0,5)} – {mb.end_time.slice(0,5)}</p></div>); })()}
+                                            {status === 'booked' && viewingBookedSlot === index && (() => {
+                                                const mb = getMatchingBooking(slot);
+                                                if (!mb) return null;
+                                                return (
+                                                    <div className="absolute z-50 left-0 right-0 top-full mt-2 bg-theme-card border-2 border-rose-300 dark:border-rose-700 rounded-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] overflow-hidden">
+                                                        {/* Header */}
+                                                        <div className="bg-rose-500 px-4 py-2.5 flex justify-between items-center">
+                                                            <div className="flex items-center gap-2">
+                                                                <Lock size={13} className="text-white" />
+                                                                <span className="text-xs font-black text-white uppercase tracking-wider">Slot Booked</span>
+                                                            </div>
+                                                            <button onClick={e => { e.stopPropagation(); setViewingBookedSlot(null); }} className="text-white/70 hover:text-white transition-colors">
+                                                                <X size={14} />
+                                                            </button>
+                                                        </div>
+                                                        {/* Body */}
+                                                        <div className="p-4 space-y-2.5">
+                                                            {/* Time */}
+                                                            <div className="flex items-center gap-2 text-xs">
+                                                                <Clock size={13} className="text-rose-500 shrink-0" />
+                                                                <span className="font-bold text-theme-primary">{mb.start_time.slice(0,5)} – {mb.end_time.slice(0,5)}</span>
+                                                            </div>
+                                                            <div className="border-t border-theme-border pt-2 space-y-2">
+                                                                {/* Name */}
+                                                                <div className="flex items-start gap-2 text-xs">
+                                                                    <span className="text-theme-secondary opacity-60 font-semibold w-14 shrink-0">👤 Name</span>
+                                                                    <span className="text-theme-primary font-bold">{mb.user_name || 'Unknown User'}</span>
+                                                                </div>
+                                                                {/* Email */}
+                                                                {mb.email && (
+                                                                    <div className="flex items-start gap-2 text-xs">
+                                                                        <span className="text-theme-secondary opacity-60 font-semibold w-14 shrink-0">📧 Email</span>
+                                                                        <span className="text-theme-primary break-all">{mb.email}</span>
+                                                                    </div>
+                                                                )}
+                                                                {/* Phone */}
+                                                                {mb.phone_no && (
+                                                                    <div className="flex items-start gap-2 text-xs">
+                                                                        <span className="text-theme-secondary opacity-60 font-semibold w-14 shrink-0">📞 Phone</span>
+                                                                        <span className="text-theme-primary">{mb.phone_no}</span>
+                                                                    </div>
+                                                                )}
+                                                                {/* Purpose */}
+                                                                {mb.purpose && (
+                                                                    <div className="flex items-start gap-2 text-xs">
+                                                                        <span className="text-theme-secondary opacity-60 font-semibold w-14 shrink-0">📋 Purpose</span>
+                                                                        <span className="text-theme-primary">{mb.purpose}</span>
+                                                                    </div>
+                                                                )}
+                                                                {/* Status */}
+                                                                <div className="flex items-center gap-2 text-xs pt-1 border-t border-theme-border">
+                                                                    <span className="text-theme-secondary opacity-60 font-semibold w-14 shrink-0">Status</span>
+                                                                    <span className="px-2 py-0.5 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-full font-bold text-[10px] uppercase tracking-wide">
+                                                                        {mb.status || 'Confirmed'}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })()}
                                         </div>
                                     );
                                 })}
@@ -431,7 +509,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                         <label className="block text-sm font-semibold text-theme-primary mb-1.5">Purpose</label>
                         <textarea rows={2} value={purpose} onChange={e => setPurpose(e.target.value)} className="w-full text-sm p-3 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg text-theme-primary" placeholder="Meeting purpose..." />
                     </div>
-                    <button type="submit" disabled={submitting || totalSelectedHours === 0 || (room && Number(attendees) > room.capacity) || selectedDates.length === 0} className="w-full py-4 bg-secondary hover:bg-secondary/90 text-white text-lg font-bold rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed">
+                    <button type="submit" disabled={submitting || totalSelectedHours === 0 || (room && Number(attendees) > room.capacity) || selectedDates.length === 0} className="w-full py-4 bg-secondary hover:bg-secondary/90 text-white text-lg font-bold rounded-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-blue-200 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed">
                         {submitting ? 'Booking...' : (room && Number(attendees) > room.capacity) ? 'Capacity Exceeded' : totalSelectedHours === 0 ? 'Select a time slot' : 'Book This Space'}
                     </button>
                 </form>
@@ -477,7 +555,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
             {/* Image Gallery / Hero */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 h-[260px] md:h-[400px] overflow-hidden">
-                <div className="md:col-span-2 h-full rounded-xl overflow-hidden bg-slate-900 group relative shadow-2xl">
+                <div className="md:col-span-2 h-full rounded-xl overflow-hidden bg-slate-900 group relative shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]">
                     {gallery.length > 0 ? (
                         <>
                             {/* Slides */}
@@ -674,7 +752,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                             <div className="grid grid-cols-2 gap-4">
                                 {amenityList.map((item, idx) => (
                                     <div key={idx} className="flex items-center gap-3 p-3 rounded-lg hover:bg-theme-bg transition-colors">
-                                        <div className="text-primary bg-theme-card p-2 rounded shadow-sm border border-theme-border">
+                                        <div className="text-primary bg-theme-card p-2 rounded shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] border border-theme-border">
                                             {amenityIcons[item] || <SquaresFour size={20} />}
                                         </div>
                                         <span className="text-theme-secondary font-medium">{item}</span>
@@ -718,7 +796,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                     </span>
                                 </div>
 
-                                <div className="bg-theme-card border border-theme-border rounded-2xl overflow-hidden shadow-sm">
+                                <div className="bg-theme-card border border-theme-border rounded-2xl overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]">
                                     {/* Scrollable grid container with right-fade hint */}
                                     <div className="relative">
                                         {/* Fade-right gradient scroll hint */}
@@ -729,7 +807,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                         >
                                             {/* Outer room border */}
                                             <div
-                                                className="relative border-2 border-theme-border rounded-xl bg-white/60 dark:bg-slate-900/60 shadow-inner mx-auto"
+                                                className="relative border-2 border-theme-border rounded-xl bg-white/60 dark:bg-slate-900/60 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-inner mx-auto"
                                                 style={{ width: GRID_W, height: GRID_H, minWidth: GRID_W }}
                                             >
                                                 {/* Background Grid lines */}
@@ -771,7 +849,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                                                 }}
                                                                 title={info.label}
                                                             >
-                                                                <span className="text-[13px] sm:text-[15px] leading-none drop-shadow-sm">{info.icon}</span>
+                                                                <span className="text-[13px] sm:text-[15px] leading-none drop-shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]">{info.icon}</span>
                                                                 <span className="text-[6.5px] sm:text-[7.5px] font-black uppercase tracking-wider mt-0.5 opacity-80 whitespace-nowrap overflow-hidden text-ellipsis px-0.5 w-full text-center">
                                                                     {info.label}
                                                                 </span>
@@ -823,7 +901,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                         <button
                             type="button"
                             onClick={() => setBookOpen(prev => !prev)}
-                            className="w-full md:hidden flex items-center justify-between px-6 py-4 bg-gradient-to-r from-secondary to-primary text-white font-bold text-base rounded-2xl shadow-lg shadow-blue-200 dark:shadow-blue-900/30 transition-all active:scale-[0.99] hover:opacity-95"
+                            className="w-full md:hidden flex items-center justify-between px-6 py-4 bg-gradient-to-r from-secondary to-primary text-white font-bold text-base rounded-2xl shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-blue-200 dark:shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-blue-900/30 transition-all active:scale-[0.99] hover:opacity-95"
                         >
                             <span className="flex items-center gap-2">
                                 <Check size={20} weight="bold" />
@@ -834,7 +912,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
                         {/* DESKTOP VIEW: direct card, shown on md screens and up */}
                         <div className="hidden md:block">
-                            <div className="bg-theme-card rounded-2xl border border-theme-border shadow-xl overflow-hidden mt-8">
+                            <div className="bg-theme-card rounded-2xl border border-theme-border shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] overflow-hidden mt-8">
                                 <div className="flex items-center justify-between px-5 py-4 border-b border-theme-border bg-gradient-to-r from-secondary/10 to-primary/5">
                                     <div>
                                         <h3 className="text-lg font-black text-theme-primary">Book a Space</h3>
@@ -852,7 +930,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                     className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-fade-in" 
                                     onClick={() => setBookOpen(false)}
                                 />
-                                <div className="relative z-10 w-full max-w-lg bg-theme-bg rounded-t-[32px] min-[500px]:rounded-[32px] shadow-2xl overflow-hidden animate-slide-up-modal flex flex-col max-h-[88vh]">
+                                <div className="relative z-10 w-full max-w-lg bg-theme-bg rounded-t-[32px] min-[500px]:rounded-[32px] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] overflow-hidden animate-slide-up-modal flex flex-col max-h-[88vh]">
                                     {/* Pull Handle for Mobile */}
                                     <div className="flex justify-center pt-3 shrink-0">
                                         <div className="w-12 h-1.5 bg-theme-border rounded-full opacity-40" />
@@ -865,7 +943,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                                         <button 
                                             type="button" 
                                             onClick={() => setBookOpen(false)} 
-                                            className="p-3 bg-theme-bg rounded-xl text-theme-secondary border border-theme-border hover:bg-theme-card active:scale-95 transition-all shadow-sm"
+                                            className="p-3 bg-theme-bg rounded-xl text-theme-secondary border border-theme-border hover:bg-theme-card active:scale-95 transition-all shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]"
                                         >
                                             <X size={20} weight="bold" />
                                         </button>

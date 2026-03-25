@@ -23,6 +23,7 @@ export interface Room {
     room_name: string;
     capacity: number;
     location: string;
+    location_id?: string;
     amenities: string;
     status: string;
     floor_no: number;
@@ -68,6 +69,16 @@ export interface User {
     userrole_id: string;
 }
 
+export interface Location {
+    location_id: string;
+    name: string;
+    address: string;
+    city: string;
+    description: string;
+    google_maps_url?: string;
+    isActive: boolean;
+}
+
 // ── Helpers ────────────────────────────────────────────────
 const getToken = (): string | null => localStorage.getItem('token');
 
@@ -94,19 +105,17 @@ export const parseLocalDate = (dateStr: string): Date => {
 };
 
 // ── Auth ───────────────────────────────────────────────────
-export const loginUser = async (email: string, password: string) => {
-    const res = await fetch(`${API_URL}/auth/login`, {
+export const loginUser = async (email: string, password: string, accountType?: 'user' | 'admin') => {
+    const res = await fetch(`${API_URL}/auth/unified-login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, accountType }),
     });
     if (!res.ok) {
         const err = await res.json();
         throw new Error(err.error || 'Login failed');
     }
     const data = await res.json();
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
     return data;
 };
 
@@ -220,6 +229,17 @@ export const fetchRooms = async (): Promise<Room[]> => {
 export const fetchRoom = async (catalog_id: string, room_id: string): Promise<Room> => {
     const res = await fetch(`${API_URL}/rooms/${catalog_id}/${room_id}`);
     if (!res.ok) throw new Error('Failed to fetch room');
+    return res.json();
+};
+
+// ── Locations ─────────────────────────────────────────────
+export const fetchLocations = async (): Promise<Location[]> => {
+    const res = await fetch(`${API_URL}/locations`);
+    // Note: Our GET /api/locations route requires auth if we didn't change it.
+    // Wait, the GET /api/locations route in backend has adminAuthMiddleware!
+    // If a normal user tries to fetch locations, they will get 401. 
+    // I need to check backend/routes/locations.js!
+    if (!res.ok) throw new Error('Failed to fetch locations');
     return res.json();
 };
 

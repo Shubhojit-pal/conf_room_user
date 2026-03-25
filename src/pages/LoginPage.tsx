@@ -25,6 +25,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [accountType, setAccountType] = useState<'user' | 'admin'>('user');
 
     // Register form
     const [regName, setRegName] = useState('');
@@ -40,7 +41,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
         setLoading(true);
         setError('');
         try {
-            await login(email, password);
+            await login(email, password, accountType);
             playSuccess();
             onSuccess();
         } catch (err: any) {
@@ -107,7 +108,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
     };
 
     const content = (
-        <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 relative">
+        <div className="bg-white rounded-2xl shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] w-full max-w-md p-8 relative">
             {isModal && onClose && (
                 <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 transition-colors">
                     <X size={24} />
@@ -128,13 +129,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
             <div className="flex rounded-lg bg-slate-100 p-1 mb-6">
                 <button
                     onClick={() => { setMode('login'); setError(''); }}
-                    className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${mode === 'login' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                    className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${mode === 'login' ? 'bg-white text-primary shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]' : 'text-slate-500 hover:text-slate-700'}`}
                 >
                     Sign In
                 </button>
                 <button
                     onClick={() => { setMode('register'); setError(''); }}
-                    className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${mode === 'register' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                    className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${mode === 'register' ? 'bg-white text-primary shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]' : 'text-slate-500 hover:text-slate-700'}`}
                 >
                     Register
                 </button>
@@ -175,7 +176,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-lg transition-all disabled:opacity-60 shadow-md"
+                            className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-lg transition-all disabled:opacity-60 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]"
                         >
                             {loading ? 'Verifying...' : 'Verify Account'}
                         </button>
@@ -196,6 +197,36 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
                 </div>
             ) : mode === 'login' ? (
                 <form onSubmit={handleLogin} className="space-y-4">
+                    <div className="flex items-center gap-6 mb-2 py-2 px-1">
+                        <label className="flex items-center gap-2 cursor-pointer group">
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${accountType === 'user' ? 'border-primary' : 'border-slate-300 group-hover:border-primary/50'}`}>
+                                {accountType === 'user' && <div className="w-2.5 h-2.5 bg-primary rounded-full"></div>}
+                            </div>
+                            <input 
+                                type="radio" 
+                                name="accountType" 
+                                value="user" 
+                                checked={accountType === 'user'} 
+                                onChange={() => setAccountType('user')}
+                                className="hidden"
+                            />
+                            <span className={`text-sm font-medium transition-colors ${accountType === 'user' ? 'text-slate-900' : 'text-slate-500 group-hover:text-slate-700'}`}>User</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer group">
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${accountType === 'admin' ? 'border-primary' : 'border-slate-300 group-hover:border-primary/50'}`}>
+                                {accountType === 'admin' && <div className="w-2.5 h-2.5 bg-primary rounded-full"></div>}
+                            </div>
+                            <input 
+                                type="radio" 
+                                name="accountType" 
+                                value="admin" 
+                                checked={accountType === 'admin'} 
+                                onChange={() => setAccountType('admin')}
+                                className="hidden"
+                            />
+                            <span className={`text-sm font-medium transition-colors ${accountType === 'admin' ? 'text-slate-900' : 'text-slate-500 group-hover:text-slate-700'}`}>Admin</span>
+                        </label>
+                    </div>
                     <div className="relative">
                         <EnvelopeSimple size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input
@@ -239,7 +270,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-lg transition-all disabled:opacity-60 shadow-md hover:shadow-lg transform active:scale-[0.98]"
+                        className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-lg transition-all disabled:opacity-60 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] transform active:scale-[0.98]"
                     >
                         {loading ? 'Signing in...' : 'Sign In'}
                     </button>
@@ -284,7 +315,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onNavigate, isModal, o
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-lg transition-all disabled:opacity-60 shadow-md hover:shadow-lg"
+                        className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-lg transition-all disabled:opacity-60 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]"
                     >
                         {loading ? 'Creating account...' : 'Create Account'}
                     </button>

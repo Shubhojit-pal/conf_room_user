@@ -137,7 +137,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ onNavigate }) => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Peak Booking Hours */}
-                    <div className="bg-theme-card rounded-2xl p-6 shadow-sm border border-theme-border">
+                    <div className="bg-theme-card rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] border border-theme-border">
                         <div className="flex items-center gap-4 mb-8">
                             <div className="p-2 rounded-lg bg-secondary/10 text-secondary">
                                 <ChartBar size={24} weight="fill" />
@@ -176,7 +176,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ onNavigate }) => {
                     </div>
 
                     {/* Most Booked Locations */}
-                    <div className="bg-theme-card rounded-2xl p-6 shadow-sm border border-theme-border flex flex-col">
+                    <div className="bg-theme-card rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] border border-theme-border flex flex-col">
                         <div className="flex items-center gap-4 mb-8">
                             <div className="p-2 rounded-lg bg-primary/10 text-primary">
                                 <MapPin size={24} weight="fill" />

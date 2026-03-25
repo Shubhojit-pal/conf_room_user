@@ -14,8 +14,8 @@ export default {
                     light: '#d1fae5', // emerald-100
                 },
                 secondary: {
-                    DEFAULT: '#2563eb', // blue-600
-                    light: '#dbeafe', // blue-100
+                    DEFAULT: '#059669', // emerald-600
+                    light: '#d1fae5', // emerald-100
                 },
                 accent: {
                     purple: '#8b5cf6', // violet-500

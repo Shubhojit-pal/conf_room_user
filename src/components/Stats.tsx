@@ -84,7 +84,7 @@ const Stats: React.FC<StatsProps> = ({ onNavigate }) => {
                     <button 
                         key={index} 
                         onClick={() => stat.route && onNavigate && onNavigate(stat.route)}
-                        className="bg-theme-card rounded-2xl p-4 sm:p-6 shadow-sm border border-theme-border flex flex-col items-start gap-3 sm:gap-4 hover:shadow-md hover:border-theme-border/70 transition-all text-left w-full group focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="bg-theme-card rounded-2xl p-4 sm:p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] border border-theme-border flex flex-col items-start gap-3 sm:gap-4 hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] hover:border-theme-border/70 transition-all text-left w-full group focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     >
                         <div className={`p-2 sm:p-3 rounded-lg ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform`}>
                             <div className="scale-75 sm:scale-100 origin-top-left flex items-center justify-center">

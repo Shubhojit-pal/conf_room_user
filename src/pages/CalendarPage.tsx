@@ -260,13 +260,20 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
     };
 
     // Slot range helpers
-    const getCalendarSlotStatus = (slot: { startH: number }) => {
+    const getCalendarSlotStatus = (slot: { startH: number, start: string, end: string }) => {
         if (!activeDate) return 'available';
         const todayStr = new Date().toISOString().slice(0, 10);
         const now = new Date();
         const isToday = activeDate === todayStr;
         if (isToday && slot.startH <= now.getHours()) return 'past';
         const isBooked = roomBookedSlots.some(b => {
+            if (b.selected_slots) {
+                const slotsArray = b.selected_slots.split(',');
+                return slotsArray.some(s => {
+                    const [bStart, bEnd] = s.split('-').map(part => part.slice(0, 5));
+                    return bStart === slot.start.slice(0, 5) && bEnd === slot.end.slice(0, 5);
+                });
+            }
             const bStartH = parseInt(b.start_time.split(':')[0]);
             const bEndH = parseInt(b.end_time.split(':')[0]);
             return slot.startH >= bStartH && slot.startH < bEndH;
@@ -413,7 +420,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
             </div>
 
             {/* ── DESKTOP: Filters ── */}
-            <div className="hidden md:block bg-theme-card border border-theme-border rounded-xl p-3 sm:p-5 mb-4 sm:mb-6 shadow-sm">
+            <div className="hidden md:block bg-theme-card border border-theme-border rounded-xl p-3 sm:p-5 mb-4 sm:mb-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 mb-4">
                     <div>
                         <label className="block text-sm font-medium text-theme-primary opacity-70 mb-2">Filter by Location</label>
@@ -467,7 +474,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                 setFilterLocation(tempLocation);
                                 setFilterTimeSlot(tempTimeSlot);
                             }}
-                            className="text-sm bg-primary hover:bg-primary-dark text-white font-bold px-6 py-2 rounded-lg transition-colors shadow-sm shadow-primary/20"
+                            className="text-sm bg-primary hover:bg-primary-dark text-white font-bold px-6 py-2 rounded-lg transition-colors shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/20"
                         >
                             Apply Filter
                         </button>
@@ -477,7 +484,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
 
             {/* ── MOBILE: Floating Action Button (FAB) for Filters ── */}
             <button
-                className="md:hidden fixed bottom-[90px] right-6 z-[60] bg-primary text-white p-4 rounded-full shadow-lg shadow-primary/30 active:scale-95 transition-transform"
+                className="md:hidden fixed bottom-[90px] right-6 z-[60] bg-primary text-white p-4 rounded-full shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/30 active:scale-95 transition-transform"
                 onClick={() => setIsMobileFilterOpen(true)}
             >
                 <div className="relative">
@@ -494,7 +501,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
             {/* ── MOBILE: Filter Modal ── */}
             {isMobileFilterOpen && (
                 <div className="md:hidden fixed inset-0 z-[100] bg-theme-bg/60 backdrop-blur-sm flex items-end justify-center p-4">
-                    <div className="bg-theme-card w-full max-w-md rounded-3xl p-6 shadow-2xl relative animate-in slide-in-from-bottom-8 duration-300 border border-theme-border">
+                    <div className="bg-theme-card w-full max-w-md rounded-3xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] relative animate-in slide-in-from-bottom-8 duration-300 border border-theme-border">
                         <button
                             onClick={() => setIsMobileFilterOpen(false)}
                             className="absolute top-4 right-4 p-2 text-theme-secondary hover:text-theme-primary bg-theme-bg rounded-full border border-theme-border"
@@ -556,7 +563,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                         setFilterTimeSlot(tempTimeSlot);
                                         setIsMobileFilterOpen(false);
                                     }}
-                                    className="flex-[2] bg-primary hover:bg-primary-dark text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-transform active:scale-[0.98]"
+                                    className="flex-[2] bg-primary hover:bg-primary-dark text-white font-bold py-4 rounded-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/20 transition-transform active:scale-[0.98]"
                                 >
                                     Apply Filters
                                 </button>
@@ -566,35 +573,57 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                 </div>
             )}
 
-            {/* Book Now Banner */}
+            {/* ── Floating Book Now Bar (fixed bottom) ── */}
             {selectedDates.length > 0 && (
-                <div className="bg-primary/10 border border-primary/30 rounded-xl px-6 py-4 mb-6 flex items-center justify-between shadow-sm">
-                    <div>
-                        <p className="text-primary font-bold text-sm">{selectedDates.length} date{selectedDates.length > 1 ? 's' : ''} selected</p>
-                        <p className="text-primary/70 text-xs mt-0.5">{selectedDates.sort().join(', ')}</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={() => setSelectedDates([])}
-                            className="text-sm text-primary/70 hover:text-primary font-medium transition-colors"
-                        >
-                            Clear
-                        </button>
-                        <button
-                            onClick={() => { setIsModalOpen(true); }}
-                            className="bg-primary hover:bg-primary-dark text-white font-bold px-6 py-2.5 rounded-lg transition-colors shadow-md shadow-primary/20"
-                        >
-                            Book Now
-                        </button>
+                <div className="fixed bottom-0 left-0 right-0 z-[80] px-4 pb-4 pt-0 pointer-events-none">
+                    <div className="max-w-3xl mx-auto pointer-events-auto">
+                        <div className="bg-theme-card/95 backdrop-blur-md border border-primary/30 rounded-2xl px-6 py-4 flex items-center justify-between shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/20 ring-1 ring-primary/10">
+                            <div>
+                                <p className="text-primary font-bold text-sm">
+                                    {selectedDates.length} date{selectedDates.length > 1 ? 's' : ''} selected
+                                </p>
+                                <p className="text-primary/60 text-xs mt-0.5 truncate max-w-[260px] sm:max-w-none">
+                                    {selectedDates.sort().join(' · ')}
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-3 shrink-0">
+                                <button
+                                    onClick={() => setSelectedDates([])}
+                                    className="text-sm text-theme-secondary hover:text-rose-500 font-semibold transition-colors px-3 py-1.5 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30"
+                                >
+                                    Clear
+                                </button>
+                                <button
+                                    onClick={() => { 
+                                        if (filterTimeSlot !== 'all') {
+                                            const slotIdx = ALL_SLOTS.findIndex((s: {start: string}) => s.start === filterTimeSlot);
+                                            if (slotIdx >= 0) {
+                                                const newDateSlots: Record<string, number[]> = {};
+                                                selectedDates.forEach((d: string) => {
+                                                    newDateSlots[d] = [slotIdx];
+                                                });
+                                                setDateSlots(newDateSlots);
+                                            }
+                                        }
+                                        setIsModalOpen(true); 
+                                    }}
+                                    className="bg-primary hover:bg-primary-dark text-white font-bold px-6 py-2.5 rounded-xl transition-all shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/30 active:scale-95 flex items-center gap-2"
+                                >
+                                    Book Now →
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}
+
+
 
             {/* Detail modal for single-date timeline */}
             {isDetailOpen && detailDate && (
                 <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-theme-bg/60 backdrop-blur-sm" onClick={() => setIsDetailOpen(false)}></div>
-                    <div className="bg-theme-card rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative z-10 shadow-2xl p-6 border border-theme-border">
+                    <div className="bg-theme-card rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative z-10 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] p-6 border border-theme-border">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-lg font-bold text-theme-primary">Details for {detailDate}</h3>
                             <button onClick={() => setIsDetailOpen(false)} className="text-theme-secondary hover:text-theme-primary transition-colors">Close</button>
@@ -665,7 +694,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
             )}
 
             {/* Calendar Grid */}
-            <div className="bg-theme-card rounded-2xl border border-theme-border shadow-sm p-3 sm:p-6 lg:p-8">
+            <div className="bg-theme-card rounded-2xl border border-theme-border shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] p-3 sm:p-6 lg:p-8">
                 {/* Calendar Header with View Options */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-8 gap-3">
                     <div>
@@ -689,7 +718,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                 <CaretDown size={16} />
                             </button>
                             {isViewOpen && (
-                                <div className="absolute top-full mt-1 right-0 bg-theme-card border border-theme-border rounded-lg shadow-lg overflow-hidden z-10">
+                                <div className="absolute top-full mt-1 right-0 bg-theme-card border border-theme-border rounded-lg shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] overflow-hidden z-10">
                                     {(['day', 'week', 'month'] as ViewType[]).map((view) => (
                                         <button
                                             key={view}
@@ -777,11 +806,11 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                                 handleDateClick(day);
                                             }}
                                             className={`
-                                                aspect-[4/3] rounded-lg sm:rounded-xl border-2 flex flex-col p-1 sm:p-2 lg:p-3 transition-all hover:shadow-md
+                                                aspect-[4/3] rounded-lg sm:rounded-xl border-2 flex flex-col p-1 sm:p-2 lg:p-3 transition-all hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]
                                                 ${isPast
                                                     ? 'bg-theme-bg/50 border-theme-border text-theme-secondary opacity-40 cursor-not-allowed'
                                                     : isSelected
-                                                        ? 'bg-primary/10 border-primary ring-1 sm:ring-2 ring-primary/40 cursor-pointer shadow-md'
+                                                        ? 'bg-primary/10 border-primary ring-1 sm:ring-2 ring-primary/40 cursor-pointer shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]'
                                                         : `${statusColors[status]} cursor-pointer`
                                                 }
                                             `}
@@ -808,7 +837,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
 
                                         {/* Hover Tooltip for Booked */}
                                         {hoveredBooking && hoveredDate === dateStr && (dayBookings.length > 0) && !isPast && (
-                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-theme-bg text-theme-primary px-4 py-3 rounded-lg shadow-lg z-20 whitespace-nowrap pointer-events-none border border-theme-border">
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-theme-bg text-theme-primary px-4 py-3 rounded-lg shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] z-20 whitespace-nowrap pointer-events-none border border-theme-border">
                                                 <p className="font-semibold text-sm">{hoveredBooking.room}</p>
                                                 <p className="text-xs text-theme-secondary">Booked by: {hoveredBooking.bookedBy}</p>
                                                 <div className="text-[10px] text-theme-secondary opacity-70 mb-1 flex flex-col">
@@ -833,7 +862,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                                     setIsDetailOpen(true);
                                                     setActiveDateOptions(null);
                                                 }}
-                                                className="absolute top-2 right-2 z-30 bg-theme-bg/90 border border-theme-border text-theme-secondary hover:text-primary hover:border-primary text-[10px] font-bold px-2 py-0.5 rounded-lg shadow-sm transition-colors"
+                                                className="absolute top-2 right-2 z-30 bg-theme-bg/90 border border-theme-border text-theme-secondary hover:text-primary hover:border-primary text-[10px] font-bold px-2 py-0.5 rounded-lg shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] transition-colors"
                                             >
                                                 Details
                                             </button>
@@ -850,9 +879,9 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                     <div className="week-view">
 
                         {/* ── MOBILE: Compact Weekly Grid ─────────────────── */}
-                        <div className="md:hidden bg-theme-card rounded-2xl border border-theme-border shadow-sm overflow-hidden flex flex-col h-[65vh] min-h-[400px]">
+                        <div className="md:hidden bg-theme-card rounded-2xl border border-theme-border shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] overflow-hidden flex flex-col h-[65vh] min-h-[400px]">
                             {/* Header: Days */}
-                            <div className="flex border-b border-theme-border bg-theme-bg shrink-0 shadow-sm z-10">
+                            <div className="flex border-b border-theme-border bg-theme-bg shrink-0 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] z-10">
                                 <div className="w-10 shrink-0 border-r border-theme-border flex items-center justify-center bg-theme-card">
                                     <CalendarBlank size={16} className="text-slate-300 dark:text-slate-600" weight="fill" />
                                 </div>
@@ -863,7 +892,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                     return (
                                         <div key={dateStr} className={`flex-1 flex flex-col items-center justify-center py-2 border-r border-theme-border last:border-0 ${isToday ? 'bg-primary/10' : ''}`}>
                                             <span className={`text-[9px] font-bold uppercase ${isToday ? 'text-primary' : 'text-theme-secondary opacity-50'}`}>{dayName}</span>
-                                            <span className={`text-xs font-black mt-0.5 flex items-center justify-center w-5 h-5 rounded-full ${isToday ? 'bg-primary text-white shadow-sm shadow-primary/30' : 'text-theme-primary'}`}>
+                                            <span className={`text-xs font-black mt-0.5 flex items-center justify-center w-5 h-5 rounded-full ${isToday ? 'bg-primary text-white shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/30' : 'text-theme-primary'}`}>
                                                 {date.getDate()}
                                             </span>
                                         </div>
@@ -913,7 +942,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                                     {hasBooking && cellBookings.map((b, i) => (
                                                         <div 
                                                             key={b.id + i}
-                                                            className={`absolute inset-[1.5px] rounded-[4px] border shadow-sm flex items-center justify-center p-0.5 overflow-hidden 
+                                                            className={`absolute inset-[1.5px] rounded-[4px] border shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] flex items-center justify-center p-0.5 overflow-hidden 
                                                                 ${b.status === 'booked' ? 'bg-emerald-100 dark:bg-emerald-900/30 border-emerald-300 dark:border-emerald-800' : 'bg-amber-100 dark:bg-amber-900/30 border-amber-300 dark:border-amber-800'}`}
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
@@ -956,7 +985,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                             >
                                                 <p className={`text-[10px] font-bold uppercase tracking-widest ${isToday ? 'text-primary' : 'text-theme-secondary opacity-50'}`}>{dayName}</p>
                                                 <p className={`text-xl font-black mt-0.5 ${isToday
-                                                    ? 'bg-primary text-white w-9 h-9 rounded-full flex items-center justify-center mx-auto shadow-sm shadow-primary/30'
+                                                    ? 'bg-primary text-white w-9 h-9 rounded-full flex items-center justify-center mx-auto shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/30'
                                                     : isPast ? 'text-theme-secondary opacity-30' : 'text-theme-primary'
                                                     }`}>{date.getDate()}</p>
                                             </div>
@@ -1002,7 +1031,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                                     >
                                                         {hasBooking && booking && (
                                                             <div
-                                                                className={`h-full min-h-[44px] rounded-lg px-2 py-1.5 border-l-4 cursor-pointer transition-all hover:shadow-md
+                                                                className={`h-full min-h-[44px] rounded-lg px-2 py-1.5 border-l-4 cursor-pointer transition-all hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]
                                                                     ${booking.status === 'booked'
                                                                         ? 'bg-green-50 dark:bg-green-900/20 border-green-500 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900/40'
                                                                         : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-500 dark:border-yellow-800 hover:bg-yellow-100 dark:hover:bg-yellow-900/40'
@@ -1050,11 +1079,11 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                     return (
                         <div className="day-view">
                             {/* Day Header */}
-                            <div className={`p-5 rounded-xl mb-6 border-2 flex items-center justify-between shadow-sm
+                            <div className={`p-5 rounded-xl mb-6 border-2 flex items-center justify-between shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]
                                 ${isPastDay
                                     ? 'bg-theme-bg/50 border-theme-border opacity-60'
                                     : isToday
-                                        ? 'bg-primary/10 border-primary shadow-primary/5'
+                                        ? 'bg-primary/10 border-primary shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/5'
                                         : 'bg-theme-card border-primary/20'
                                 }`}
                             >
@@ -1078,6 +1107,13 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
 
                                     // Bookings that cover this exact slot hour
                                     const slotBookings = getBookingsForDate(dateStr).filter(b => {
+                                        if (b.selectedSlots) {
+                                            const slotsArray = b.selectedSlots.split(',');
+                                            return slotsArray.some(s => {
+                                                const [bStart, bEnd] = s.split('-').map(part => part.slice(0, 5));
+                                                return bStart === slot.start.slice(0, 5) && bEnd === slot.end.slice(0, 5);
+                                            });
+                                        }
                                         const ts = b.timeSlot || '';
                                         const parts = ts.split(' - ');
                                         if (parts.length < 2) return false;
@@ -1122,7 +1158,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                                         {slotBookings.map((booking) => (
                                                             <div
                                                                 key={booking.id}
-                                                                className={`rounded-lg border-l-4 p-3 cursor-pointer transition-all hover:shadow-md
+                                                                className={`rounded-lg border-l-4 p-3 cursor-pointer transition-all hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]
                                                                     ${booking.status === 'booked'
                                                                         ? 'bg-green-50 dark:bg-green-900/20 border-green-500 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900/40'
                                                                         : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-500 dark:border-yellow-800 hover:bg-yellow-100 dark:hover:bg-yellow-900/40'
@@ -1174,7 +1210,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                 <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}></div>
 
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative z-10 shadow-2xl flex flex-col border border-white dark:border-slate-800">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative z-10 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] flex flex-col border border-white dark:border-slate-800">
 
                         {/* Modal Header */}
                         <div className="p-6 border-b border-theme-border flex justify-between items-center sticky top-0 bg-theme-card z-20">
@@ -1196,7 +1232,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                             onClick={() => setActiveDate(date)}
                                             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer transition-all border
                                                 ${activeDate === date
-                                                    ? 'bg-primary text-white border-primary shadow-md shadow-primary/20'
+                                                    ? 'bg-primary text-white border-primary shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/20'
                                                     : 'bg-primary/5 text-primary border-primary/20 hover:bg-primary/10'}`}
                                         >
                                             <CalendarBlank size={16} />
@@ -1217,7 +1253,14 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
 
                             {/* Select Room */}
                             <div>
-                                <label className="block text-sm font-medium text-theme-primary opacity-80 mb-2">Select Room</label>
+                                <label className="block text-sm font-medium text-theme-primary opacity-80 mb-2">
+                                    Select Room
+                                    {filterLocation !== 'all' && (
+                                        <span className="ml-2 text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                                            📍 {filterLocation}
+                                        </span>
+                                    )}
+                                </label>
                                 <select
                                     className="w-full p-3 rounded-lg border border-theme-border focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-theme-bg text-theme-primary"
                                     value={formData.room}
@@ -1227,13 +1270,33 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                     }}
                                 >
                                     <option value="" disabled>Choose a room</option>
-                                    {availableRooms.map(r => (
-                                        <option key={`${r.catalog_id}:${r.room_id}`} value={`${r.catalog_id}:${r.room_id}`}>
-                                            {r.room_name} ({r.capacity} people)
-                                        </option>
-                                    ))}
+                                    {availableRooms
+                                        .filter(r => {
+                                            if (filterLocation === 'all') return true;
+                                            return (
+                                                r.location === filterLocation ||
+                                                r.location?.toLowerCase() === filterLocation.toLowerCase() ||
+                                                r.location?.toLowerCase().includes(filterLocation.toLowerCase()) ||
+                                                filterLocation.toLowerCase().includes((r.location || '').toLowerCase())
+                                            );
+                                        })
+                                        .map(r => (
+                                            <option key={`${r.catalog_id}:${r.room_id}`} value={`${r.catalog_id}:${r.room_id}`}>
+                                                {r.room_name} ({r.capacity} people)
+                                            </option>
+                                        ))
+                                    }
                                 </select>
+                                {filterLocation !== 'all' &&
+                                    availableRooms.filter(r =>
+                                        r.location === filterLocation ||
+                                        r.location?.toLowerCase().includes(filterLocation.toLowerCase()) ||
+                                        filterLocation.toLowerCase().includes((r.location || '').toLowerCase())
+                                    ).length === 0 && (
+                                    <p className="text-xs text-rose-500 mt-1.5">No rooms found for this location. Try selecting "All Locations".</p>
+                                )}
                             </div>
+
 
                             {/* Time Slots */}
                             <div className={!activeDate ? 'opacity-50 pointer-events-none' : ''}>
@@ -1275,6 +1338,13 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
 
                                         // Find matching booking for tooltip
                                         const matchingBooking = roomBookedSlots.find(b => {
+                                            if (b.selected_slots) {
+                                                const slotsArray = b.selected_slots.split(',');
+                                                return slotsArray.some(s => {
+                                                    const [bStart, bEnd] = s.split('-').map(part => part.slice(0, 5));
+                                                    return bStart === slot.start.slice(0, 5) && bEnd === slot.end.slice(0, 5);
+                                                });
+                                            }
                                             const bStartH = parseInt(b.start_time.split(':')[0]);
                                             const bEndH = parseInt(b.end_time.split(':')[0]);
                                             return slot.startH >= bStartH && slot.startH < bEndH;
@@ -1285,7 +1355,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                         } else if (status === 'booked') {
                                             classes += 'bg-rose-50 dark:bg-rose-900/10 text-rose-500 border-rose-200 dark:border-rose-900/30 cursor-not-allowed';
                                         } else if (selected) {
-                                            classes += 'bg-primary border-primary text-white shadow-md shadow-primary/20 scale-[0.98]';
+                                            classes += 'bg-primary border-primary text-white shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/20 scale-[0.98]';
                                         } else {
                                             classes += 'bg-theme-bg text-theme-primary border-theme-border hover:border-primary hover:text-primary cursor-pointer';
                                         }
@@ -1312,7 +1382,7 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                                         >
                                                             <Eye size={14} className="text-rose-600 group-hover:text-rose-700 transition-colors" />
                                                             {matchingBooking && (
-                                                                <div className="absolute hidden group-hover:block bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-3 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl text-white text-xs z-[100] text-left font-normal pointer-events-none animate-in fade-in slide-in-from-bottom-1 duration-200">
+                                                                <div className="absolute hidden group-hover:block bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-3 bg-slate-800 border border-slate-700 rounded-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] text-white text-xs z-[100] text-left font-normal pointer-events-none animate-in fade-in slide-in-from-bottom-1 duration-200">
                                                                     <p className="font-bold mb-2 border-b border-slate-700 pb-1 text-sm text-slate-200 flex items-center gap-2">
                                                                         <Eye size={14} /> Booking Details
                                                                     </p>
@@ -1385,10 +1455,10 @@ const CalendarPage: React.FC<CalendarPageProps> = () => {
                                 Cancel
                             </button>
                             <button
-                                className={`px-8 py-2.5 rounded-lg font-bold shadow-lg transition-all active:scale-[0.98] 
+                                className={`px-8 py-2.5 rounded-lg font-bold shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] transition-all active:scale-[0.98] 
                                     ${(isSubmitting || (!!formData.room && Number(formData.attendees) > (availableRooms.find(r => `${r.catalog_id}:${r.room_id}` === formData.room)?.capacity || 0)) || selectedDates.length > 180 || selectedDates.some(d => d > maxDateStr))
-                                        ? 'bg-slate-300 cursor-not-allowed text-slate-500 shadow-none'
-                                        : 'bg-primary hover:bg-primary-dark text-white shadow-teal-200/50'}`}
+                                        ? 'bg-slate-300 cursor-not-allowed text-slate-500 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-none'
+                                        : 'bg-primary hover:bg-primary-dark text-white shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-teal-200/50'}`}
                                 onClick={() => {
                                     const user = getCurrentUser();
                                     if (!user) {

@@ -4,7 +4,7 @@ import { loginUser, logoutUser, getCurrentUser, registerUser, User } from '../li
 interface AuthContextType {
     user: User | null;
     isLoading: boolean;
-    login: (email: string, password: string) => Promise<void>;
+    login: (email: string, password: string, accountType?: 'user' | 'admin') => Promise<void>;
     register: (payload: {
         uid: string; name: string; email: string;
         password: string; dept: string; phone_no: string; userrole_id?: string;
@@ -25,9 +25,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsLoading(false);
     }, []);
 
-    const login = async (email: string, password: string) => {
-        const data = await loginUser(email, password);
-        setUser(data.user);
+    const login = async (email: string, password: string, accountType?: 'user' | 'admin') => {
+        const data = await loginUser(email, password, accountType);
+        
+        if (data.role === 'admin') {
+            // Redirect admin to the proxied Admin portal path on the SAME port
+            const adminUrl = import.meta.env.VITE_ADMIN_URL || window.location.origin;
+            window.location.href = `${adminUrl}/auth-callback?token=${data.token}`;
+            return;
+        } else {
+            // Store user session locally
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            setUser(data.user);
+        }
     };
 
     const register = async (payload: {

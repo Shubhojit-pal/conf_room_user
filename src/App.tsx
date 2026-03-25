@@ -102,12 +102,18 @@ export interface BookingResult {
  * ═══════════════════════════════════════════════════════════════
  */
 function App() {
-    const [currentView, setCurrentView] = useState('home');
+    const getInitialView = () => {
+        const hash = window.location.hash.replace('#', '');
+        return hash ? hash : 'home';
+    };
+    const [currentView, setCurrentView] = useState(getInitialView());
     const { isLoading } = useAuth();
     const { playClick } = useUISound();
     const [selectedRoom, setSelectedRoom] = useState<SelectedRoom | null>(null);
     const [lastBooking, setLastBooking] = useState<BookingResult | null>(null);
     const [initialSearchFilters, setInitialSearchFilters] = useState<{ location: string; capacity: string; date: string } | undefined>();
+    const [prefillDates, setPrefillDates] = useState<string[] | undefined>();
+    const [prefillSlots, setPrefillSlots] = useState<number[] | undefined>();
 
     const [resetEmail, setResetEmail] = useState('');
 
@@ -124,8 +130,10 @@ function App() {
         window.scrollTo(0, 0);
     };
 
-    const navigateToRoom = (catalog_id: string, room_id: string) => {
+    const navigateToRoom = (catalog_id: string, room_id: string, dates?: string[], slots?: number[]) => {
         setSelectedRoom({ catalog_id, room_id });
+        setPrefillDates(dates && dates.length > 0 ? dates : undefined);
+        setPrefillSlots(slots && slots.length > 0 ? slots : undefined);
         navigateTo('details');
     };
 
@@ -137,7 +145,7 @@ function App() {
     // Show loading spinner while auth state is being restored
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+            <div className="min-h-screen flex items-center justify-center bg-transparent dark:bg-slate-900">
                 <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary" />
             </div>
         );
@@ -177,7 +185,6 @@ function App() {
                             onViewAvailableToday={() => navigateTo('search')}
                             onSearch={(filters) => navigateTo('search', filters)}
                             onViewFavorites={() => navigateTo('search')}
-                            onViewActivity={() => navigateTo('my-bookings')}
                         />
                     </>
                 );
@@ -189,6 +196,8 @@ function App() {
                         room={selectedRoom}
                         onBack={() => navigateTo('search')}
                         onBookingSuccess={navigateToTicket}
+                        prefillDates={prefillDates}
+                        prefillSlots={prefillSlots}
                     />
                 );
             case 'ticket':
@@ -213,7 +222,6 @@ function App() {
                             onViewAvailableToday={() => navigateTo('search')}
                             onSearch={(filters) => navigateTo('search', filters)}
                             onViewFavorites={() => navigateTo('search')}
-                            onViewActivity={() => navigateTo('my-bookings')}
                         />
                     </>
                 );
@@ -221,7 +229,7 @@ function App() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col transition-colors duration-300">
+        <div className="min-h-screen bg-transparent dark:bg-slate-900 flex flex-col transition-colors duration-300">
             <Header currentView={currentView} onNavigate={navigateTo} />
             <main className="flex-grow pb-20 md:pb-0">
                 {renderContent()}

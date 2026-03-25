@@ -1,14 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Cache bust for new green theme */
 
 @layer base {
     :root {
-        --bg-app: #f8fafc; /* slate-50 */
-        --bg-card: #ffffff;
-        --text-primary: #1e293b; /* slate-800 */
-        --text-secondary: #64748b; /* slate-500 */
-        --border-theme: #e2e8f0; /* slate-200 */
+        --bg-app: #f9fafb; /* gray-50 */
+        --bg-card: #ffffff; /* white */
+        --text-primary: #111827; /* gray-900 */
+        --text-secondary: #6b7280; /* gray-500 */
+        --border-theme: #e5e7eb; /* gray-200 */
         --shadow-theme: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     }
 

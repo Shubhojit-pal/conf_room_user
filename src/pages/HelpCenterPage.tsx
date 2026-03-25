@@ -58,7 +58,7 @@ const HelpCenterPage: React.FC<HelpCenterPageProps> = ({ onNavigate, onAlert }) 
                         placeholder="Search for help... (e.g. 'cancel', 'confirmed')"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-sm transition-all"
+                        className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] transition-all"
                     />
                 </div>
             </div>
@@ -72,7 +72,7 @@ const HelpCenterPage: React.FC<HelpCenterPageProps> = ({ onNavigate, onAlert }) 
                     <div
                         key={idx}
                         onClick={card.action}
-                        className="bg-white p-6 rounded-2xl border border-slate-200 hover:shadow-lg transition-all cursor-pointer group hover:-translate-y-1"
+                        className="bg-white p-6 rounded-2xl border border-slate-200 hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] transition-all cursor-pointer group hover:-translate-y-1"
                     >
                         <div className="w-12 h-12 bg-primary-light/30 text-primary rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
                             {card.icon}

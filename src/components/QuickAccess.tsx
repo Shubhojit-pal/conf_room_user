@@ -1,28 +1,23 @@
 import {
     CalendarPlus,
     Star,
-    ClockCounterClockwise,
     MapPin,
     Users,
-    CheckCircle,
-    Check,
-    Clock,
-    XCircle,
     Calendar,
     X
 } from '@phosphor-icons/react';
+
 import React, { useState, useEffect } from 'react';
 import { getDirectImageUrl } from '../lib/imageUtils';
 import { fetchRooms, Room } from '../lib/api';
 
 interface QuickAccessProps {
     onViewAvailableToday?: () => void;
-    onSearch?: (filters?: { location: string; capacity: string; date: string }) => void;
+    onSearch?: (filters?: { location: string; capacity: string; date: string; quickBookingMode?: boolean }) => void;
     onViewFavorites?: () => void;
-    onViewActivity?: () => void;
 }
 
-const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearch, onViewFavorites, onViewActivity }) => {
+const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearch, onViewFavorites }) => {
     // State to toggle stars
     const [favorites, setFavorites] = useState<{ [key: string]: boolean }>({});
     const [location, setLocation] = useState('All Locations');
@@ -51,24 +46,20 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
 
     const handleFindRooms = (e: React.FormEvent) => {
         e.preventDefault();
-        onSearch?.({ location, capacity, date });
+        onSearch?.({ location, capacity, date, quickBookingMode: true } as any);
     };
 
     const handleAdvancedSearch = (e: React.MouseEvent) => {
         e.preventDefault();
-        onSearch?.();
+        onSearch?.({ location, capacity, date, quickBookingMode: true } as any);
     };
+
 
     // Use fetched rooms or fallback empty state
     const displayRooms = apiRooms.slice(0, 3);
     const todayAvailableRooms = apiRooms.filter(r => r.status === 'active' || r.status === 'available' || r.availability === 'available').slice(0, 3);
 
-    const activities = [
-        { title: 'Booking Confirmed', desc: 'Executive Boardroom for tomorrow at 10:00 AM', time: '2 hours ago', icon: <CheckCircle size={20} />, bg: 'bg-primary-light', color: 'text-primary' },
-        { title: 'Booking Approved', desc: 'Your request for Grand Auditorium has been approved', time: '5 hours ago', icon: <Check size={20} />, bg: 'bg-secondary-light', color: 'text-secondary' },
-        { title: 'Extension Requested', desc: 'Requested 1 hour extension for Innovation Lab', time: '1 day ago', icon: <Clock size={20} />, bg: 'bg-accent-orangeLight', color: 'text-accent-orange' },
-        { title: 'Booking Cancelled', desc: 'Training Hall B booking cancelled successfully', time: '2 days ago', icon: <XCircle size={20} />, bg: 'bg-accent-redLight', color: 'text-accent-red' },
-    ];
+
 
     return (
         <section className="pb-20 px-6">
@@ -80,7 +71,7 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {/* Available Today */}
-                    <div className="bg-theme-card rounded-2xl p-6 shadow-sm border border-theme-border border-t-4 border-t-secondary hover:shadow-md transition-shadow cursor-pointer" onClick={onViewAvailableToday}>
+                    <div className="bg-theme-card rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] border border-theme-border border-t-4 border-t-secondary hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] transition-shadow-[0_8px_32px_0_rgba(31,38,135,0.05)] cursor-pointer" onClick={onViewAvailableToday}>
                         <div className="flex items-center gap-4 mb-6">
                             <div className="p-2 rounded-lg bg-secondary/10 text-secondary">
                                 <Calendar size={24} weight="fill" />
@@ -113,7 +104,7 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                     </div>
 
                     {/* Quick Booking - Desktop Only */}
-                    <div className="hidden lg:block bg-theme-card rounded-2xl p-6 shadow-sm border border-theme-border border-t-4 border-t-primary">
+                    <div className="hidden lg:block bg-theme-card rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] border border-theme-border border-t-4 border-t-primary">
                         <div className="flex items-center gap-4 mb-6">
                             <div className="p-2 rounded-lg bg-primary/10 text-primary">
                                 <CalendarPlus size={24} weight="fill" />
@@ -158,13 +149,13 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                                 Find Available Rooms
                             </button>
                             <a href="#" onClick={handleAdvancedSearch} className="text-center text-primary text-sm font-medium hover:underline">
-                                Advanced Search →
+                                Quick Booking →
                             </a>
                         </form>
                     </div>
 
                     {/* Favorite Rooms */}
-                    <div className="bg-theme-card rounded-2xl p-6 shadow-sm border border-theme-border">
+                    <div className="bg-theme-card rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] border border-theme-border">
                         <div className="flex justify-between items-center mb-6">
                             <div className="flex items-center gap-4">
                                 <div className="p-2 rounded-lg bg-accent-orange/10 text-accent-orange">
@@ -208,44 +199,12 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                         </div>
                     </div>
 
-                    {/* Recent Activity */}
-                    <div className="bg-theme-card rounded-2xl p-6 shadow-sm border border-theme-border">
-                        <div className="flex justify-between items-center mb-6">
-                            <div className="flex items-center gap-4">
-                                <div className="p-2 rounded-lg bg-accent-purple/10 text-accent-purple">
-                                    <ClockCounterClockwise size={24} weight="fill" />
-                                </div>
-                                <h3 className="text-lg font-bold text-theme-primary">Recent Activity</h3>
-                            </div>
-                            <button onClick={onViewActivity} className="text-primary text-sm font-medium hover:underline">View All</button>
-                        </div>
-
-                        <div className="relative pl-2">
-                            {/* Vertical Line */}
-                            <div className="absolute left-[19px] top-3 bottom-4 w-0.5 bg-theme-border -z-0"></div>
-
-                            <div className="flex flex-col gap-6">
-                                {activities.map((item, idx) => (
-                                    <div key={idx} className="flex gap-4 relative z-10">
-                                        <div className={`w-10 h-10 rounded-full ${item.bg.includes('-light') ? 'bg-primary/10' : 'bg-slate-100 dark:bg-slate-800'} ${item.color} flex items-center justify-center shrink-0 border-4 border-theme-card shadow-sm`}>
-                                            {item.icon}
-                                        </div>
-                                        <div>
-                                            <h4 className="text-sm font-semibold text-theme-primary">{item.title}</h4>
-                                            <p className="text-xs text-theme-secondary mt-0.5 leading-snug">{item.desc}</p>
-                                            <span className="text-[10px] text-theme-secondary opacity-60 font-medium mt-1 block">{item.time}</span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
             {/* ── MOBILE: Floating Action Button (FAB) ── */}
             <button
-                className="lg:hidden fixed bottom-[90px] right-6 z-[60] bg-primary text-white p-4 rounded-full shadow-lg shadow-primary/30 active:scale-95 transition-transform"
+                className="lg:hidden fixed bottom-[90px] right-6 z-[60] bg-primary text-white p-4 rounded-full shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/30 active:scale-95 transition-transform"
                 onClick={() => setIsMobileModalOpen(true)}
             >
                 <CalendarPlus size={26} weight="fill" />
@@ -254,7 +213,7 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
             {/* ── MOBILE: Quick Booking Modal ── */}
             {isMobileModalOpen && (
                 <div className="lg:hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-end justify-center p-4">
-                    <div className="bg-theme-card w-full max-w-md rounded-3xl p-6 shadow-2xl relative animate-in slide-in-from-bottom-8 duration-300 border border-theme-border">
+                    <div className="bg-theme-card w-full max-w-md rounded-3xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] relative animate-in slide-in-from-bottom-8 duration-300 border border-theme-border">
                         <button
                             onClick={() => setIsMobileModalOpen(false)}
                             className="absolute top-4 right-4 p-2 text-theme-secondary hover:text-theme-primary bg-theme-bg rounded-full border border-theme-border"
@@ -302,11 +261,11 @@ const QuickAccess: React.FC<QuickAccessProps> = ({ onViewAvailableToday, onSearc
                                     className="w-full p-3.5 rounded-xl border border-theme-border text-theme-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-theme-bg font-medium"
                                 />
                             </div>
-                            <button type="submit" className="mt-4 w-full bg-primary hover:bg-primary-dark text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-transform active:scale-[0.98]">
+                            <button type="submit" className="mt-4 w-full bg-primary hover:bg-primary-dark text-white font-bold py-4 rounded-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-primary/20 transition-transform active:scale-[0.98]">
                                 Find Available Rooms
                             </button>
                             <a href="#" onClick={(e) => { setIsMobileModalOpen(false); handleAdvancedSearch(e); }} className="text-center text-primary text-sm font-semibold hover:underline bg-primary/5 py-3 rounded-xl">
-                                Advanced Search →
+                                Quick Booking →
                             </a>
                         </form>
                     </div>
