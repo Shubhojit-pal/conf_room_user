@@ -53,6 +53,7 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
     const [error, setError] = useState<string | null>(null);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [bookOpen, setBookOpen] = useState(false); // collapsible booking form
+    const [showAllGallery, setShowAllGallery] = useState(false);
 
     // Booking form
     const todayStr = new Date().toISOString().slice(0, 10);
@@ -555,7 +556,10 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
 
             {/* Image Gallery / Hero */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 h-[260px] md:h-[400px] overflow-hidden">
-                <div className="md:col-span-2 h-full rounded-xl overflow-hidden bg-slate-900 group relative shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]">
+                <div 
+                    className="md:col-span-2 h-full rounded-xl overflow-hidden bg-slate-900 group relative shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] cursor-pointer"
+                    onClick={() => gallery.length > 0 && setShowAllGallery(true)}
+                >
                     {gallery.length > 0 ? (
                         <>
                             {/* Slides */}
@@ -628,67 +632,47 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                     )}
                 </div>
                 <div className="hidden md:flex flex-col gap-4 h-full">
-                    {/* Small previews if available */}
+                    {/* Top right box: Preview Image or Capacity */}
                     {gallery.length > 1 ? (
-                        <>
-                            {gallery.slice(1, 3).map((url, idx) => (
-                                <div 
-                                    key={idx} 
-                                    className="h-1/2 rounded-xl overflow-hidden bg-theme-bg cursor-pointer group relative"
-                                    onClick={() => setCurrentImageIndex(idx + 1)}
-                                >
-                                    <img
-                                        src={getDirectImageUrl(url)}
-                                        alt={`Preview ${idx + 2}`}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                    />
-                                    <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
-                                    {idx === 1 && gallery.length > 3 && (
-                                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white">
-                                            <span className="text-xl font-bold">+{gallery.length - 3}</span>
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                            {gallery.length === 2 && (
-                                <div 
-                                    className={`h-1/2 rounded-xl overflow-hidden bg-theme-bg/50 border border-theme-border flex items-center justify-center p-4 transition-all ${room.mapLink ? 'cursor-pointer hover:bg-primary/5 hover:border-primary/30 group/loc' : ''}`}
-                                    onClick={() => room.mapLink && window.open(room.mapLink, '_blank')}
-                                >
-                                    <div className="text-center">
-                                        <MapPin size={32} className={`mx-auto mb-2 transition-colors ${room.mapLink ? 'text-primary group-hover/loc:scale-110' : 'text-theme-secondary opacity-40'}`} weight={room.mapLink ? "fill" : "regular"} />
-                                        <p className="text-sm font-bold text-theme-primary">{room.location}</p>
-                                        <p className="text-[10px] text-theme-secondary opacity-60 mt-1">Floor {room.floor_no}, Room {room.room_number}</p>
-                                        {room.mapLink && (
-                                            <span className="inline-block mt-2 text-[10px] font-black text-primary uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded">View on Map</span>
-                                        )}
-                                    </div>
+                        <div 
+                            className="flex-1 rounded-xl overflow-hidden bg-theme-bg cursor-pointer group relative shadow-sm"
+                            onClick={() => setShowAllGallery(true)}
+                        >
+                            <img
+                                src={getDirectImageUrl(gallery[1])}
+                                alt="Preview 2"
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            />
+                            <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
+                            {gallery.length > 2 && (
+                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span className="text-lg font-bold">See all {gallery.length}</span>
                                 </div>
                             )}
-                        </>
+                        </div>
                     ) : (
-                        <>
-                            <div 
-                                className={`h-1/2 rounded-xl overflow-hidden bg-theme-bg border border-theme-border flex items-center justify-center transition-all ${room.mapLink ? 'cursor-pointer hover:bg-primary/5 hover:border-primary/30 group/loc' : ''}`}
-                                onClick={() => room.mapLink && window.open(room.mapLink, '_blank')}
-                            >
-                                <div className="text-center">
-                                    <MapPin size={32} className={`mx-auto mb-2 transition-colors ${room.mapLink ? 'text-primary group-hover/loc:scale-110' : 'text-theme-secondary opacity-40'}`} weight={room.mapLink ? "fill" : "regular"} />
-                                    <p className="text-sm font-bold text-theme-primary">{room.location}</p>
-                                    <p className="text-[10px] text-theme-secondary opacity-60 mt-1">Floor {room.floor_no}, Room {room.room_number}</p>
-                                    {room.mapLink && (
-                                        <span className="inline-block mt-2 text-[10px] font-black text-primary uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded">View on Map</span>
-                                    )}
-                                </div>
+                        <div className="flex-1 rounded-xl overflow-hidden bg-theme-bg/50 border border-theme-border flex items-center justify-center">
+                            <div className="text-center text-theme-secondary opacity-40">
+                                <Users size={32} className="mx-auto mb-1" />
+                                <p className="text-sm font-medium">Capacity: {room.capacity}</p>
                             </div>
-                            <div className="h-1/2 rounded-xl overflow-hidden bg-theme-bg/50 border border-theme-border flex items-center justify-center">
-                                <div className="text-center text-theme-secondary opacity-40">
-                                    <Users size={32} className="mx-auto mb-1" />
-                                    <p className="text-sm font-medium">Capacity: {room.capacity}</p>
-                                </div>
-                            </div>
-                        </>
+                        </div>
                     )}
+
+                    {/* Bottom right box: View on Map location */}
+                    <div 
+                        className={`flex-1 rounded-xl overflow-hidden bg-theme-bg border border-theme-border flex items-center justify-center p-4 transition-all ${room.mapLink ? 'cursor-pointer hover:bg-primary/5 hover:border-primary/30 group/loc shadow-sm' : ''}`}
+                        onClick={() => room.mapLink && window.open(room.mapLink, '_blank')}
+                    >
+                        <div className="text-center">
+                            <MapPin size={32} className={`mx-auto mb-2 transition-colors ${room.mapLink ? 'text-primary group-hover/loc:scale-110' : 'text-theme-secondary opacity-40'}`} weight={room.mapLink ? "fill" : "regular"} />
+                            <p className="text-sm font-bold text-theme-primary">{room.location}</p>
+                            <p className="text-[10px] text-theme-secondary opacity-60 mt-1">Floor {room.floor_no}, Room {room.room_number}</p>
+                            {room.mapLink && (
+                                <span className="inline-block mt-2 text-[10px] font-black text-primary uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded">View on Map</span>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -971,6 +955,35 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                         if (user) submitBookingAction(user);
                     }}
                 />
+            )}
+
+            {showAllGallery && (
+                <div className="fixed inset-0 z-[200] bg-theme-bg/95 backdrop-blur-xl flex flex-col animate-fade-in overflow-hidden">
+                    <div className="flex items-center justify-between p-4 md:p-6 bg-theme-card/50 border-b border-theme-border shrink-0">
+                        <button 
+                            onClick={() => setShowAllGallery(false)}
+                            className="flex items-center gap-2 text-theme-secondary hover:text-theme-primary transition-colors text-sm font-bold"
+                        >
+                            <X size={24} weight="bold" /> Close
+                        </button>
+                        <span className="text-theme-primary text-sm font-black tracking-widest uppercase">{gallery.length} Photos</span>
+                    </div>
+                    <div className="flex-1 overflow-y-auto p-4 md:p-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-7xl mx-auto pb-12">
+                            {gallery.map((url, idx) => (
+                                <div key={idx} className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-theme-bg border border-theme-border shadow-md group">
+                                    <img 
+                                        src={getDirectImageUrl(url)} 
+                                        alt={`${room.room_name} - view ${idx + 1}`}
+                                        referrerPolicy="no-referrer"
+                                        crossOrigin="anonymous" 
+                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );

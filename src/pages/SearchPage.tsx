@@ -73,6 +73,7 @@ export interface SearchRoom {
     type: string;
     isInactive: boolean; // true when admin has deactivated the room
     location_id?: string;
+    policy_pdf?: string;
 }
 
 /**
@@ -204,7 +205,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
     const [advBookingRoom, setAdvBookingRoom] = useState<(SearchRoom & { availableSlots: typeof ALL_SLOTS }) | null>(null);
     const [advBookSlots, setAdvBookSlots] = useState<typeof ALL_SLOTS>([]);
     const [advBookPurpose, setAdvBookPurpose] = useState('');
-    const [advBookAttendees, setAdvBookAttendees] = useState(1);
+    const [advBookAttendees, setAdvBookAttendees] = useState<number | string>(1);
     const [advBookLoading, setAdvBookLoading] = useState(false);
     const [advBookMsg, setAdvBookMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
@@ -455,6 +456,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                     type: r.room_type || 'Conference Room',
                     isInactive: r.status === 'inactive',
                     location_id: r.location_id,
+                    policy_pdf: (r as any).policy_pdf,
                 }));
                 
                 if (isInitial && initialFilters && (initialFilters.location !== 'All Locations' || initialFilters.capacity !== 'Any Capacity')) {
@@ -715,8 +717,20 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                     </div>
                                 )}
                             </div>
-                            <div className="p-6">
-                                <h3 className="text-lg font-bold text-theme-primary mb-2">{room.name}</h3>
+                                <div className="p-6">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <h3 className="text-lg font-bold text-theme-primary">{room.name}</h3>
+                                    {room.policy_pdf && (
+                                        <a
+                                            href={room.policy_pdf.startsWith('/') ? `http://127.0.0.1:5000${room.policy_pdf}` : room.policy_pdf}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full border border-primary text-primary hover:bg-primary/10 transition-all cursor-pointer"
+                                        >
+                                            Guidelines
+                                        </a>
+                                    )}
+                                </div>
                                 <p className="text-sm font-semibold text-primary mb-2">{room.type}</p>
                                 <p className="text-theme-secondary text-sm mb-4">{room.description}</p>
                                 <div className="flex items-center gap-4 text-sm text-theme-secondary mb-4">
@@ -729,13 +743,11 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                     onClick={() => {
                                         if (room.isInactive) return;
                                         if (_onViewRoom) {
-                                            // Pass sbDates and sbSlotIndices as prefill info when availability filter is active
                                             const dates = sbSearched && sbDates.length > 0 ? sbDates : undefined;
                                             const slots = sbSearched && sbSlotIndices.length > 0 ? sbSlotIndices : undefined;
                                             _onViewRoom(room.catalog_id, room.id, dates, slots);
                                         } else {
                                             setSelectedRoomType(room);
-                                            // Pre-fill booking date from availability filter if used
                                             if (sbSearched && sbDates.length > 0) {
                                                 setBookDate(sbDates[0]);
                                             }
@@ -746,10 +758,10 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                     className={`w-full font-semibold py-2.5 rounded-lg transition-all ${
                                         room.isInactive
                                             ? 'bg-theme-bg text-theme-secondary opacity-40 cursor-not-allowed border border-theme-border'
-                                            : 'bg-primary hover:bg-primary-dark text-white cursor-pointer hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)]'
+                                            : 'bg-primary hover:bg-primary-dark text-white cursor-pointer'
                                     }`}
                                 >
-                                    {room.isInactive ? 'Room Unavailable' : 'Select Room Type'}
+                                    {room.isInactive ? 'Room Unavailable' : 'Book'}
                                 </button>
                             </div>
                         </div>
@@ -1348,14 +1360,9 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
 
                                                                         {/* Capacity */}
                                                                         <div className="flex items-center gap-2 mb-3">
-                                                                            <Users size={13} className="text-primary shrink-0" />
-                                                                            <div className="flex-1">
-                                                                                <div className="flex justify-between items-center mb-0.5">
-                                                                                    <span className="text-[10px] text-theme-secondary font-semibold">Capacity</span>
-                                                                                    <span className="text-[10px] font-black text-theme-primary">{room.capacity} people</span>
-                                                                                </div>
-                                                                                <div className="h-1.5 bg-theme-bg rounded-full overflow-hidden"><div className="h-full bg-primary rounded-full" style={{ width: `${Math.min((room.capacity / 50) * 100, 100)}%` }} /></div>
-                                                                            </div>
+                                                                            <Users size={15} className="text-primary shrink-0" />
+                                                                            <span className="text-[11px] text-theme-secondary font-semibold uppercase tracking-wider">Capacity</span>
+                                                                            <span className="text-xs font-black text-theme-primary ml-auto">{room.capacity} people</span>
                                                                         </div>
 
                                                                         {/* Slots */}
@@ -1442,14 +1449,18 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                         <label className="block text-xs font-bold text-theme-secondary uppercase tracking-wider mb-1.5">
                                             Attendees <span className="font-normal normal-case opacity-60">(max {advBookingRoom.capacity})</span>
                                         </label>
-                                        <div className="flex items-center gap-3">
-                                            <button type="button" onClick={() => setAdvBookAttendees(a => Math.max(1, a - 1))} className="w-8 h-8 rounded-full border-2 border-theme-border text-theme-primary font-bold hover:border-primary hover:text-primary transition-all flex items-center justify-center text-lg">−</button>
-                                            <span className="text-xl font-black text-theme-primary w-8 text-center">{advBookAttendees}</span>
-                                            <button type="button" onClick={() => setAdvBookAttendees(a => Math.min(advBookingRoom!.capacity, a + 1))} className="w-8 h-8 rounded-full border-2 border-theme-border text-theme-primary font-bold hover:border-primary hover:text-primary transition-all flex items-center justify-center text-lg">+</button>
-                                            <div className="flex-1 h-2 bg-theme-bg/60 rounded-full overflow-hidden border border-theme-border">
-                                                <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${(advBookAttendees / advBookingRoom.capacity) * 100}%` }} />
-                                            </div>
-                                        </div>
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            value={advBookAttendees}
+                                            onChange={e => {
+                                                const val = e.target.value;
+                                                if (val === '') setAdvBookAttendees('');
+                                                else setAdvBookAttendees(parseInt(val, 10));
+                                            }}
+                                            className="w-full px-4 py-3 bg-theme-bg border border-theme-border rounded-xl text-theme-primary text-sm font-bold focus:ring-2 focus:ring-primary outline-none"
+                                            placeholder="Enter number of attendees"
+                                        />
                                     </div>
 
                                     {/* Result message */}
@@ -1463,13 +1474,15 @@ const SearchPage: React.FC<SearchPageProps> = ({ onViewRoom: _onViewRoom, onBook
                                     {/* Confirm button */}
                                     <button
                                         onClick={advConfirmBooking}
-                                        disabled={advBookLoading || !!advBookMsg?.ok}
-                                        className={`w-full py-3 text-white rounded-xl font-bold text-sm transition-all disabled:opacity-60 flex items-center justify-center gap-2 active:scale-95 ${advBookingMode === 'full-day' ? 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700' : 'bg-primary hover:bg-primary-dark'}`}
+                                        disabled={advBookLoading || !!advBookMsg?.ok || !advBookAttendees || Number(advBookAttendees) > advBookingRoom.capacity}
+                                        className={`w-full py-3 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 active:scale-95 ${advBookingMode === 'full-day' ? 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 disabled:from-slate-400 disabled:to-slate-400' : 'bg-primary hover:bg-primary-dark disabled:bg-slate-400'} disabled:cursor-not-allowed disabled:shadow-none`}
                                     >
                                         {advBookLoading
                                             ? <><div className="w-4 h-4 border-2 border-theme-border border-t-white rounded-full animate-spin" /> Booking...</>
                                             : advBookMsg?.ok
                                             ? <><CheckCircle size={16} weight="fill" /> Booked!</>
+                                            : (Number(advBookAttendees) > advBookingRoom.capacity)
+                                            ? <><Warning size={16} /> Capacity Exceeded</>
                                             : <><CheckCircle size={16} /> Confirm Booking</>}
                                     </button>
                                 </div>

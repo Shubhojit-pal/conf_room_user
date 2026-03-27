@@ -130,6 +130,19 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
     };
 
     // --- Filtering Logic ---
+    const isBookingOnDate = (b: Booking, dateStr: string) => {
+        if (b.selected_dates) {
+            return b.selected_dates.split(',').map(d => d.trim()).includes(dateStr);
+        }
+        return b.start_date.slice(0, 10) === dateStr;
+    };
+
+    const isUpcoming = (b: Booking, now: Date) => {
+        const endDateStr = b.end_date ? b.end_date.slice(0, 10) : b.start_date.slice(0, 10);
+        const endTimeStr = b.end_time || b.start_time || '23:59:00';
+        return new Date(`${endDateStr}T${endTimeStr}`) >= now;
+    };
+
     const filteredBookings = useMemo(() => {
         const now = new Date();
 
@@ -147,30 +160,31 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
 
         // 2. Calendar Date Filter
         if (selectedDateFilter) {
-            result = result.filter(b => b.start_date.slice(0, 10) === selectedDateFilter);
+            result = result.filter(b => isBookingOnDate(b, selectedDateFilter));
         }
 
         // 3. Tab Filter
         if (activeTab === 'upcoming') {
             return result.filter(b =>
-                b.status !== 'cancelled' && b.status !== 'rejected' &&
-                new Date(`${b.start_date.slice(0, 10)}T${b.start_time}`) >= now
+                b.status !== 'cancelled' && b.status !== 'rejected' && isUpcoming(b, now)
             );
         } else if (activeTab === 'past') {
             return result.filter(b =>
-                b.status !== 'cancelled' && b.status !== 'rejected' &&
-                new Date(`${b.start_date.slice(0, 10)}T${b.start_time}`) < now
+                b.status !== 'cancelled' && b.status !== 'rejected' && !isUpcoming(b, now)
             );
         } else {
             return result.filter(b => b.status === 'cancelled' || b.status === 'rejected');
         }
     }, [bookings, searchTerm, selectedDateFilter, activeTab]);
 
-    const stats = useMemo(() => ({
-        upcoming: bookings.filter(b => b.status !== 'cancelled' && b.status !== 'rejected' && new Date(`${b.start_date.slice(0, 10)}T${b.start_time}`) >= new Date()).length,
-        past: bookings.filter(b => b.status !== 'cancelled' && b.status !== 'rejected' && new Date(`${b.start_date.slice(0, 10)}T${b.start_time}`) < new Date()).length,
-        cancelled: bookings.filter(b => b.status === 'cancelled' || b.status === 'rejected').length,
-    }), [bookings]);
+    const stats = useMemo(() => {
+        const now = new Date();
+        return {
+            upcoming: bookings.filter(b => b.status !== 'cancelled' && b.status !== 'rejected' && isUpcoming(b, now)).length,
+            past: bookings.filter(b => b.status !== 'cancelled' && b.status !== 'rejected' && !isUpcoming(b, now)).length,
+            cancelled: bookings.filter(b => b.status === 'cancelled' || b.status === 'rejected').length,
+        };
+    }, [bookings]);
 
     // Calendar Helpers
     const getDaysInMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -505,7 +519,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                             {Array.from({ length: getDaysInMonth(currentDate) }).map((_, i) => {
                                 const day = i + 1;
                                 const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                                const dateBookings = bookings.filter(b => b.start_date.slice(0, 10) === dateStr);
+                                const dateBookings = bookings.filter(b => isBookingOnDate(b, dateStr));
                                 const hasConfirmed = dateBookings.some(b => b.status === 'confirmed');
                                 const hasCancelled = dateBookings.some(b => b.status === 'cancelled' || b.status === 'rejected');
                                 const isSelected = selectedDateFilter === dateStr;
@@ -606,7 +620,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                                         })}
                                     </h3>
                                     <p className="text-sm font-semibold text-theme-secondary mt-1">
-                                        {bookings.filter(b => b.start_date.slice(0, 10) === showDatePopup).length} Bookings found
+                                        {bookings.filter(b => isBookingOnDate(b, showDatePopup!)).length} Bookings found
                                     </p>
                                 </div>
                                 <button
@@ -620,7 +634,7 @@ const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ onBrowse, onViewTicket 
                             {/* Content Details */}
                             <div className="p-8 overflow-y-auto space-y-4 bg-theme-bg/50">
                                 {bookings
-                                    .filter(b => b.start_date.slice(0, 10) === showDatePopup)
+                                    .filter(b => isBookingOnDate(b, showDatePopup!))
                                     .map(booking => (
                                         <div key={booking.booking_id} className="bg-theme-card p-5 rounded-2xl border border-theme-border shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] transition-shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]">
                                             <div className="flex justify-between items-start mb-4">

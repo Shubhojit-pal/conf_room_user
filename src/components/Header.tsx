@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
         { id: 'home', label: 'Home', icon: <CirclesFour size={20} /> },
         { id: 'search', label: 'Reserve', icon: <MagnifyingGlass size={20} /> },
         { id: 'calendar', label: 'Calendar', icon: <CalendarBlank size={20} /> },
-        { id: 'my-bookings', label: 'Bookings', icon: <Ticket size={20} /> },
+        { id: 'my-bookings', label: 'My Bookings', icon: <Ticket size={20} /> },
         { id: 'notifications', label: 'Notification', icon: <Bell size={20} /> },
     ];
 
@@ -125,7 +125,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
                         <div className="bg-primary text-white p-1.5 rounded-md flex">
                             <Buildings size={24} weight="regular" />
                         </div>
-                        <span>RoomBook</span>
+                        <span>BookVenue</span>
                     </div>
 
                     {/* Desktop Navigation */}

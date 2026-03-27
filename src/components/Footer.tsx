@@ -13,7 +13,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                     {/* About */}
                     <div>
-                        <h3 className="font-bold text-lg mb-4 text-theme-primary">RoomBook</h3>
+                        <h3 className="font-bold text-lg mb-4 text-theme-primary">BookVenue</h3>
                         <p className="text-theme-secondary text-sm leading-relaxed opacity-70">
                             Your trusted platform for booking conference rooms and meeting spaces with ease.
                         </p>
@@ -69,7 +69,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
                 <div className="border-t border-theme-border pt-8">
                     <div className="flex flex-col md:flex-row justify-between items-center text-sm text-theme-secondary opacity-60">
-                        <p>&copy; {currentYear} RoomBook. All rights reserved.</p>
+                        <p>&copy; {currentYear} BookVenue. All rights reserved.</p>
                     </div>
                 </div>
             </div>

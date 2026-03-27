@@ -34,6 +34,7 @@ export interface Room {
     room_type?: string;
     mapLink?: string;
     layout?: RoomLayout | null;
+    policy_pdf?: string;
 }
 
 export interface Booking {
