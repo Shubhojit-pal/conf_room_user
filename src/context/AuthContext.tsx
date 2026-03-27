@@ -21,6 +21,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         // Load user from localStorage on mount
         const storedUser = getCurrentUser();
+        // Migrate any old localStorage session to sessionStorage (one-time cleanup)
+        const oldToken = localStorage.getItem('token');
+        if (oldToken) {
+            sessionStorage.setItem('token', oldToken);
+            sessionStorage.setItem('user', localStorage.getItem('user') || '');
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+        }
         setUser(storedUser);
         setIsLoading(false);
     }, []);
@@ -35,8 +43,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             return;
         } else {
             // Store user session locally
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
+            // Store user session in sessionStorage (auto-clears when tab is closed)
+            sessionStorage.setItem('token', data.token);
+            sessionStorage.setItem('user', JSON.stringify(data.user));
             setUser(data.user);
         }
     };

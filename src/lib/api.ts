@@ -81,7 +81,7 @@ export interface Location {
 }
 
 // ── Helpers ────────────────────────────────────────────────
-const getToken = (): string | null => localStorage.getItem('token');
+const getToken = (): string | null => sessionStorage.getItem('token');
 
 const authHeaders = (): HeadersInit => ({
     'Content-Type': 'application/json',
@@ -91,8 +91,8 @@ const authHeaders = (): HeadersInit => ({
 // Auto-logout on expired/invalid token
 const handleAuthError = (res: Response) => {
     if (res.status === 401 || res.status === 403) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
         window.location.reload();
     }
 };
@@ -172,8 +172,8 @@ export const registerUser = async (payload: {
 };
 
 export const logoutUser = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
 };
 
 export const changePassword = async (currentPassword: string, newPassword: string) => {
@@ -216,7 +216,7 @@ export const resetPassword = async (token: string, newPassword: string) => {
 };
 
 export const getCurrentUser = (): User | null => {
-    const u = localStorage.getItem('user');
+    const u = sessionStorage.getItem('user');
     return u ? JSON.parse(u) : null;
 };
 
