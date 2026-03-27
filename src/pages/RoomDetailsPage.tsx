@@ -81,10 +81,10 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
     }
     const [dateSlots, setDateSlots] = useState<Record<string, number[]>>(initialDateSlots);
     
-    // Determine slot start time based on location: IIT Kharagpur → 10 AM, others → 9 AM
+    // Determine slot start time based on location: Kharagpur IIT Research Park → 10 AM, others → 9 AM
     const ALL_SLOTS = useMemo(() => {
         const locationName = room?.location?.toLowerCase() || '';
-        const startHour = locationName.includes('iit kharagpur') || locationName.includes('iit kgp') ? 10 : 9;
+        const startHour = locationName.includes('kharagpur') ? 10 : 9;
         return generateSlots(startHour);
     }, [room?.location]);
 
