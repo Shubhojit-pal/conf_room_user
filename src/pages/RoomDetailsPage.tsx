@@ -15,7 +15,7 @@ import {
     ForkKnife,
     Bed
 } from '@phosphor-icons/react';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { fetchRoom, createBooking, fetchRoomAvailability, getCurrentUser, Room, BookedSlot } from '../lib/api';
 import { getDirectImageUrl } from '../lib/imageUtils';
 import { BookingResult } from '../App';
@@ -32,17 +32,18 @@ interface RoomDetailsPageProps {
     prefillSlots?: number[];
 }
 
-// Generate all 1-hour slots for the day (9 AM - 6 PM)
-const ALL_SLOTS = Array.from({ length: 9 }, (_, i) => {
-    const startH = 9 + i;
-    const endH = startH + 1;
-    return {
-        start: `${String(startH).padStart(2, '0')}:00:00`,
-        end: `${String(endH).padStart(2, '0')}:00:00`,
-        label: `${String(startH).padStart(2, '0')}:00 - ${String(endH).padStart(2, '0')}:00`,
-        startH,
-    };
-});
+// Generate hourly time slots given a start hour (inclusive) to 18:00 (6 PM)
+const generateSlots = (startHour: number) =>
+    Array.from({ length: 18 - startHour }, (_, i) => {
+        const startH = startHour + i;
+        const endH = startH + 1;
+        return {
+            start: `${String(startH).padStart(2, '0')}:00:00`,
+            end: `${String(endH).padStart(2, '0')}:00:00`,
+            label: `${String(startH).padStart(2, '0')}:00 - ${String(endH).padStart(2, '0')}:00`,
+            startH,
+        };
+    });
 
 type SlotStatus = 'available' | 'booked' | 'past';
 
@@ -80,6 +81,13 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
     }
     const [dateSlots, setDateSlots] = useState<Record<string, number[]>>(initialDateSlots);
     
+    // Determine slot start time based on location: IIT Kharagpur → 10 AM, others → 9 AM
+    const ALL_SLOTS = useMemo(() => {
+        const locationName = room?.location?.toLowerCase() || '';
+        const startHour = locationName.includes('iit kharagpur') || locationName.includes('iit kgp') ? 10 : 9;
+        return generateSlots(startHour);
+    }, [room?.location]);
+
     const [purpose, setPurpose] = useState('');
     const [attendees, setAttendees] = useState<number | string>(1);
     const [submitting, setSubmitting] = useState(false);
