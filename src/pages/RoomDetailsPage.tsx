@@ -510,8 +510,8 @@ const RoomDetailsPage: React.FC<RoomDetailsPageProps> = ({ room: roomRef, onBack
                         <label className="block text-sm font-semibold text-theme-primary mb-1.5">Purpose</label>
                         <textarea rows={2} value={purpose} onChange={e => setPurpose(e.target.value)} className="w-full text-sm p-3 rounded-xl border border-theme-border focus:outline-none focus:ring-2 focus:ring-primary bg-theme-bg text-theme-primary" placeholder="Meeting purpose..." />
                     </div>
-                    <button type="submit" disabled={submitting || totalSelectedHours === 0 || (room && Number(attendees) > room.capacity) || selectedDates.length === 0} className="w-full py-4 bg-secondary hover:bg-secondary/90 text-white text-lg font-bold rounded-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-blue-200 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed">
-                        {submitting ? 'Booking...' : (room && Number(attendees) > room.capacity) ? 'Capacity Exceeded' : totalSelectedHours === 0 ? 'Select a time slot' : 'Book This Space'}
+                    <button type="submit" disabled={submitting || totalSelectedHours === 0 || (room && Number(attendees) > room.capacity) || selectedDates.length === 0 || !purpose.trim()} className="w-full py-4 bg-secondary hover:bg-secondary/90 text-white text-lg font-bold rounded-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-[0_8px_32px_0_rgba(31,38,135,0.05)] shadow-[0_8px_32px_0_rgba(31,38,135,0.05)]-blue-200 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed">
+                        {submitting ? 'Booking...' : (room && Number(attendees) > room.capacity) ? 'Capacity Exceeded' : totalSelectedHours === 0 ? 'Select a time slot' : !purpose.trim() ? 'Enter a purpose to continue' : 'Book This Space'}
                     </button>
                 </form>
             </div>
