@@ -13,7 +13,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const [theme, setTheme] = useState<Theme>(() => {
         const saved = localStorage.getItem('app-theme');
         if (saved) return saved as Theme;
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        return 'light'; // Default to light mode
     });
 
     useEffect(() => {
